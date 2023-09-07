@@ -1,11 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
-[Serializable]
 public class Tile : IComparable<Tile>, IEquatable<Tile>
 {
     public int X { private set; get; }
@@ -20,7 +17,7 @@ public class Tile : IComparable<Tile>, IEquatable<Tile>
     [NonSerialized] private List<Tile> _neighbors = new();
     [SerializeField] private bool _isOccupied = false;
 
-    [NonSerialized] public List<Tile> PathPerTile = new();
+    [NonSerialized] public Tile parentTile;
     public Tile(int X, int Y)
     {
         this.X = X;
