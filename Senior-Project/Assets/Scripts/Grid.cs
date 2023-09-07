@@ -1,15 +1,16 @@
-using Unity.Engine;
+
 using System;
 using System.Collections;
-using System.COllections.Generic;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class GridManager : Monobehavior
+public class GridManager : MonoBehaviour
 {
-    [SerializeField] private int _xSize;
-    [SerializeField] private int _ySize;
+    [SerializeField] private static int _xSize;
+    [SerializeField] private static int _ySize;
 
-    public int XSize {private set { _xSize = value; } get { return _xSize; } }
-    public int YSize {private set { _ySize = value; } get {return _ySize; } }
+    public static int XSize {private set { _xSize = value; } get { return _xSize; } }
+    public static int YSize {private set { _ySize = value; } get { return _ySize; } }
     
     public Vector2Int Size { private set; get; }
 
@@ -17,12 +18,13 @@ public class GridManager : Monobehavior
     
     public GridManager(int xSize, int ySize)
     {
-        this._xSize = xSize;
-        this._ySize = ySize;
+        _xSize = xSize;
+        _ySize = ySize;
     }
     
     public void Awake()
     {
+        new GridManager(10, 10);
         GenerateGrid();
     }
     
@@ -53,11 +55,11 @@ public class GridManager : Monobehavior
         }
     }
 
-    public Tile GetTile(Vector2 pos)
+    public static Tile GetTile(Vector2 pos)
     {
         return GetTile(new Vector2Int(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.y)));
     }
-    public Tile GetTile(Vector2Int pos)
+    public static Tile GetTile(Vector2Int pos)
     {
         return Grid[pos.x + pos.y * XSize];
     }
