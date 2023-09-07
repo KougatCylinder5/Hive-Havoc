@@ -32,11 +32,17 @@ public class Tile :IComparable, IComparable<Tile>, IEquatable<Tile>
         Y = tile.Y;
         _isOccupied = tile.IsOccupied;
         _neighbors = tile.Neighbors;
+        this.Position = tile.Position;
+        this._gCost = tile.GCost;
+        this.parentTile = tile.parentTile;
     }
-
+    public float LinearDistanceToTarget(Vector2 target)
+    {
+        return Mathf.Sqrt(Mathf.Pow(Mathf.Abs(target.x - this.X), 2) + Mathf.Pow(Mathf.Abs(target.y - this.Y), 2));
+    }
     public float LinearDistanceToTarget(Vector2Int target)
     {
-        return Mathf.Sqrt(Mathf.Pow(target.x - this.X, 2) + MathF.Pow(target.y - this.Y, 2));
+        return LinearDistanceToTarget(new Vector2(target.x, target.y));
     }
     public void AddNeighbor(Tile tile)
     {
@@ -59,7 +65,7 @@ public class Tile :IComparable, IComparable<Tile>, IEquatable<Tile>
     }
     public override int GetHashCode()
     {
-        return (int)(_gCost * 1000) + (int)(_hCost) << 16;
+        return (int)((_gCost + _hCost) * 1000);
     }
     public Tile GetInstance()
     {

@@ -40,9 +40,10 @@ public class GridManager : MonoBehaviour
         
         foreach (Tile tile in Grid)
         {
-            int[] spots = new int[] { tile.X - 1, tile.X + 1, tile.X + tile.Y * _xSize - _xSize, tile.X + tile.Y * _xSize + _xSize };
+            int[] spots = new int[] { tile.X - 1, tile.X + tile.Y * _xSize - _xSize - 1, tile.X + tile.Y * _xSize - _xSize, tile.X + tile.Y * _xSize - _xSize + 1, tile.X + 1, tile.X + tile.Y * _xSize + _xSize + 1, tile.X + tile.Y * _xSize + _xSize, tile.X + tile.Y * _xSize + _xSize - 1 };
             foreach (int spot in spots)
             {
+                if(tile.LinearDistanceToTarget(new Vector2(spot % _xSize, spot / _xSize)) > 2) { continue; }
                 try
                 {
                     tile.AddNeighbor(Grid[spot]);
@@ -62,5 +63,15 @@ public class GridManager : MonoBehaviour
     public static Tile GetTile(Vector2Int pos)
     {
         return Grid[pos.x + pos.y * XSize];
+    }
+
+    public void OnDrawGizmos()
+    {
+        Gizmos.color = Color.white;
+        foreach (Tile tile in Grid)
+        {
+            Gizmos.DrawCube(new Vector3(tile.X, 0, tile.Y), new Vector3(0.5f, 0.5f, 0.5f));
+        }
+
     }
 }
