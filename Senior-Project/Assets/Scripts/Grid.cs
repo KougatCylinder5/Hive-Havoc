@@ -24,7 +24,7 @@ public class GridManager : MonoBehaviour
     
     public void Awake()
     {
-        new GridManager(10, 10);
+        new GridManager(500, 500);
         GenerateGrid();
     }
     
@@ -70,7 +70,7 @@ public class GridManager : MonoBehaviour
         Gizmos.color = Color.white;
         foreach (Tile tile in Grid)
         {
-            Gizmos.DrawCube(new Vector3(tile.X, 0, tile.Y), new Vector3(0.5f, 0.5f, 0.5f));
+            //Gizmos.DrawCube(new Vector3(tile.X, 0, tile.Y), new Vector3(0.5f, 0.5f, 0.5f));
         }
 
     }

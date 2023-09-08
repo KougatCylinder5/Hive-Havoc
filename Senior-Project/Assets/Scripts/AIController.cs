@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -7,13 +8,13 @@ public class AIController : MonoBehaviour
 
     public void Start()
     {
-        List<Tile> path = GeneratePath(new Vector2Int(0, 0), new Vector2Int(3, 3));
+        
+        List<Tile> path = GeneratePath(new Vector2Int(10, 10), new Vector2Int(440, 490), true); GeneratePath(new Vector2Int(10, 10), new Vector2Int(440, 490), true); GeneratePath(new Vector2Int(10, 10), new Vector2Int(440, 490), true);
+        
         foreach (Tile tile in path)
         {
-
-            Debug.Log(tile);
+            UnityEngine.Debug.Log(tile);
         }
-
     }
 
     public Vector2Int Size { private set; get; }
@@ -22,8 +23,9 @@ public class AIController : MonoBehaviour
      * 
      * 
      */
-    public List<Tile> GeneratePath(Vector2 start, Vector2 end)
+    public static List<Tile> GeneratePath(Vector2 start, Vector2 end, bool ignoreOccupied = false)
     {
+        Stopwatch watch = new Stopwatch();
         if (GridManager.GetTile(start).Equals(GridManager.GetTile(end)))
         {
             return new();
@@ -40,9 +42,9 @@ public class AIController : MonoBehaviour
         {
             Tile copy = neighbor.GetInstance();
             copy.SetGCost(copy.LinearDistanceToTarget(end));
-            copy.SetHCost(copy.HCost + 0.5f);
+            copy.SetHCost(copy.HCost + 1);
             copy.parentTile = GridManager.GetTile(start);
-            tilesToCheck.Add((copy.HCost + copy.GCost) * 1000 + UnityEngine.Random.Range(-0.5f, 0.5f), copy);
+            tilesToCheck.Add((copy.HCost + copy.GCost) * 1000 + Random.Range(-0.5f, 0.5f), copy);
 
         }
         int iterations = 0;
@@ -51,14 +53,16 @@ public class AIController : MonoBehaviour
 
         while (true)
         {
+            
+            watch.Start();
             //just a break so it doesn't get stuck if it can't find a path
-            if (iterations++ == 100)
+            if (iterations++ == 5000)
             {
                 break;
             }
             foreach (Tile neighbor in GridManager.GetTile((tilesToCheck.Values[0]).Position).Neighbors)
             {
-                if (tilesToCheck.ContainsValue(neighbor) || checkedTiles.Contains(neighbor) || neighbor.IsOccupied)
+                if (tilesToCheck.ContainsValue(neighbor) || checkedTiles.Contains(neighbor) || (neighbor.IsOccupied && ignoreOccupied))
                 {
                     continue;
                 }
@@ -68,7 +72,13 @@ public class AIController : MonoBehaviour
                 copy.SetHCost(copy.HCost + 0.5f);
                 copy.parentTile = tilesToCheck.Values[0];
                 //UnityEngine.Random is used to prevent collisions on prexisting keys
-                holdingQueue.Add((copy.HCost + copy.GCost) * 1000 + UnityEngine.Random.Range(-0.5f, 0.5f), copy);
+                while (true) 
+                {
+                    if (holdingQueue.TryAdd((copy.HCost + copy.GCost) * 1000 + Random.Range(-0.75f, 0.75f), copy))
+                    {
+                        break;
+                    }
+                }
                 if (neighbor.Equals(GridManager.GetTile(end)))
                 {
                     lastTouched = copy;
@@ -79,12 +89,19 @@ public class AIController : MonoBehaviour
             }
             checkedTiles.Add(tilesToCheck.Values[0]);
             tilesToCheck.RemoveAt(0);
-            tilesToCheck.AddRange(holdingQueue);
+            foreach (KeyValuePair<float,Tile> tile in holdingQueue)
+            {
+                while (true)
+                {
+                    if (tilesToCheck.TryAdd(tile.Key + Random.Range(-0.75f, 0.75f), tile.Value))
+                    {
+                        break;
+                    }
+                }
+            }
             holdingQueue.Clear();
-
-
         }
-    outter:
+        outter:
 
         List<Tile> completePath = new();
         completePath.Add(lastTouched);
@@ -94,11 +111,13 @@ public class AIController : MonoBehaviour
             lastTouched = lastTouched.parentTile;
         }
         completePath.Reverse();
+        watch.Stop();
+        UnityEngine.Debug.Log(watch.ElapsedMilliseconds);
         return completePath;
     }
 
-    public List<Tile> GeneratePath(Vector2Int start, Vector2Int end)
+    public static List<Tile> GeneratePath(Vector2Int start, Vector2Int end, bool ignoreOccupied = false)
     {
-        return GeneratePath(new Vector2(start.x, start.y), new Vector2(end.x, end.y));
+        return GeneratePath(new Vector2(start.x, start.y), new Vector2(end.x, end.y), ignoreOccupied);
     }
 }
