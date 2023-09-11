@@ -704,6 +704,7 @@ MonoBehaviour:
   cameraTransform: {fileID: 1167834529}
   dragStartPosition: {x: 0, y: 0, z: 0}
   dragCurrentPosition: {x: 0, y: 0, z: 0}
+  speedConstant: 0.003
 --- !u!4 &1830684034
 Transform:
   m_ObjectHideFlags: 0

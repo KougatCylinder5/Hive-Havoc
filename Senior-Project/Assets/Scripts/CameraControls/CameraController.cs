@@ -15,6 +15,8 @@ public class CameraController : MonoBehaviour
     public Vector3 dragStartPosition;
     public Vector3 dragCurrentPosition;
 
+    public float speedConstant;
+
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +30,7 @@ public class CameraController : MonoBehaviour
     {
         HandleMovementInput();
         HandleMouseInput();
+        SpeedChange(speedConstant);
     }
 
     void HandleMovementInput()
@@ -67,8 +70,22 @@ public class CameraController : MonoBehaviour
                 dragStartPosition = ray.GetPoint(entry);
             }
         }
-
-
+        if (Input.GetMouseButton(0))
+        {
+            Plane plane = new Plane(Vector3.up, Vector3.zero);
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            float entry;
+            if (plane.Raycast(ray, out entry))
+            {
+                dragCurrentPosition = ray.GetPoint(entry);
+                newPosition = transform.position + dragStartPosition - dragCurrentPosition;
+            }
+        }
         cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, newZoom, Time.deltaTime * movementTime);
-    }    
+    }
+
+    void SpeedChange(float speedConstant)
+    {
+        movementSpeed = newZoom.y * speedConstant;
+    }
 }
