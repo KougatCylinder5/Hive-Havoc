@@ -6,14 +6,16 @@ public class CameraController : MonoBehaviour
 {
     public float movementSpeed;
     public float movementTime;
-    public Vector3 newPosition;
+    private Vector3 newPosition;
 
     public Vector3 zoomAmount;
-    public Vector3 newZoom;
+    private Vector3 newZoom;
     public Transform cameraTransform;
+    public int minZoomBound;
+    public int maxZoomBound;
 
-    public Vector3 dragStartPosition;
-    public Vector3 dragCurrentPosition;
+    private Vector3 dragStartPosition;
+    private Vector3 dragCurrentPosition;
 
     public float speedConstant;
 
@@ -56,30 +58,19 @@ public class CameraController : MonoBehaviour
 
     void HandleMouseInput()
     {
-        if(Input.mouseScrollDelta.y != 0)
+        if((Input.mouseScrollDelta.y > 0 && newZoom.y + zoomAmount.y > minZoomBound) || (Input.mouseScrollDelta.y < 0 && newZoom.y - zoomAmount.y < maxZoomBound))
         {
             newZoom += Input.mouseScrollDelta.y * zoomAmount;
         }
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(2))
         {
-            Plane plane = new Plane(Vector3.up, Vector3.zero);
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            float entry;
-            if(plane.Raycast(ray, out entry))
-            {
-                dragStartPosition = ray.GetPoint(entry);
-            }
+            dragStartPosition = CameraRaycast();
         }
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(2))
         {
-            Plane plane = new Plane(Vector3.up, Vector3.zero);
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            float entry;
-            if (plane.Raycast(ray, out entry))
-            {
-                dragCurrentPosition = ray.GetPoint(entry);
-                newPosition = transform.position + dragStartPosition - dragCurrentPosition;
-            }
+            dragCurrentPosition = CameraRaycast();
+            newPosition = transform.position + dragStartPosition - dragCurrentPosition;
+            
         }
         cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, newZoom, Time.deltaTime * movementTime);
     }
@@ -87,5 +78,20 @@ public class CameraController : MonoBehaviour
     void SpeedChange(float speedConstant)
     {
         movementSpeed = newZoom.y * speedConstant;
+    }
+
+    Vector3 CameraRaycast()
+    {
+        Plane plane = new Plane(Vector3.up, Vector3.zero);
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        float entry;
+        if (plane.Raycast(ray, out entry))
+        {
+            return ray.GetPoint(entry);
+        }
+        else
+        {
+            return Vector3.zero;
+        }
     }
 }
