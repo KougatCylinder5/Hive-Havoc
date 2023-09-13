@@ -1,6 +1,5 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using Unity.Mathematics;
 using Unity.Collections;
@@ -9,58 +8,50 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Unity.Burst;
+using System.Runtime.CompilerServices;
+using UnityEditor.Experimental.GraphView;
 
 public class AIController : MonoBehaviour
 {
-    Queue<PathInfo> pathGeneration = new();
-
-    public static Vector2Int sizeOfGrid = new(100, 100);
-
-    static NativeArray<Node> nodes = new NativeArray<Node>(sizeOfGrid.x * sizeOfGrid.y,Allocator.Persistent);
-
-
+    public static Vector2Int sizeOfGrid = new(1000, 1000);
+    public static AIController Instance;
     public void Awake()
     {
+        Instance = this;
+    }
+    public IEnumerable<JobHandle> GeneratePath(NativeList<Node> path, Vector2 target, Vector2 start)
+    {
+        NativeArray<Node> nodes = new(sizeOfGrid.x * sizeOfGrid.y, Allocator.TempJob);
+
+        
         for (int x = 0; x < sizeOfGrid.x; x++)
         {
-            for(int y = 0 ; y < sizeOfGrid.y ; y++)
+            for (int y = 0; y < sizeOfGrid.y; y++)
             {
                 nodes[x + y * sizeOfGrid.x] = new Node()
                 {
                     position = new Vector2Int(x, y),
                     index = x + y * sizeOfGrid.x,
                     isWalkable = true,
-                    cameFromIndex = -1
+                    cameFromIndex = -1,
+                    gCost = int.MaxValue
                 };
             }
         }
-
-    }
-
-    private void Start()
-    {
-        NativeList<JobHandle> AIJobs = new(0,Allocator.Temp);
-        NativeList<Node> path = new NativeList<Node>();
-        while (pathGeneration.Count > 0)
+        JobHandle task = new GeneratedPath()
         {
-            AIJobs.Add(new GeneratedPath()
-            {
-                start = pathGeneration.Peek().start,
-                end = pathGeneration.Peek().end,
-                path = path
-            }.Schedule());
-            pathGeneration.Dequeue();
-        }
-        JobHandle.CompleteAll(AIJobs);
-        AIJobs.Dispose();
-
+            start = start,
+            end = target,
+            path = path,
+            nodes = nodes
+        }.Schedule();
+        yield return task;
+        task.Complete();
         
-    }
-    
-    
 
-    
-    private struct Node
+    }
+
+    public struct Node
     {
         public Vector2Int position;
         public int index;
@@ -83,22 +74,30 @@ public class AIController : MonoBehaviour
         {
             Node copy = new() {position = position,index = index, isWalkable = isWalkable};
             return copy;
-        } 
-        
+        }
+        public override string ToString()
+        {
+            return string.Format("Pos: {0}", position);
+        }
     }
-    [BurstCompile]
+    
     private struct GeneratedPath : IJob
     {
-        public Vector2Int start; public Vector2Int end;
+        public Vector2 start; public Vector2 end;
 
         public NativeList<Node> path;
 
+        public NativeArray<Node> nodes;
+
+
+        //[BurstCompile]
         public void Execute()
         {
+            NativeList<int> openList = new(Allocator.Temp), closedList = new(Allocator.Temp);
+
             for (int i = 0; i < nodes.Length; i++)
             {
                 Node node = nodes[i];
-                node.cameFromIndex = -1;
                 node.hCost = CalculateDistanceCost(node.position, end);
                 node.FCost();
                 nodes[i] = node;
@@ -116,22 +115,29 @@ public class AIController : MonoBehaviour
 
             int endNodeIndex = CalcuateIndex(end);
 
-            Node startNode = nodes[CalcuateIndex(start)].GetInstance();
+            Node startNode = nodes[CalcuateIndex(start)];
             startNode.gCost = 0;
-            List<int> openList = new List<int>();
-            List<int> closedList = new List<int>();
+            nodes[CalcuateIndex(start)] = startNode;
 
-            openList.Add(startNode.index);
+            openList.Add( startNode.index );
 
-            while (openList.Count > 0)
+            while (openList.Length > 0)
             {
                 int currentNodeIndex = GetLosestCostFNodeIndex(openList, nodes);
                 Node currentNode = nodes[currentNodeIndex];
                 if (currentNodeIndex == CalcuateIndex(end))
                 {
+                    endNodeIndex = currentNodeIndex;
                     break;
                 }
-                openList.Remove(currentNodeIndex);
+                for (int i = 0; i < openList.Length; i++)
+                {
+                    if (openList[i] == currentNodeIndex)
+                    {
+                        openList.RemoveAt(i);
+                        break;
+                    }
+                }
                 closedList.Add(currentNodeIndex);
 
                 for (int i = 0; i < neighborOffsetArray.Length; i++)
@@ -139,20 +145,23 @@ public class AIController : MonoBehaviour
                     Vector2Int offset = neighborOffsetArray[i];
                     Vector2Int neighborPos = currentNode.position + offset;
                     int neighbourIndex = -1;
+                    if (!IsInsideBounds(neighborPos)) {
+                        neighbourIndex = CalcuateIndex(neighborPos);
+                    }
+                    
+                    if (closedList.Contains(neighbourIndex))
+                    {
+                        continue;
+                    }
+                    Node neighborNode = new();
                     try
                     {
-                        neighbourIndex = CalcuateIndex(neighborPos);
+                        neighborNode = nodes[neighbourIndex];
                     }
                     catch
                     {
                         continue;
                     }
-                    if (closedList.Contains(neighbourIndex))
-                    {
-                        continue;
-                    }
-
-                    Node neighborNode = nodes[neighbourIndex];
 
                     if (!neighborNode.isWalkable)
                     {
@@ -169,7 +178,7 @@ public class AIController : MonoBehaviour
 
                         if (!openList.Contains(neighborNode.index))
                         {
-                            openList.Add(neighborNode.index);
+                            openList.Add(neighbourIndex);
                         }
                     }
                 }
@@ -177,24 +186,26 @@ public class AIController : MonoBehaviour
 
             Node endNode = nodes[endNodeIndex];
             path.Add(endNode);
-            Node nextNode = nodes[endNode.cameFromIndex];
-            do
+            if (endNode.cameFromIndex != -1)
             {
-                path.Add(nextNode);
-                nextNode = nodes[nextNode.cameFromIndex];
-            } while (nextNode.index != -1);
+                Node nextNode = nodes[endNode.cameFromIndex];
+                while (nextNode.cameFromIndex != -1)
+                {
+                    path.Add(nextNode);
+                    nextNode = nodes[nextNode.cameFromIndex];
+                }
+            }
             neighborOffsetArray.Dispose();
-            path.Dispose();
 
         }
         public int CalculateDistanceCost(Vector2 cur, Vector2 end)
         {
             return Mathf.RoundToInt(Vector2.Distance(cur, end) * 10);
         }
-        private int GetLosestCostFNodeIndex(List<int> openList, NativeArray<Node> nodes)
+        private int GetLosestCostFNodeIndex(NativeList<int> openList, NativeArray<Node> nodes)
         {
             Node lowestCostPathNode = nodes[openList[0]];
-            for (int i = 0; i < openList.Count; i++)
+            for (int i = 0; i < openList.Length; i++)
             {
                 Node testNode = nodes[openList[i]];
                 if (testNode.fCost < lowestCostPathNode.fCost)
@@ -204,9 +215,17 @@ public class AIController : MonoBehaviour
             }
             return lowestCostPathNode.index;
         }
-        public int CalcuateIndex(Vector2Int position)
+        public int CalcuateIndex(Vector2 position)
         {
-            return position.x + position.y * sizeOfGrid.x;
+            return Mathf.RoundToInt(position.x) + Mathf.RoundToInt(position.y) * sizeOfGrid.x;
         }
+        private bool IsInsideBounds(Vector2 pos)
+        {
+            return pos.x > 0 &&
+                pos.y > 0 &&
+                pos.x > sizeOfGrid.x &&
+                pos.y > sizeOfGrid.y;
+        }
+       
     }
 }
