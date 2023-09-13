@@ -1,123 +1,212 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using Unity.Mathematics;
+using Unity.Collections;
+using Unity.Jobs;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
+using Unity.Burst;
 
 public class AIController : MonoBehaviour
 {
-    
-    public void Start()
+    Queue<PathInfo> pathGeneration = new();
+
+    public static Vector2Int sizeOfGrid = new(100, 100);
+
+    static NativeArray<Node> nodes = new NativeArray<Node>(sizeOfGrid.x * sizeOfGrid.y,Allocator.Persistent);
+
+
+    public void Awake()
     {
-        List<Tile> path = GeneratePath(new Vector2Int(10, 10), new Vector2Int(440, 490), true); GeneratePath(new Vector2Int(10, 10), new Vector2Int(440, 490), true); GeneratePath(new Vector2Int(10, 10), new Vector2Int(440, 490), true);
+        for (int x = 0; x < sizeOfGrid.x; x++)
+        {
+            for(int y = 0 ; y < sizeOfGrid.y ; y++)
+            {
+                nodes[x + y * sizeOfGrid.x] = new Node()
+                {
+                    position = new Vector2Int(x, y),
+                    index = x + y * sizeOfGrid.x,
+                    isWalkable = true,
+                    cameFromIndex = -1
+                };
+            }
+        }
+
+    }
+
+    private void Start()
+    {
+        NativeList<JobHandle> AIJobs = new(0,Allocator.Temp);
+        NativeList<Node> path = new NativeList<Node>();
+        while (pathGeneration.Count > 0)
+        {
+            AIJobs.Add(new GeneratedPath()
+            {
+                start = pathGeneration.Peek().start,
+                end = pathGeneration.Peek().end,
+                path = path
+            }.Schedule());
+            pathGeneration.Dequeue();
+        }
+        JobHandle.CompleteAll(AIJobs);
+        AIJobs.Dispose();
+
         
-        foreach (Tile tile in path)
-        {
-            UnityEngine.Debug.Log(tile);
-        }
     }
+    
+    
 
-    public Vector2Int Size { private set; get; }
-    public List<Tile> Grid { private set; get; }
-    /**
-     * 
-     * 
-     */
-    public static List<Tile> GeneratePath(Vector2 start, Vector2 end, bool ignoreOccupied = false)
+    
+    private struct Node
     {
-        Stopwatch watch = new Stopwatch();
-        if (GridManager.GetTile(start).Equals(GridManager.GetTile(end)))
+        public Vector2Int position;
+        public int index;
+
+        public int gCost;
+        public int hCost;
+        public int fCost;//x:g y:h z:f
+
+        public bool isWalkable;
+
+        public int cameFromIndex;
+
+
+        public void FCost()
         {
-            return new();
+            fCost = hCost + gCost;
         }
 
-        List<Tile> checkedTiles = new()
+        public Node GetInstance()
         {
-            GridManager.GetTile(start).GetInstance().SetGCost(GridManager.GetTile(start).LinearDistanceToTarget(end))
-        };
-        SortedList<float, Tile> tilesToCheck = new();
-        SortedList<float, Tile> holdingQueue = new();
-        //set up for both lists
-        foreach (Tile neighbor in GridManager.GetTile(start).Neighbors)
+            Node copy = new() {position = position,index = index, isWalkable = isWalkable};
+            return copy;
+        } 
+        
+    }
+    [BurstCompile]
+    private struct GeneratedPath : IJob
+    {
+        public Vector2Int start; public Vector2Int end;
+
+        public NativeList<Node> path;
+
+        public void Execute()
         {
-            Tile copy = neighbor.GetInstance();
-            copy.SetGCost(copy.LinearDistanceToTarget(end));
-            copy.SetHCost(copy.HCost + 1);
-            copy.parentTile = GridManager.GetTile(start);
-            tilesToCheck.Add((copy.HCost + copy.GCost) * 1000 + Random.Range(-0.5f, 0.5f), copy);
-
-        }
-        int iterations = 0;
-
-        Tile lastTouched = new(-1, -1);
-
-        while (true)
-        {
-            
-            watch.Start();
-            //just a break so it doesn't get stuck if it can't find a path
-            if (iterations++ == 5000)
+            for (int i = 0; i < nodes.Length; i++)
             {
-                break;
+                Node node = nodes[i];
+                node.cameFromIndex = -1;
+                node.hCost = CalculateDistanceCost(node.position, end);
+                node.FCost();
+                nodes[i] = node;
             }
-            foreach (Tile neighbor in GridManager.GetTile((tilesToCheck.Values[0]).Position).Neighbors)
+
+            NativeArray<Vector2Int> neighborOffsetArray = new(8, Allocator.Temp);
+            neighborOffsetArray[0] = new(-1, 0);
+            neighborOffsetArray[1] = new(+1, 0);
+            neighborOffsetArray[2] = new(0, -1);
+            neighborOffsetArray[3] = new(0, +1);
+            neighborOffsetArray[4] = new(-1, -1);
+            neighborOffsetArray[5] = new(+1, +1);
+            neighborOffsetArray[6] = new(-1, +1);
+            neighborOffsetArray[7] = new(+1, -1);
+
+            int endNodeIndex = CalcuateIndex(end);
+
+            Node startNode = nodes[CalcuateIndex(start)].GetInstance();
+            startNode.gCost = 0;
+            List<int> openList = new List<int>();
+            List<int> closedList = new List<int>();
+
+            openList.Add(startNode.index);
+
+            while (openList.Count > 0)
             {
-                if (tilesToCheck.ContainsValue(neighbor) || checkedTiles.Contains(neighbor) || (neighbor.IsOccupied && ignoreOccupied))
+                int currentNodeIndex = GetLosestCostFNodeIndex(openList, nodes);
+                Node currentNode = nodes[currentNodeIndex];
+                if (currentNodeIndex == CalcuateIndex(end))
                 {
-                    continue;
+                    break;
                 }
-                //create a copy so we don't modify the original
-                Tile copy = neighbor.GetInstance();
-                copy.SetGCost(copy.LinearDistanceToTarget(end));
-                copy.SetHCost(copy.HCost + 0.5f);
-                copy.parentTile = tilesToCheck.Values[0];
-                //UnityEngine.Random is used to prevent collisions on prexisting keys
-                while (true) 
+                openList.Remove(currentNodeIndex);
+                closedList.Add(currentNodeIndex);
+
+                for (int i = 0; i < neighborOffsetArray.Length; i++)
                 {
-                    if (holdingQueue.TryAdd((copy.HCost + copy.GCost) * 1000 + Random.Range(-0.75f, 0.75f), copy))
+                    Vector2Int offset = neighborOffsetArray[i];
+                    Vector2Int neighborPos = currentNode.position + offset;
+                    int neighbourIndex = -1;
+                    try
                     {
-                        break;
+                        neighbourIndex = CalcuateIndex(neighborPos);
+                    }
+                    catch
+                    {
+                        continue;
+                    }
+                    if (closedList.Contains(neighbourIndex))
+                    {
+                        continue;
+                    }
+
+                    Node neighborNode = nodes[neighbourIndex];
+
+                    if (!neighborNode.isWalkable)
+                    {
+                        continue;
+                    }
+
+                    int tentativeGCost = currentNode.gCost + CalculateDistanceCost(currentNode.position, neighborPos);
+                    if (tentativeGCost < neighborNode.gCost)
+                    {
+                        neighborNode.cameFromIndex = currentNodeIndex;
+                        neighborNode.gCost = tentativeGCost;
+                        neighborNode.FCost();
+                        nodes[neighbourIndex] = neighborNode;
+
+                        if (!openList.Contains(neighborNode.index))
+                        {
+                            openList.Add(neighborNode.index);
+                        }
                     }
                 }
-                if (neighbor.Equals(GridManager.GetTile(end)))
-                {
-                    lastTouched = copy;
-                    //to break out of both loops at once however a bad practice goto is
-                    goto outter;
-                }
-
             }
-            checkedTiles.Add(tilesToCheck.Values[0]);
-            tilesToCheck.RemoveAt(0);
-            foreach (KeyValuePair<float,Tile> tile in holdingQueue)
+
+            Node endNode = nodes[endNodeIndex];
+            path.Add(endNode);
+            Node nextNode = nodes[endNode.cameFromIndex];
+            do
             {
-                while (true)
+                path.Add(nextNode);
+                nextNode = nodes[nextNode.cameFromIndex];
+            } while (nextNode.index != -1);
+            neighborOffsetArray.Dispose();
+            path.Dispose();
+
+        }
+        public int CalculateDistanceCost(Vector2 cur, Vector2 end)
+        {
+            return Mathf.RoundToInt(Vector2.Distance(cur, end) * 10);
+        }
+        private int GetLosestCostFNodeIndex(List<int> openList, NativeArray<Node> nodes)
+        {
+            Node lowestCostPathNode = nodes[openList[0]];
+            for (int i = 0; i < openList.Count; i++)
+            {
+                Node testNode = nodes[openList[i]];
+                if (testNode.fCost < lowestCostPathNode.fCost)
                 {
-                    if (tilesToCheck.TryAdd(tile.Key + Random.Range(-0.75f, 0.75f), tile.Value))
-                    {
-                        break;
-                    }
+                    lowestCostPathNode = testNode;
                 }
             }
-            holdingQueue.Clear();
+            return lowestCostPathNode.index;
         }
-        outter:
-
-        List<Tile> completePath = new();
-        completePath.Add(lastTouched);
-        while (lastTouched.parentTile != null)
+        public int CalcuateIndex(Vector2Int position)
         {
-            completePath.Add(lastTouched.parentTile);
-            lastTouched = lastTouched.parentTile;
+            return position.x + position.y * sizeOfGrid.x;
         }
-        completePath.Reverse();
-        watch.Stop();
-        UnityEngine.Debug.Log(watch.ElapsedMilliseconds);
-        return completePath;
-    }
-
-    public static List<Tile> GeneratePath(Vector2Int start, Vector2Int end, bool ignoreOccupied = false)
-    {
-        return GeneratePath(new Vector2(start.x, start.y), new Vector2(end.x, end.y), ignoreOccupied);
     }
 }

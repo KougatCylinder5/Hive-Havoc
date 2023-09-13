@@ -123,6 +123,50 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &146366610
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 146366612}
+  - component: {fileID: 146366611}
+  m_Layer: 0
+  m_Name: GridManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &146366611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146366610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd5c71ea4a91d7748b662ffe030e4329, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &146366612
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146366610}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -165.24728, y: 698.8592, z: -324.23608}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &149687486
 GameObject:
   m_ObjectHideFlags: 0
@@ -575,7 +619,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f8387e3d17bc41419a4ee4b7edd96cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  followObject: {fileID: 1178493114}
 --- !u!1 &1178493114
 GameObject:
   m_ObjectHideFlags: 0
@@ -588,7 +631,7 @@ GameObject:
   - component: {fileID: 1178493117}
   - component: {fileID: 1178493116}
   - component: {fileID: 1178493115}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FollowObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -745,7 +788,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 22ff8771d87ef27429e670136399094b, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 7a7225c5d2a13954f8e35174d387e522, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -781,3 +824,4 @@ SceneRoots:
   - {fileID: 149687488}
   - {fileID: 1261232043}
   - {fileID: 1178493118}
+  - {fileID: 146366612}
