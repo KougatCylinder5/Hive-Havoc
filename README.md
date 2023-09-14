@@ -1,6 +1,6 @@
 # Senior-Project
 
-##SQL Testing
+## SQL Testing
 Done:
 - Database creater
 - Account table
