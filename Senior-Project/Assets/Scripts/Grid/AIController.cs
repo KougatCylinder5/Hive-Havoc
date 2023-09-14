@@ -1,231 +1,302 @@
-using System.Collections.Concurrent;
+/* 
+    ------------------- Code Monkey -------------------
+
+    Thank you for downloading this package
+    I hope you find it useful in your projects
+    If you have any questions let me know
+    Cheers!
+
+               unitycodemonkey.com
+    --------------------------------------------------
+ */
+
 using System.Collections.Generic;
-using System.IO;
+using UnityEngine;
 using Unity.Mathematics;
 using Unity.Collections;
 using Unity.Jobs;
-using Unity.VisualScripting;
-using UnityEngine;
-using UnityEngine.UIElements;
 using Unity.Burst;
-using System.Runtime.CompilerServices;
-using UnityEditor.Experimental.GraphView;
+using Unity.VisualScripting;
 
-public class AIController : MonoBehaviour
+public class Pathfinding : MonoBehaviour
 {
-    public static Vector2Int sizeOfGrid = new(1000, 1000);
-    public static AIController Instance;
-    public void Awake()
-    {
-        Instance = this;
-    }
-    public IEnumerable<JobHandle> GeneratePath(NativeList<Node> path, Vector2 target, Vector2 start)
-    {
-        NativeArray<Node> nodes = new(sizeOfGrid.x * sizeOfGrid.y, Allocator.TempJob);
 
-        
-        for (int x = 0; x < sizeOfGrid.x; x++)
-        {
-            for (int y = 0; y < sizeOfGrid.y; y++)
-            {
-                nodes[x + y * sizeOfGrid.x] = new Node()
-                {
-                    position = new Vector2Int(x, y),
-                    index = x + y * sizeOfGrid.x,
-                    isWalkable = true,
-                    cameFromIndex = -1,
-                    gCost = int.MaxValue
-                };
-            }
-        }
-        JobHandle task = new GeneratedPath()
-        {
-            start = start,
-            end = target,
-            path = path,
-            nodes = nodes
-        }.Schedule();
-        yield return task;
-        task.Complete();
-        
+    private const int MOVE_STRAIGHT_COST = 10;
+    private const int MOVE_DIAGONAL_COST = 14;
 
+    public Vector2 start, end;
+    public void Update()
+    {
+        Queue<Vector2> path = ReturnPath(start, end);
     }
 
-    public struct Node
+    public Queue<Vector2> ReturnPath(Vector2 start, Vector2 end)
     {
-        public Vector2Int position;
-        public int index;
-
-        public int gCost;
-        public int hCost;
-        public int fCost;//x:g y:h z:f
-
-        public bool isWalkable;
-
-        public int cameFromIndex;
-
-
-        public void FCost()
+        NativeArray<JobHandle> jobs = new NativeArray<JobHandle>(1, Allocator.Temp);
+        NativeList<int2> rawPath = new NativeList<int2>(Allocator.Persistent);
+        FindPathJob findPathJob = new FindPathJob
         {
-            fCost = hCost + gCost;
-        }
-
-        public Node GetInstance()
+            startPosition = new int2(Mathf.RoundToInt(start.x), Mathf.RoundToInt(start.y)),
+            endPosition = new int2(Mathf.RoundToInt(end.x), Mathf.RoundToInt(end.y)),
+            path = rawPath
+        };
+        jobs[0] = findPathJob.Schedule();
+        JobHandle.CompleteAll(jobs);
+        jobs.Dispose();
+        Queue<Vector2> path = new();
+        foreach (int2 node in rawPath)
         {
-            Node copy = new() {position = position,index = index, isWalkable = isWalkable};
-            return copy;
+            path.Enqueue(new Vector2(node.x, node.y));
         }
-        public override string ToString()
-        {
-            return string.Format("Pos: {0}", position);
-        }
+        rawPath.Dispose();
+        return path;
     }
-    
-    private struct GeneratedPath : IJob
+
+    [BurstCompile]
+    private struct FindPathJob : IJob
     {
-        public Vector2 start; public Vector2 end;
 
-        public NativeList<Node> path;
-
-        public NativeArray<Node> nodes;
-
-
-        //[BurstCompile]
+        public int2 startPosition;
+        public int2 endPosition;
+        public NativeList<int2> path;
         public void Execute()
         {
-            NativeList<int> openList = new(Allocator.Temp), closedList = new(Allocator.Temp);
+            int2 gridSize = new int2(100, 100);
 
-            for (int i = 0; i < nodes.Length; i++)
+            NativeArray<PathNode> pathNodeArray = new NativeArray<PathNode>(gridSize.x * gridSize.y, Allocator.Temp);
+
+            for (int x = 0; x < gridSize.x; x++)
             {
-                Node node = nodes[i];
-                node.hCost = CalculateDistanceCost(node.position, end);
-                node.FCost();
-                nodes[i] = node;
+                for (int y = 0; y < gridSize.y; y++)
+                {
+                    PathNode pathNode = new()
+                    {
+                        x = x,
+                        y = y,
+                        index = CalculateIndex(x, y, gridSize.x),
+
+                        gCost = int.MaxValue,
+                        hCost = CalculateDistanceCost(new int2(x, y), endPosition)
+                    };
+                    pathNode.CalculateFCost();
+
+                    pathNode.isWalkable = true;
+                    pathNode.cameFromNodeIndex = -1;
+
+                    pathNodeArray[pathNode.index] = pathNode;
+                }
             }
 
-            NativeArray<Vector2Int> neighborOffsetArray = new(8, Allocator.Temp);
-            neighborOffsetArray[0] = new(-1, 0);
-            neighborOffsetArray[1] = new(+1, 0);
-            neighborOffsetArray[2] = new(0, -1);
-            neighborOffsetArray[3] = new(0, +1);
-            neighborOffsetArray[4] = new(-1, -1);
-            neighborOffsetArray[5] = new(+1, +1);
-            neighborOffsetArray[6] = new(-1, +1);
-            neighborOffsetArray[7] = new(+1, -1);
 
-            int endNodeIndex = CalcuateIndex(end);
+            NativeArray<int2> neighbourOffsetArray = new NativeArray<int2>(8, Allocator.Temp);
+            neighbourOffsetArray[0] = new int2(-1, 0); // Left
+            neighbourOffsetArray[1] = new int2(+1, 0); // Right
+            neighbourOffsetArray[2] = new int2(0, +1); // Up
+            neighbourOffsetArray[3] = new int2(0, -1); // Down
+            neighbourOffsetArray[4] = new int2(-1, -1); // Left Down
+            neighbourOffsetArray[5] = new int2(-1, +1); // Left Up
+            neighbourOffsetArray[6] = new int2(+1, -1); // Right Down
+            neighbourOffsetArray[7] = new int2(+1, +1); // Right Up
 
-            Node startNode = nodes[CalcuateIndex(start)];
+            int endNodeIndex = CalculateIndex(endPosition.x, endPosition.y, gridSize.x);
+
+            PathNode startNode = pathNodeArray[CalculateIndex(startPosition.x, startPosition.y, gridSize.x)];
             startNode.gCost = 0;
-            nodes[CalcuateIndex(start)] = startNode;
+            startNode.CalculateFCost();
+            pathNodeArray[startNode.index] = startNode;
 
-            openList.Add( startNode.index );
+            NativeList<int> openList = new NativeList<int>(Allocator.Temp);
+            NativeList<int> closedList = new NativeList<int>(Allocator.Temp);
+
+            openList.Add(startNode.index);
 
             while (openList.Length > 0)
             {
-                int currentNodeIndex = GetLosestCostFNodeIndex(openList, nodes);
-                Node currentNode = nodes[currentNodeIndex];
-                if (currentNodeIndex == CalcuateIndex(end))
+                int currentNodeIndex = GetLowestCostFNodeIndex(openList, pathNodeArray);
+                PathNode currentNode = pathNodeArray[currentNodeIndex];
+
+                if (currentNodeIndex == endNodeIndex)
                 {
-                    endNodeIndex = currentNodeIndex;
+                    // Reached our destination!
                     break;
                 }
+
+                // Remove current node from Open List
                 for (int i = 0; i < openList.Length; i++)
                 {
                     if (openList[i] == currentNodeIndex)
                     {
-                        openList.RemoveAt(i);
+                        openList.RemoveAtSwapBack(i);
                         break;
                     }
                 }
+
                 closedList.Add(currentNodeIndex);
 
-                for (int i = 0; i < neighborOffsetArray.Length; i++)
+                for (int i = 0; i < neighbourOffsetArray.Length; i++)
                 {
-                    Vector2Int offset = neighborOffsetArray[i];
-                    Vector2Int neighborPos = currentNode.position + offset;
-                    int neighbourIndex = -1;
-                    if (!IsInsideBounds(neighborPos)) {
-                        neighbourIndex = CalcuateIndex(neighborPos);
-                    }
-                    
-                    if (closedList.Contains(neighbourIndex))
+                    int2 neighbourOffset = neighbourOffsetArray[i];
+                    int2 neighbourPosition = new int2(currentNode.x + neighbourOffset.x, currentNode.y + neighbourOffset.y);
+
+                    if (!IsPositionInsideGrid(neighbourPosition, gridSize))
                     {
-                        continue;
-                    }
-                    Node neighborNode = new();
-                    try
-                    {
-                        neighborNode = nodes[neighbourIndex];
-                    }
-                    catch
-                    {
+                        // Neighbour not valid position
                         continue;
                     }
 
-                    if (!neighborNode.isWalkable)
+                    int neighbourNodeIndex = CalculateIndex(neighbourPosition.x, neighbourPosition.y, gridSize.x);
+
+                    if (closedList.Contains(neighbourNodeIndex))
                     {
+                        // Already searched this node
                         continue;
                     }
 
-                    int tentativeGCost = currentNode.gCost + CalculateDistanceCost(currentNode.position, neighborPos);
-                    if (tentativeGCost < neighborNode.gCost)
+                    PathNode neighbourNode = pathNodeArray[neighbourNodeIndex];
+                    if (!neighbourNode.isWalkable)
                     {
-                        neighborNode.cameFromIndex = currentNodeIndex;
-                        neighborNode.gCost = tentativeGCost;
-                        neighborNode.FCost();
-                        nodes[neighbourIndex] = neighborNode;
+                        // Not walkable
+                        continue;
+                    }
 
-                        if (!openList.Contains(neighborNode.index))
+                    int2 currentNodePosition = new int2(currentNode.x, currentNode.y);
+
+                    int tentativeGCost = currentNode.gCost + CalculateDistanceCost(currentNodePosition, neighbourPosition);
+                    if (tentativeGCost < neighbourNode.gCost)
+                    {
+                        neighbourNode.cameFromNodeIndex = currentNodeIndex;
+                        neighbourNode.gCost = tentativeGCost;
+                        neighbourNode.CalculateFCost();
+                        pathNodeArray[neighbourNodeIndex] = neighbourNode;
+
+                        if (!openList.Contains(neighbourNode.index))
                         {
-                            openList.Add(neighbourIndex);
+                            openList.Add(neighbourNode.index);
                         }
                     }
+
                 }
             }
 
-            Node endNode = nodes[endNodeIndex];
-            path.Add(endNode);
-            if (endNode.cameFromIndex != -1)
+            PathNode endNode = pathNodeArray[endNodeIndex];
+            if (endNode.cameFromNodeIndex == -1)
             {
-                Node nextNode = nodes[endNode.cameFromIndex];
-                while (nextNode.cameFromIndex != -1)
-                {
-                    path.Add(nextNode);
-                    nextNode = nodes[nextNode.cameFromIndex];
-                }
+                // Didn't find a path!
+                Debug.Log("Didn't find a path!");
             }
-            neighborOffsetArray.Dispose();
-
-        }
-        public int CalculateDistanceCost(Vector2 cur, Vector2 end)
-        {
-            return Mathf.RoundToInt(Vector2.Distance(cur, end) * 10);
-        }
-        private int GetLosestCostFNodeIndex(NativeList<int> openList, NativeArray<Node> nodes)
-        {
-            Node lowestCostPathNode = nodes[openList[0]];
-            for (int i = 0; i < openList.Length; i++)
+            else
             {
-                Node testNode = nodes[openList[i]];
-                if (testNode.fCost < lowestCostPathNode.fCost)
+
+                // Found a path
+                path.Add(new int2(endNode.x, endNode.y));
+
+
+                PathNode currentNode = endNode;
+                while (currentNode.cameFromNodeIndex != -1)
                 {
-                    lowestCostPathNode = testNode;
+                    PathNode cameFromNode = pathNodeArray[currentNode.cameFromNodeIndex];
+                    path.Add(new int2(cameFromNode.x, cameFromNode.y));
+                    currentNode = cameFromNode;
+                }
+
+                //path.Dispose();
+            }
+
+            pathNodeArray.Dispose();
+            neighbourOffsetArray.Dispose();
+            openList.Dispose();
+            closedList.Dispose();
+        }
+
+        private NativeList<int2> CalculatePath(NativeArray<PathNode> pathNodeArray, PathNode endNode)
+        {
+            if (endNode.cameFromNodeIndex == -1)
+            {
+                // Couldn't find a path!
+                return new NativeList<int2>(Allocator.Persistent);
+            }
+            else
+            {
+                // Found a path
+                NativeList<int2> path = new NativeList<int2>(Allocator.Persistent)
+                {
+                    new int2(endNode.x, endNode.y)
+                };
+
+                PathNode currentNode = endNode;
+                while (currentNode.cameFromNodeIndex != -1)
+                {
+                    PathNode cameFromNode = pathNodeArray[currentNode.cameFromNodeIndex];
+                    path.Add(new int2(cameFromNode.x, cameFromNode.y));
+                    currentNode = cameFromNode;
+                }
+                return path;
+            }
+        }
+
+        private bool IsPositionInsideGrid(int2 gridPosition, int2 gridSize)
+        {
+            return
+                gridPosition.x >= 0 &&
+                gridPosition.y >= 0 &&
+                gridPosition.x < gridSize.x &&
+                gridPosition.y < gridSize.y;
+        }
+
+        private int CalculateIndex(int x, int y, int gridWidth)
+        {
+            return x + y * gridWidth;
+        }
+
+        private int CalculateDistanceCost(int2 aPosition, int2 bPosition)
+        {
+            int xDistance = math.abs(aPosition.x - bPosition.x);
+            int yDistance = math.abs(aPosition.y - bPosition.y);
+            int remaining = math.abs(xDistance - yDistance);
+            return MOVE_DIAGONAL_COST * math.min(xDistance, yDistance) + MOVE_STRAIGHT_COST * remaining;
+        }
+
+
+        private int GetLowestCostFNodeIndex(NativeList<int> openList, NativeArray<PathNode> pathNodeArray)
+        {
+            PathNode lowestCostPathNode = pathNodeArray[openList[0]];
+            for (int i = 1; i < openList.Length; i++)
+            {
+                PathNode testPathNode = pathNodeArray[openList[i]];
+                if (testPathNode.fCost < lowestCostPathNode.fCost)
+                {
+                    lowestCostPathNode = testPathNode;
                 }
             }
             return lowestCostPathNode.index;
         }
-        public int CalcuateIndex(Vector2 position)
+
+        private struct PathNode
         {
-            return Mathf.RoundToInt(position.x) + Mathf.RoundToInt(position.y) * sizeOfGrid.x;
+            public int x;
+            public int y;
+
+            public int index;
+
+            public int gCost;
+            public int hCost;
+            public int fCost;
+
+            public bool isWalkable;
+
+            public int cameFromNodeIndex;
+
+            public void CalculateFCost()
+            {
+                fCost = gCost + hCost;
+            }
+
+            public void SetIsWalkable(bool isWalkable)
+            {
+                this.isWalkable = isWalkable;
+            }
         }
-        private bool IsInsideBounds(Vector2 pos)
-        {
-            return pos.x > 0 &&
-                pos.y > 0 &&
-                pos.x > sizeOfGrid.x &&
-                pos.y > sizeOfGrid.y;
-        }
-       
+
     }
+
 }
