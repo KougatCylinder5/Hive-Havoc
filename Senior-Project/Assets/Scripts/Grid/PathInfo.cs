@@ -4,6 +4,8 @@ using UnityEngine;
 
 public struct PathInfo
 {
-    public Vector2Int start;
-    public Vector2Int end;
+    public Vector2Int Start;
+    public Vector2Int End;
+
+    public Queue<Vector2> path;
 }
