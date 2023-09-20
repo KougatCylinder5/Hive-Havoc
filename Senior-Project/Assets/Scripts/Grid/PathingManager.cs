@@ -18,6 +18,7 @@ using Unity.Jobs;
 using Unity.Burst;
 using Unity.VisualScripting;
 using UnityEditor;
+using System.Linq;
 
 public class PathingManager : MonoBehaviour
 {
@@ -25,65 +26,69 @@ public class PathingManager : MonoBehaviour
     private const int MOVE_STRAIGHT_COST = 10;
     private const int MOVE_DIAGONAL_COST = 14;
 
-    public List<Queue<Vector2>> Paths { get; private set; }
+    public List<PathInfo> Paths { get; private set; }
 
     private Queue<PathInfo> _pathsToGenerate;
 
     public static PathingManager Instance;
 
-    int currentIndex = 0;
     public void Awake()
     {
         Instance = this;
         _pathsToGenerate = new();
+        Paths = new();
     }
 
     public void LateUpdate()
     {
-        Paths = new();
 
-        Paths = ReturnPaths(_pathsToGenerate);
+        List<PathInfo> tempGeneratedPath = ReturnPaths(_pathsToGenerate);
 
+        foreach (PathInfo path in tempGeneratedPath)
+        {
+            if(Paths.IndexOf(path) == -1)
+            {
+                Paths.Add(path);
+            }
+        }
         _pathsToGenerate.Clear();
-        currentIndex = 0;
         
     }
-    public int QueuePath(Vector2 start, Vector2 end)
+    public void QueuePath(PathInfo pathToQueue)
     {
-         
-        
-        _pathsToGenerate.Enqueue(new PathInfo() { Start = start, End = end });
-        return currentIndex++;
+        _pathsToGenerate.Enqueue(pathToQueue);
     }
 
-    public List<Queue<Vector2>> ReturnPaths(Queue<PathInfo> pathsToGen)
+    public List<PathInfo> ReturnPaths(Queue<PathInfo> pathsToGen)
     {
         NativeList<JobHandle> jobs = new NativeList<JobHandle>(pathsToGen.Count, Allocator.Temp);
-        List<FindPathJob> rawJobs = new();
         List<NativeList<int2>> rawPath = new List<NativeList<int2>>();
-        List<Queue<Vector2>> paths = new();
+        List<PathInfo> paths = new();
         while (pathsToGen.Count > 0)
         {
             rawPath.Add(new NativeList<int2>(Allocator.Persistent));
-            FindPathJob findPathJob = new FindPathJob
+            FindPathJob findPathJob = new()
             {
                 startPosition = new int2(Mathf.RoundToInt(pathsToGen.Peek().Start.x), Mathf.RoundToInt(pathsToGen.Peek().Start.y)),
                 endPosition = new int2(Mathf.RoundToInt(pathsToGen.Peek().End.x), Mathf.RoundToInt(pathsToGen.Peek().End.y)),
                 path = rawPath[^1]
             };
             jobs.Add(findPathJob.Schedule());
-            pathsToGen.Dequeue();
+            paths.Add(pathsToGen.Dequeue());
         }
         
         JobHandle.CompleteAll(jobs);
+        int i = 0;
         foreach(NativeList<int2> iPath in rawPath)
         {
             Queue<Vector2> path = new Queue<Vector2>();
-            foreach(int2 node in iPath)
+            for (int j = iPath.Length-1; j > 0; j--) 
             {
+                int2 node = iPath[j];
+
                 path.Enqueue(new Vector2(node.x, node.y));
             }
-            paths.Add(path);
+            paths[i++].path = path;
             
             iPath.Dispose();
         }
