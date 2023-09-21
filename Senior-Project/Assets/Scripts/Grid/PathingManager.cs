@@ -38,6 +38,7 @@ public class PathingManager : MonoBehaviour
         Instance = this;
         _pathsToGenerate = new();
         Paths = new();
+        InvokeRepeating(nameof(DestroyAllPaths), 0, 60);
     }
 
     public void LateUpdate()
@@ -52,18 +53,7 @@ public class PathingManager : MonoBehaviour
                 Paths.Add(path);
             }
         }
-        try
-        {
-            foreach (PathInfo path in Paths)
-            {
-                path.pathLifeTime -= Time.deltaTime;
-                path.CheckLifeTime();
-            }
-        }
-        catch(Exception ex)
-        {
-            Debug.LogError(ex.ToString());
-        }
+        
         
         _pathsToGenerate.Clear();
         
@@ -73,16 +63,22 @@ public class PathingManager : MonoBehaviour
         _pathsToGenerate.Enqueue(pathToQueue);
     }
 
+    public void DestroyAllPaths()
+    {
+        Paths.Clear();
+    }
+
     public List<PathInfo> ReturnPaths(Queue<PathInfo> pathsToGen)
     {
         NativeList<JobHandle> jobs = new NativeList<JobHandle>(pathsToGen.Count, Allocator.Temp);
-        List<NativeList<int2>> rawPath = new List<NativeList<int2>>();
+        List<NativeList<float2>> rawPath = new List<NativeList<float2>>();
         List<PathInfo> paths = new();
         while (pathsToGen.Count > 0)
         {
-            rawPath.Add(new NativeList<int2>(Allocator.Persistent));
+            rawPath.Add(new NativeList<float2>(Allocator.Persistent));
             FindPathJob findPathJob = new()
             {
+                exactEndPosition = pathsToGen.Peek().End,
                 startPosition = new int2(Mathf.RoundToInt(pathsToGen.Peek().Start.x), Mathf.RoundToInt(pathsToGen.Peek().Start.y)),
                 endPosition = new int2(Mathf.RoundToInt(pathsToGen.Peek().End.x), Mathf.RoundToInt(pathsToGen.Peek().End.y)),
                 path = rawPath[^1]
@@ -93,15 +89,18 @@ public class PathingManager : MonoBehaviour
         
         JobHandle.CompleteAll(jobs);
         int i = 0;
-        foreach(NativeList<int2> iPath in rawPath)
+        foreach(NativeList<float2> iPath in rawPath)
         {
             Queue<Vector2> path = new Queue<Vector2>();
-            for (int j = iPath.Length-1; j > 0; j--) 
+            for (int j = iPath.Length-1; j >= 0; j--) 
             {
-                int2 node = iPath[j];
+                
+                float2 node = iPath[j];
 
                 path.Enqueue(new Vector2(node.x, node.y));
             }
+
+            path.TryDequeue(out Vector2 _);
             paths[i++].path = path;
             
             iPath.Dispose();
@@ -117,10 +116,12 @@ public class PathingManager : MonoBehaviour
     [BurstCompile]
     private struct FindPathJob : IJob
     {
+        public float2 exactEndPosition;
+
 
         public int2 startPosition;
         public int2 endPosition;
-        public NativeList<int2> path;
+        public NativeList<float2> path;
         public void Execute()
         {
             int2 gridSize = new int2(100, 100);
@@ -247,7 +248,6 @@ public class PathingManager : MonoBehaviour
             }
             else
             {
-
                 path.Add(new int2(endNode.x, endNode.y));
 
 
@@ -258,6 +258,8 @@ public class PathingManager : MonoBehaviour
                     path.Add(new int2(cameFromNode.x, cameFromNode.y));
                     currentNode = cameFromNode;
                 }
+                path.RemoveAt(path.Length - 1);
+                path.Add(exactEndPosition);
 
             }
 

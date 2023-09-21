@@ -8,23 +8,47 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
     public Vector2 Start;
     public Vector2 End;
 
-    public float pathLifeTime = 10;
-
     public Queue<Vector2> path = new();
 
     public bool pathFound = false;
-    
-    public void CheckLifeTime()
+
+    private LayerMask raycastLayers;
+
+    public Queue<Vector2> cleanedPath = new();
+
+    public PathInfo()
     {
-        if(pathLifeTime <= 0)
-        {
-            DeletePath();
-        }
+        raycastLayers = ~LayerMask.GetMask(new string[] { "Building", "Terrain" });
     }
 
-    private void DeletePath()
+    public void CleanPath()
     {
-        PathingManager.Instance.Paths.Remove(this);
+            Queue<Vector2> _path = path;
+            Vector2 currentNode = _path.Dequeue();
+            Vector2 priorNode = currentNode;
+            cleanedPath.Clear();
+            cleanedPath.Enqueue(currentNode);
+
+            while (path.Count > 0)
+            {
+                if(Physics.Raycast(currentNode, ConvertToVector3(currentNode, 0.1f) - ConvertToVector3(_path.Peek(), 0.1f).normalized, out RaycastHit hit, Vector2.Distance(currentNode, _path.Peek()), raycastLayers))
+                {
+                    cleanedPath.Enqueue(priorNode);
+                }
+                else
+                {
+                    priorNode = _path.Dequeue();
+                }
+            
+            }
+            
+
+
+    }
+
+    private Vector3 ConvertToVector3(Vector2 obj, float height)
+    {
+        return new Vector3(obj.x, height, obj.y);
     }
     
     public bool Equals(PathInfo other)

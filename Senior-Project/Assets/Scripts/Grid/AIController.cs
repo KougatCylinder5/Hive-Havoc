@@ -7,14 +7,15 @@ public class AIController : MonoBehaviour
 {
 
     [SerializeField]
-    private Vector2 target, position;
+    private Vector2 target;
+    private Vector3 position;
     
     public float speed;
     public bool IsStale { get; private set; }
 
-    private PathInfo path, requestedPath;
+    private PathInfo _Path, _requestedPath;
     [SerializeField]
-    private float _updateFrequency = 0.5f;
+    private float _updateFrequency = 0.5f, _updateTimeRemaining = 0f;
     [SerializeField]
     private PathingType _pathingType;
 
@@ -26,16 +27,33 @@ public class AIController : MonoBehaviour
 
     public void Update()
     {
+
+
+        position = transform.position;
+
         switch (_pathingType)
         {
             case PathingType.Direct:
-
-
+                transform.position = Vector3.MoveTowards(position, new Vector3(target.x, 0.1f, target.y), speed * Time.deltaTime);
                 break;
 
             case PathingType.AroundObject:
-
-
+                
+                if (/*(_updateFrequency < _updateTimeRemaining || IsStale) &&*/ Vector3.Distance(position, new Vector3(target.x, 0.1f, target.y)) > 0.01f)
+                {
+                    
+                    _Path = RetrieveNewPath();
+                    _Path.cleanedPath = _Path.path;
+                    //_Path?.CleanPath();
+                }
+                if (_Path != null && _Path.cleanedPath.Count > 0)
+                {
+                    transform.position = Vector3.MoveTowards(position, new Vector3(_Path.cleanedPath.Peek().x, 0.1f, _Path.cleanedPath.Peek().y), speed * Time.deltaTime);
+                    if (Vector3.Distance(position, new Vector3(_Path.cleanedPath.Peek().x, 0.1f, _Path.cleanedPath.Peek().y)) < 0.01f)
+                    {
+                        _Path.cleanedPath.Dequeue();
+                    }
+                }
                 break;
 
             case PathingType.Flow:
@@ -45,24 +63,43 @@ public class AIController : MonoBehaviour
 
 
         }
-        position = transform.position;
-        requestedPath = new PathInfo() { Start = position, End = target };
-        PathingManager.Instance.QueuePath(requestedPath);
+        
+        
     }
-
+    
 
     public void LateUpdate()
     {
-        int pathPos = PathingManager.Instance.Paths.IndexOf(requestedPath);
-        if (pathPos != -1)
+        if(_pathingType == PathingType.AroundObject)
         {
-            path = PathingManager.Instance.Paths.ElementAt(pathPos);
+            RequestNewPath();
         }
     }
 
     private void RequestNewPath()
     {
-        
+        if (_updateFrequency < _updateTimeRemaining || IsStale)
+        {
+            _requestedPath = new PathInfo() { Start = new(position.x, position.z), End = target };
+            PathingManager.Instance.QueuePath(_requestedPath);
+            _updateTimeRemaining = 0;
+        }
+        else
+        {
+            _updateTimeRemaining += Time.deltaTime;
+        }
+    }
+
+
+    private PathInfo RetrieveNewPath()
+    {
+        int pathPos = PathingManager.Instance.Paths.IndexOf(_requestedPath);
+        if (pathPos != -1)
+        {
+            return PathingManager.Instance.Paths.ElementAt(pathPos);
+        }
+        return _Path;
+
     }
 
     public void SetDestination(Vector2 destination)
