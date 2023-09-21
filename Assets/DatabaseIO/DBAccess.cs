@@ -7,73 +7,121 @@ using Mono.Data.Sqlite;
 
 public class DBAccess : MonoBehaviour
 {
-    private static int userId = 0;
+    private static int saveID = 0;
     private static string dbConnectionString = "URI=file:" + Application.persistentDataPath + "\\storage.db";
-    public static void Start()
-    {
-        userId = 0;
-    }
 
-    public static string getConnectionString() {
+    protected static string getConnectionString() {
         return dbConnectionString;
     }
 
+    public static void AddTableIfMissing(string name, string columes) {
+        //Scorce https://www.youtube.com/watch?v=8bpYHCKdZno
+
+        var sqliteDB = new SqliteConnection(dbConnectionString);
+        sqliteDB.Open();
+        var sqliteCommand = sqliteDB.CreateCommand();
+
+        sqliteCommand.CommandText = "CREATE TABLE IF NOT EXISTS " + name + " (" + columes + ");";
+        sqliteCommand.ExecuteNonQuery();
+
+        sqliteDB.Close();
+        
+    }
+
     //Return true if signin is found.
-    public static bool signIn(string username) {
+    public static bool selectSave(string savename) {
         var sqliteDB = new SqliteConnection(dbConnectionString);
         sqliteDB.Open();
         var sqliteCommand = sqliteDB.CreateCommand(); 
         
-        sqliteCommand.CommandText = "SELECT id FROM users WHERE username LIKE '" + username + "';";
-        Debug.Log("SELECT id FROM 'users' WHERE 'username' LIKE '" + username + "';");
-        IDataReader users = sqliteCommand.ExecuteReader();
+        sqliteCommand.CommandText = "SELECT id FROM saves WHERE name LIKE '" + savename + "';";
+        IDataReader saves = sqliteCommand.ExecuteReader();
 
         try {
-            while(users.Read()) {
-                Debug.Log(users.GetValue(0));
-                //int.TryParse(users["id"], out userId);
+            while(saves.Read()) {
+                saveID = saves.GetInt32(0);
             }
         } catch {}
 
         sqliteDB.Close();
 
-        if(userId != 0) {
+        if(saveID != 0) {
             return true;
         }
 
         return false;
     }
 
-    public static void signOut() {
-        userId = 0;
+    public static void exitSave() {
+        saveID = 0;
     }
 
-    public static void addUser(string username) {
+    public static bool addSave(string savename) {
+        bool passed = false;
         var sqliteDB = new SqliteConnection(dbConnectionString);
         sqliteDB.Open();
         var sqliteCommand = sqliteDB.CreateCommand();
 
-        sqliteCommand.CommandText = "INSERT INTO users ('username') VALUES ('" + username + "');";
-        sqliteCommand.ExecuteNonQuery();
+        sqliteCommand.CommandText = "INSERT INTO saves ('name', 'last_play', 'rank', 'play_time') VALUES ('" + savename + "', + '" + System.DateTime.Now + "', 0, 0);";
+        try {
+            sqliteCommand.ExecuteNonQuery();
+            passed = true;
+
+        } catch {
+            passed = false;
+        }
 
         sqliteDB.Close();
+        return passed;
     }
 
-    /*private static List<Object> query(string queryString) {
-        List<var> output;
+    public static List<Unit> getUnits() {
+        List<Unit> units = new List<Unit>();
         var sqliteDB = new SqliteConnection(dbConnectionString);
         sqliteDB.Open();
         var sqliteCommand = sqliteDB.CreateCommand(); 
         
-        sqliteCommand.CommandText = queryString;
-        output = sqliteCommand.ExecuteReader();
+        sqliteCommand.CommandText = "SELECT id, x_pos, y_pos, target_x, target_y, health FROM unit WHERE save_id IS " + saveID + ";";
+        IDataReader aunit = sqliteCommand.ExecuteReader();
 
-        while(users.Read()) {
-            output.add(users);
-        }
+        try {
+            while(aunit.Read()) {
+                units.Add(new Unit(aunit.GetInt32(0), aunit.GetFloat(1), aunit.GetFloat(2), aunit.GetFloat(3), aunit.GetFloat(4), aunit.GetFloat(5)));
+            }
+        } catch {}
 
         sqliteDB.Close();
 
-        return output;
-    }*/
+        return units;
+    }
+
+    public static int addUnit(float xPos, float yPos, float xTarget, float yTarget, float health) {
+        int rowid = 0;
+        var sqliteDB = new SqliteConnection(dbConnectionString);
+        sqliteDB.Open();
+        var sqliteCommand = sqliteDB.CreateCommand();
+        sqliteCommand.CommandText = "INSERT INTO unit ('x_pos', 'y_pos', 'target_x', 'target_y', 'health', save_id) VALUES ('" + xPos + "', '" + yPos + "', '" + xTarget + "', '" + yTarget + "', '" + health + "', '" + saveID + "');";
+        sqliteCommand.ExecuteNonQuery();
+
+        sqliteCommand.CommandText = "SELECT last_insert_rowid() FROM unit;";
+        IDataReader lastRow = sqliteCommand.ExecuteReader();
+
+        try {
+            while(lastRow.Read()) {
+                rowid = lastRow.GetInt32(0);
+            }
+        } catch {}
+
+        return rowid;
+    }
+
+    public static void setUnit(int id, float xPos, float yPos, float xTarget, float yTarget, float health) {
+        var sqliteDB = new SqliteConnection(dbConnectionString);
+        sqliteDB.Open();
+        var sqliteCommand = sqliteDB.CreateCommand();
+        sqliteCommand.CommandText = " UPDATE unit SET x_pos=" + xPos + ", y_pos=" + yPos + ", target_x=" + xTarget + ", target_y=" + yTarget + ", health=" + health + " WHERE id IS " + id + ";";
+        sqliteCommand.ExecuteNonQuery();
+    }
+
+    
 }
