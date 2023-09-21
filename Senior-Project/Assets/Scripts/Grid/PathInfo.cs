@@ -8,10 +8,25 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
     public Vector2 Start;
     public Vector2 End;
 
+    public float pathLifeTime = 10;
+
     public Queue<Vector2> path = new();
 
     public bool pathFound = false;
+    
+    public void CheckLifeTime()
+    {
+        if(pathLifeTime <= 0)
+        {
+            DeletePath();
+        }
+    }
 
+    private void DeletePath()
+    {
+        PathingManager.Instance.Paths.Remove(this);
+    }
+    
     public bool Equals(PathInfo other)
     {
         return Start == other.Start && End == other.End;

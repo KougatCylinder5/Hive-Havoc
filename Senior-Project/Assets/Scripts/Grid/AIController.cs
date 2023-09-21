@@ -14,8 +14,9 @@ public class AIController : MonoBehaviour
 
     private PathInfo path, requestedPath;
     [SerializeField]
-    private int _pathQueuePosition = -1;
     private float _updateFrequency = 0.5f;
+    [SerializeField]
+    private PathingType _pathingType;
 
     public void Start()
     {
@@ -25,6 +26,25 @@ public class AIController : MonoBehaviour
 
     public void Update()
     {
+        switch (_pathingType)
+        {
+            case PathingType.Direct:
+
+
+                break;
+
+            case PathingType.AroundObject:
+
+
+                break;
+
+            case PathingType.Flow:
+
+
+                break;
+
+
+        }
         position = transform.position;
         requestedPath = new PathInfo() { Start = position, End = target };
         PathingManager.Instance.QueuePath(requestedPath);
@@ -33,12 +53,16 @@ public class AIController : MonoBehaviour
 
     public void LateUpdate()
     {
-
-        path = PathingManager.Instance.Paths.ElementAt(PathingManager.Instance.Paths.IndexOf(requestedPath));
+        int pathPos = PathingManager.Instance.Paths.IndexOf(requestedPath);
+        if (pathPos != -1)
+        {
+            path = PathingManager.Instance.Paths.ElementAt(pathPos);
+        }
     }
 
     private void RequestNewPath()
     {
+        
     }
 
     public void SetDestination(Vector2 destination)
@@ -52,6 +76,13 @@ public class AIController : MonoBehaviour
     }
 
 
+    
 
+}
 
+public enum PathingType
+{
+    Flow,
+    Direct,
+    AroundObject
 }

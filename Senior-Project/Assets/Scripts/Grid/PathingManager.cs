@@ -19,6 +19,7 @@ using Unity.Burst;
 using Unity.VisualScripting;
 using UnityEditor;
 using System.Linq;
+using System;
 
 public class PathingManager : MonoBehaviour
 {
@@ -51,6 +52,19 @@ public class PathingManager : MonoBehaviour
                 Paths.Add(path);
             }
         }
+        try
+        {
+            foreach (PathInfo path in Paths)
+            {
+                path.pathLifeTime -= Time.deltaTime;
+                path.CheckLifeTime();
+            }
+        }
+        catch(Exception ex)
+        {
+            Debug.LogError(ex.ToString());
+        }
+        
         _pathsToGenerate.Clear();
         
     }
