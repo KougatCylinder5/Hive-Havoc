@@ -44,7 +44,7 @@ public class AIController : MonoBehaviour
                     
                     _Path = RetrieveNewPath();
                     _Path.cleanedPath = _Path.path;
-                    //_Path?.CleanPath();
+                    _Path?.CleanPath();
                 }
                 if (_Path != null && _Path.cleanedPath.Count > 0)
                 {
