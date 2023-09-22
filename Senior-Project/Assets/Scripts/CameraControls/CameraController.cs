@@ -6,16 +6,16 @@ public class CameraController : MonoBehaviour
 {
     public float movementSpeed;
     public float movementTime;
-    public Vector3 newPosition;
+    private Vector3 _newPosition;
 
     public Vector3 zoomAmount;
-    private Vector3 newZoom;
+    private Vector3 _newZoom;
     public Transform cameraTransform;
     public int minZoomBound;
     public int maxZoomBound;
 
-    private Vector3 dragStartPosition;
-    private Vector3 dragCurrentPosition;
+    private Vector3 _dragStartPosition;
+    private Vector3 _dragCurrentPosition;
 
     public float speedConstant;
     public CameraBounds boundChecker;
@@ -23,8 +23,8 @@ public class CameraController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        newPosition = transform.position;
-        newZoom = cameraTransform.localPosition;
+        _newPosition = transform.position;
+        _newZoom = cameraTransform.localPosition;
     }
 
     // Update is called once per frame
@@ -33,52 +33,52 @@ public class CameraController : MonoBehaviour
         HandleMovementInput();
         HandleMouseInput();
         SpeedChange(speedConstant);
-        newPosition = boundChecker.CheckBounds(newPosition);
+        _newPosition = boundChecker.CheckBounds(_newPosition);
     }
 
     void HandleMovementInput()
     {
         if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
         {
-            newPosition += transform.forward * movementSpeed;
+            _newPosition += transform.forward * movementSpeed;
         }
         if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
         {
-            newPosition += transform.forward * -movementSpeed;
+            _newPosition += transform.forward * -movementSpeed;
         }
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
-            newPosition += transform.right * -movementSpeed;
+            _newPosition += transform.right * -movementSpeed;
         }
         if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
-            newPosition += transform.right * movementSpeed;
+            _newPosition += transform.right * movementSpeed;
         }
-        transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * movementTime);
+        transform.position = Vector3.Lerp(transform.position, _newPosition, Time.deltaTime * movementTime);
     }
 
     void HandleMouseInput()
     {
-        if((Input.mouseScrollDelta.y > 0 && newZoom.y + zoomAmount.y > minZoomBound) || (Input.mouseScrollDelta.y < 0 && newZoom.y - zoomAmount.y < maxZoomBound))
+        if((Input.mouseScrollDelta.y > 0 && _newZoom.y + zoomAmount.y > minZoomBound) || (Input.mouseScrollDelta.y < 0 && _newZoom.y - zoomAmount.y < maxZoomBound))
         {
-            newZoom += Input.mouseScrollDelta.y * zoomAmount;
+            _newZoom += Input.mouseScrollDelta.y * zoomAmount;
         }
         if(Input.GetMouseButtonDown(2))
         {
-            dragStartPosition = CameraRaycast();
+            _dragStartPosition = CameraRaycast();
         }
         if (Input.GetMouseButton(2))
         {
-            dragCurrentPosition = CameraRaycast();
-            newPosition = transform.position + dragStartPosition - dragCurrentPosition;
+            _dragCurrentPosition = CameraRaycast();
+            _newPosition = transform.position + _dragStartPosition - _dragCurrentPosition;
             
         }
-        cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, newZoom, Time.deltaTime * movementTime);
+        cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, _newZoom, Time.deltaTime * movementTime);
     }
 
     void SpeedChange(float speedConstant)
     {
-        movementSpeed = newZoom.y * speedConstant;
+        movementSpeed = _newZoom.y * speedConstant;
     }
 
     Vector3 CameraRaycast()

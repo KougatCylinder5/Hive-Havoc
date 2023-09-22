@@ -4,26 +4,26 @@ using UnityEditor;
 public class RenameChildren : EditorWindow
 {
 
-    private static readonly Vector2Int size = new Vector2Int(250, 100);
+    private static readonly Vector2Int _size = new Vector2Int(250, 100);
 
-    private string childrenPrefix;
-    private int startIndex;
-    private string childrenSuffix;
+    private string _childrenPrefix;
+    private int _startIndex;
+    private string _childrenSuffix;
 
     [MenuItem("GameObject/Rename Children")]
     public static void ShowWindow()
     {
         EditorWindow window = GetWindow<RenameChildren>();
-        window.minSize = size;
-        window.maxSize = size;
+        window.minSize = _size;
+        window.maxSize = _size;
     }
 
     private void OnGUI()
     {
-        childrenPrefix = EditorGUILayout.TextField("Children prefix", childrenPrefix);
-        childrenSuffix = EditorGUILayout.TextField("Children suffix", childrenSuffix);
+        _childrenPrefix = EditorGUILayout.TextField("Children prefix", _childrenPrefix);
+        _childrenSuffix = EditorGUILayout.TextField("Children suffix", _childrenSuffix);
 
-        startIndex = EditorGUILayout.IntField("Start index", startIndex);
+        _startIndex = EditorGUILayout.IntField("Start index", _startIndex);
 
         if (GUILayout.Button("Rename children"))
         {
@@ -31,7 +31,7 @@ public class RenameChildren : EditorWindow
             for (int objectI = 0; objectI < selectedObjects.Length; objectI++)
             {
                 Transform selectedObjectT = selectedObjects[objectI].transform;
-                for (int childI = 0, i = startIndex; childI < selectedObjectT.childCount; childI++) selectedObjectT.GetChild(childI).name = $"{childrenPrefix}{i++}{childrenSuffix}";
+                for (int childI = 0, i = _startIndex; childI < selectedObjectT.childCount; childI++) selectedObjectT.GetChild(childI).name = $"{_childrenPrefix}{i++}{_childrenSuffix}";
             }
         }
     }
