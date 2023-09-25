@@ -43,8 +43,6 @@ public class AIController : MonoBehaviour
                 {
                     
                     _Path = RetrieveNewPath();
-                    _Path.cleanedPath = _Path.path;
-                    _Path?.CleanPath();
                 }
                 if (_Path != null && _Path.cleanedPath.Count > 0)
                 {
@@ -53,6 +51,10 @@ public class AIController : MonoBehaviour
                     {
                         _Path.cleanedPath.Dequeue();
                     }
+                }
+                else if (_Path != null && Vector3.Distance(position, new Vector3(_Path.End.x, 0.1f, _Path.End.y)) > 0.01f)
+                {
+                    transform.position = Vector3.MoveTowards(position, new Vector3(_Path.End.x, 0.1f, _Path.End.y), speed * Time.deltaTime);
                 }
                 break;
 

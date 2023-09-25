@@ -29,6 +29,8 @@ public class PathingManager : MonoBehaviour
 
     public List<PathInfo> Paths { get; private set; }
 
+    public List<bool> ObstructedTiles = new List<bool>();
+
     private Queue<PathInfo> _pathsToGenerate;
 
     public static PathingManager Instance;
@@ -39,6 +41,12 @@ public class PathingManager : MonoBehaviour
         _pathsToGenerate = new();
         Paths = new();
         InvokeRepeating(nameof(DestroyAllPaths), 0, 60);
+
+        for(int i = 0; i < 15*15; i++)
+        {
+            ObstructedTiles.Add(true);
+        }
+        ObstructedTiles[80] = false;
     }
 
     public void LateUpdate()
@@ -73,21 +81,35 @@ public class PathingManager : MonoBehaviour
         NativeList<JobHandle> jobs = new NativeList<JobHandle>(pathsToGen.Count, Allocator.Temp);
         List<NativeList<float2>> rawPath = new List<NativeList<float2>>();
         List<PathInfo> paths = new();
+
+        NativeList<bool> obstructedTiles = new NativeList<bool>(15*15, Allocator.TempJob);
+        foreach (bool tile in ObstructedTiles)
+        {
+            obstructedTiles.Add(tile);
+        }
+
+
         while (pathsToGen.Count > 0)
         {
+            
+
             rawPath.Add(new NativeList<float2>(Allocator.Persistent));
             FindPathJob findPathJob = new()
             {
                 exactEndPosition = pathsToGen.Peek().End,
                 startPosition = new int2(Mathf.RoundToInt(pathsToGen.Peek().Start.x), Mathf.RoundToInt(pathsToGen.Peek().Start.y)),
                 endPosition = new int2(Mathf.RoundToInt(pathsToGen.Peek().End.x), Mathf.RoundToInt(pathsToGen.Peek().End.y)),
-                path = rawPath[^1]
+                path = rawPath[^1],
+                obstructedGrid = obstructedTiles
+                
             };
             jobs.Add(findPathJob.Schedule());
             paths.Add(pathsToGen.Dequeue());
         }
         
         JobHandle.CompleteAll(jobs);
+
+        obstructedTiles.Dispose();
         int i = 0;
         foreach(NativeList<float2> iPath in rawPath)
         {
@@ -101,8 +123,9 @@ public class PathingManager : MonoBehaviour
             }
 
             path.TryDequeue(out Vector2 _);
-            paths[i++].path = path;
-            
+            paths[i].path = path;
+            paths[i++].CleanPath();
+
             iPath.Dispose();
         }
 
@@ -113,18 +136,19 @@ public class PathingManager : MonoBehaviour
 
 
 
-    [BurstCompile]
+    //[BurstCompile]
     private struct FindPathJob : IJob
     {
         public float2 exactEndPosition;
 
+        public NativeList<bool> obstructedGrid;
 
         public int2 startPosition;
         public int2 endPosition;
         public NativeList<float2> path;
         public void Execute()
         {
-            int2 gridSize = new int2(100, 100);
+            int2 gridSize = new int2(15, 15);
 
             NativeArray<PathNode> pathNodeArray = new NativeArray<PathNode>(gridSize.x * gridSize.y, Allocator.Temp);
 
@@ -139,12 +163,12 @@ public class PathingManager : MonoBehaviour
                         index = CalculateIndex(x, y, gridSize.x),
 
                         gCost = int.MaxValue,
-                        hCost = CalculateDistanceCost(new int2(x, y), endPosition)
+                        hCost = CalculateDistanceCost(new int2(x, y), endPosition),
+
+                        isWalkable = obstructedGrid[CalculateIndex(x, y, gridSize.x)],
+                        cameFromNodeIndex = -1
                     };
                     pathNode.CalculateFCost();
-
-                    pathNode.isWalkable = true;
-                    pathNode.cameFromNodeIndex = -1;
 
                     pathNodeArray[pathNode.index] = pathNode;
                 }
@@ -262,7 +286,6 @@ public class PathingManager : MonoBehaviour
                 path.Add(exactEndPosition);
 
             }
-
             pathNodeArray.Dispose();
             neighbourOffsetArray.Dispose();
             openList.Dispose();

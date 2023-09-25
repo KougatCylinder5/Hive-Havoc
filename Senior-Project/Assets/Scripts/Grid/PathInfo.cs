@@ -23,19 +23,36 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
 
     public void CleanPath()
     {
-        Queue<Vector2> copyPath = path;
-        Vector2 curNode = copyPath.Dequeue();
-
-
-        while(copyPath.Count > 0)
+        Queue<Vector2> copyPath = new Queue<Vector2>(path);
+        
+        cleanedPath.Clear();
+        if(copyPath.TryPeek(out Vector2 curNode))
         {
-            Ray ray = new Ray(ConvertToVector3(copyPath.Peek(), 0.1f), ConvertToVector3(copyPath.Peek(), 0.1f) - ConvertToVector3(curNode, 0.1f));
-            
-            if (Physics.Raycast())
+            Vector2 priorNode = new Vector2(-1, -1);
+
+            while (copyPath.Count > 0)
             {
+                Ray ray = new Ray(ConvertToVector3(curNode, 0.1f), ConvertToVector3(copyPath.Peek() - curNode, 0.1f));
+
+                if (Physics.Raycast(ray, out RaycastHit hit, ConvertToVector3(copyPath.Peek() - curNode, 0.1f).magnitude))
+                {
+                    cleanedPath.Enqueue(priorNode);
+                    curNode = priorNode;
+                    copyPath.Dequeue();
+                }
+                else
+                {
+                    priorNode = copyPath.Dequeue();
+
+                }
 
             }
+            if (!priorNode.Equals(new Vector2(-1,-1)))
+                cleanedPath.Enqueue(priorNode);
         }
+        
+
+        
 
 
     }
