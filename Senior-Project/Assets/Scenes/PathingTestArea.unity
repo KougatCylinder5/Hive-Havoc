@@ -168,7 +168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4351c91a70d30614aaf0ac8389b51158, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {x: 10, y: 0}
+  target: {x: 10, y: 10}
   speed: 0.5
   _updateFrequency: 0
   _updateTimeRemaining: 0
@@ -985,6 +985,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67ae88b0ea2bbfe45b7cde702739f6c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gridSize: {x: 100, y: 100}
   ObstructedTiles: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

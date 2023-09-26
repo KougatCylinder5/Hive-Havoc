@@ -18,7 +18,7 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
 
     public PathInfo()
     {
-        raycastLayers = ~LayerMask.GetMask(new string[] { "Building", "Terrain" });
+        raycastLayers = LayerMask.GetMask(new string[] { "Building", "Terrain" });
     }
 
     public void CleanPath()
@@ -37,7 +37,7 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
             {
                 Ray ray = new Ray(ConvertToVector3(curNode, 0.6f), ConvertToVector3(copyPath.Peek() - curNode, 0.6f));
 
-                if (Physics.Raycast(ray : ray, hitInfo :out RaycastHit hit,maxDistance: (copyPath.Peek() - curNode).magnitude, layerMask : raycastLayers))
+                if (Physics.Raycast(ray : ray, hitInfo : out RaycastHit hit,maxDistance: (copyPath.Peek() - curNode).magnitude))
                 {
                     cleanedPath.Enqueue(priorNode);
                     curNode = priorNode;
