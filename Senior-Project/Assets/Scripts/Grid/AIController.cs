@@ -115,7 +115,7 @@ public class AIController : MonoBehaviour
         target = destination;
     }
 
-    public void SetTarget(ref Transform target)
+    public void SetTarget(Transform target)
     {
         this.target = target.position;
     }
