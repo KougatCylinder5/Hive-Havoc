@@ -42,7 +42,7 @@ public class PathingManager : MonoBehaviour
         Paths = new();
         InvokeRepeating(nameof(DestroyAllPaths), 0, 60);
 
-        for(int i = 0; i < 15*15; i++)
+        for(int i = 0; i < 100*100; i++)
         {
             ObstructedTiles.Add(true);
         }
@@ -82,7 +82,7 @@ public class PathingManager : MonoBehaviour
         List<NativeList<float2>> rawPath = new List<NativeList<float2>>();
         List<PathInfo> paths = new();
 
-        NativeList<bool> obstructedTiles = new NativeList<bool>(15*15, Allocator.TempJob);
+        NativeList<bool> obstructedTiles = new NativeList<bool>(100*100, Allocator.TempJob);
         foreach (bool tile in ObstructedTiles)
         {
             obstructedTiles.Add(tile);
@@ -99,8 +99,8 @@ public class PathingManager : MonoBehaviour
                 exactEndPosition = pathsToGen.Peek().End,
                 startPosition = new int2(Mathf.RoundToInt(pathsToGen.Peek().Start.x), Mathf.RoundToInt(pathsToGen.Peek().Start.y)),
                 endPosition = new int2(Mathf.RoundToInt(pathsToGen.Peek().End.x), Mathf.RoundToInt(pathsToGen.Peek().End.y)),
-                path = rawPath[^1],
-                obstructedGrid = obstructedTiles
+                path = rawPath[^1]//,
+                //obstructedGrid = obstructedTiles
                 
             };
             jobs.Add(findPathJob.Schedule());
@@ -141,14 +141,14 @@ public class PathingManager : MonoBehaviour
     {
         public float2 exactEndPosition;
 
-        public NativeList<bool> obstructedGrid;
+        //public NativeList<bool> obstructedGrid;
 
         public int2 startPosition;
         public int2 endPosition;
         public NativeList<float2> path;
         public void Execute()
         {
-            int2 gridSize = new int2(15, 15);
+            int2 gridSize = new int2(100, 100);
 
             NativeArray<PathNode> pathNodeArray = new NativeArray<PathNode>(gridSize.x * gridSize.y, Allocator.Temp);
 
@@ -165,7 +165,7 @@ public class PathingManager : MonoBehaviour
                         gCost = int.MaxValue,
                         hCost = CalculateDistanceCost(new int2(x, y), endPosition),
 
-                        isWalkable = obstructedGrid[CalculateIndex(x, y, gridSize.x)],
+                        isWalkable = true,//obstructedGrid[CalculateIndex(x, y, gridSize.x)],
                         cameFromNodeIndex = -1
                     };
                     pathNode.CalculateFCost();
