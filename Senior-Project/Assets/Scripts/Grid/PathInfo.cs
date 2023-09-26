@@ -24,9 +24,12 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
     public void CleanPath()
     {
         Queue<Vector2> copyPath = new Queue<Vector2>(path);
+
+        Vector2 curNode = Start;
         
         cleanedPath.Clear();
-        if(copyPath.TryPeek(out Vector2 curNode))
+
+        if(copyPath.Count > 0)
         {
             Vector2 priorNode = new Vector2(-1, -1);
 
@@ -40,11 +43,7 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
                     curNode = priorNode;
                     copyPath.Dequeue();
                 }
-                else
-                {
-                    priorNode = copyPath.Dequeue();
-
-                }
+                priorNode = copyPath.Dequeue();
 
             }
             if (!priorNode.Equals(new Vector2(-1,-1)))

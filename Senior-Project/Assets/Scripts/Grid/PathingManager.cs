@@ -180,10 +180,10 @@ public class PathingManager : MonoBehaviour
             neighbourOffsetArray[1] = new int2(+1, 0); // Right
             neighbourOffsetArray[2] = new int2(0, +1); // Up
             neighbourOffsetArray[3] = new int2(0, -1); // Down
-            neighbourOffsetArray[4] = new int2(-1, -1); // Left Down
-            neighbourOffsetArray[5] = new int2(-1, +1); // Left Up
-            neighbourOffsetArray[6] = new int2(+1, -1); // Right Down
-            neighbourOffsetArray[7] = new int2(+1, +1); // Right Up
+            //neighbourOffsetArray[4] = new int2(-1, -1); // Left Down
+            //neighbourOffsetArray[5] = new int2(-1, +1); // Left Up
+            //neighbourOffsetArray[6] = new int2(+1, -1); // Right Down
+            //neighbourOffsetArray[7] = new int2(+1, +1); // Right Up
 
             int endNodeIndex = CalculateIndex(endPosition.x, endPosition.y, gridSize.x);
 
