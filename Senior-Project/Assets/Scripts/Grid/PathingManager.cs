@@ -18,6 +18,8 @@ using Unity.Jobs;
 using Unity.Burst;
 using Unity.VisualScripting;
 using UnityEditor;
+using System.Linq;
+using System;
 
 public class PathingManager : MonoBehaviour
 {
@@ -25,66 +27,105 @@ public class PathingManager : MonoBehaviour
     private const int MOVE_STRAIGHT_COST = 10;
     private const int MOVE_DIAGONAL_COST = 14;
 
-    public List<Queue<Vector2>> Paths { get; private set; }
+    public List<PathInfo> Paths { get; private set; }
+
+    public List<bool> ObstructedTiles = new List<bool>();
 
     private Queue<PathInfo> _pathsToGenerate;
 
     public static PathingManager Instance;
 
-    int currentIndex = 0;
     public void Awake()
     {
         Instance = this;
         _pathsToGenerate = new();
+        Paths = new();
+        InvokeRepeating(nameof(DestroyAllPaths), 0, 60);
+
+        for(int i = 0; i < 15*15; i++)
+        {
+            ObstructedTiles.Add(true);
+        }
+        ObstructedTiles[80] = false;
     }
 
     public void LateUpdate()
     {
-        Paths = new();
 
-        Paths = ReturnPaths(_pathsToGenerate);
+        List<PathInfo> tempGeneratedPath = ReturnPaths(_pathsToGenerate);
 
+        foreach (PathInfo path in tempGeneratedPath)
+        {
+            if(Paths.IndexOf(path) == -1)
+            {
+                Paths.Add(path);
+            }
+        }
+        
+        
         _pathsToGenerate.Clear();
-        currentIndex = 0;
         
     }
-    public int QueuePath(Vector2 start, Vector2 end)
+    public void QueuePath(PathInfo pathToQueue)
     {
-         
-        
-        _pathsToGenerate.Enqueue(new PathInfo() { Start = start, End = end });
-        return currentIndex++;
+        _pathsToGenerate.Enqueue(pathToQueue);
     }
 
-    public List<Queue<Vector2>> ReturnPaths(Queue<PathInfo> pathsToGen)
+    public void DestroyAllPaths()
+    {
+        Paths.Clear();
+    }
+
+    public List<PathInfo> ReturnPaths(Queue<PathInfo> pathsToGen)
     {
         NativeList<JobHandle> jobs = new NativeList<JobHandle>(pathsToGen.Count, Allocator.Temp);
-        List<FindPathJob> rawJobs = new();
-        List<NativeList<int2>> rawPath = new List<NativeList<int2>>();
-        List<Queue<Vector2>> paths = new();
+        List<NativeList<float2>> rawPath = new List<NativeList<float2>>();
+        List<PathInfo> paths = new();
+
+        NativeList<bool> obstructedTiles = new NativeList<bool>(15*15, Allocator.TempJob);
+        foreach (bool tile in ObstructedTiles)
+        {
+            obstructedTiles.Add(tile);
+        }
+
+
         while (pathsToGen.Count > 0)
         {
-            rawPath.Add(new NativeList<int2>(Allocator.Persistent));
-            FindPathJob findPathJob = new FindPathJob
+            
+
+            rawPath.Add(new NativeList<float2>(Allocator.Persistent));
+            FindPathJob findPathJob = new()
             {
+                exactEndPosition = pathsToGen.Peek().End,
                 startPosition = new int2(Mathf.RoundToInt(pathsToGen.Peek().Start.x), Mathf.RoundToInt(pathsToGen.Peek().Start.y)),
                 endPosition = new int2(Mathf.RoundToInt(pathsToGen.Peek().End.x), Mathf.RoundToInt(pathsToGen.Peek().End.y)),
-                path = rawPath[^1]
+                path = rawPath[^1],
+                obstructedGrid = obstructedTiles
+                
             };
             jobs.Add(findPathJob.Schedule());
-            pathsToGen.Dequeue();
+            paths.Add(pathsToGen.Dequeue());
         }
         
         JobHandle.CompleteAll(jobs);
-        foreach(NativeList<int2> iPath in rawPath)
+
+        obstructedTiles.Dispose();
+        int i = 0;
+        foreach(NativeList<float2> iPath in rawPath)
         {
             Queue<Vector2> path = new Queue<Vector2>();
-            foreach(int2 node in iPath)
+            for (int j = iPath.Length-1; j >= 0; j--) 
             {
+                
+                float2 node = iPath[j];
+
                 path.Enqueue(new Vector2(node.x, node.y));
             }
-            paths.Add(path);
-            
+
+            path.TryDequeue(out Vector2 _);
+            paths[i].path = path;
+            paths[i++].CleanPath();
+
             iPath.Dispose();
         }
 
@@ -95,16 +136,19 @@ public class PathingManager : MonoBehaviour
 
 
 
-    [BurstCompile]
+    //[BurstCompile]
     private struct FindPathJob : IJob
     {
+        public float2 exactEndPosition;
+
+        public NativeList<bool> obstructedGrid;
 
         public int2 startPosition;
         public int2 endPosition;
-        public NativeList<int2> path;
+        public NativeList<float2> path;
         public void Execute()
         {
-            int2 gridSize = new int2(100, 100);
+            int2 gridSize = new int2(15, 15);
 
             NativeArray<PathNode> pathNodeArray = new NativeArray<PathNode>(gridSize.x * gridSize.y, Allocator.Temp);
 
@@ -119,12 +163,12 @@ public class PathingManager : MonoBehaviour
                         index = CalculateIndex(x, y, gridSize.x),
 
                         gCost = int.MaxValue,
-                        hCost = CalculateDistanceCost(new int2(x, y), endPosition)
+                        hCost = CalculateDistanceCost(new int2(x, y), endPosition),
+
+                        isWalkable = obstructedGrid[CalculateIndex(x, y, gridSize.x)],
+                        cameFromNodeIndex = -1
                     };
                     pathNode.CalculateFCost();
-
-                    pathNode.isWalkable = true;
-                    pathNode.cameFromNodeIndex = -1;
 
                     pathNodeArray[pathNode.index] = pathNode;
                 }
@@ -136,10 +180,10 @@ public class PathingManager : MonoBehaviour
             neighbourOffsetArray[1] = new int2(+1, 0); // Right
             neighbourOffsetArray[2] = new int2(0, +1); // Up
             neighbourOffsetArray[3] = new int2(0, -1); // Down
-            neighbourOffsetArray[4] = new int2(-1, -1); // Left Down
-            neighbourOffsetArray[5] = new int2(-1, +1); // Left Up
-            neighbourOffsetArray[6] = new int2(+1, -1); // Right Down
-            neighbourOffsetArray[7] = new int2(+1, +1); // Right Up
+            //neighbourOffsetArray[4] = new int2(-1, -1); // Left Down
+            //neighbourOffsetArray[5] = new int2(-1, +1); // Left Up
+            //neighbourOffsetArray[6] = new int2(+1, -1); // Right Down
+            //neighbourOffsetArray[7] = new int2(+1, +1); // Right Up
 
             int endNodeIndex = CalculateIndex(endPosition.x, endPosition.y, gridSize.x);
 
@@ -228,7 +272,6 @@ public class PathingManager : MonoBehaviour
             }
             else
             {
-
                 path.Add(new int2(endNode.x, endNode.y));
 
 
@@ -239,9 +282,10 @@ public class PathingManager : MonoBehaviour
                     path.Add(new int2(cameFromNode.x, cameFromNode.y));
                     currentNode = cameFromNode;
                 }
+                path.RemoveAt(path.Length - 1);
+                path.Add(exactEndPosition);
 
             }
-
             pathNodeArray.Dispose();
             neighbourOffsetArray.Dispose();
             openList.Dispose();
