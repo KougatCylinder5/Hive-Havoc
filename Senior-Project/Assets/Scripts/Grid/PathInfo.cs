@@ -31,13 +31,13 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
 
         if(copyPath.Count > 0)
         {
-            Vector2 priorNode = new Vector2(-1, -1);
+            Vector2 priorNode = curNode;
 
             while (copyPath.Count > 0)
             {
-                Ray ray = new Ray(ConvertToVector3(curNode, 0.1f), ConvertToVector3(copyPath.Peek() - curNode, 0.1f));
+                Ray ray = new Ray(ConvertToVector3(curNode, 0.6f), ConvertToVector3(copyPath.Peek() - curNode, 0.6f));
 
-                if (Physics.Raycast(ray, out RaycastHit hit, ConvertToVector3(copyPath.Peek() - curNode, 0.1f).magnitude))
+                if (Physics.Raycast(ray : ray, hitInfo :out RaycastHit hit,maxDistance: (copyPath.Peek() - curNode).magnitude, layerMask : raycastLayers))
                 {
                     cleanedPath.Enqueue(priorNode);
                     curNode = priorNode;

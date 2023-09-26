@@ -21,11 +21,11 @@ public class AIController : MonoBehaviour
 
 
     [SerializeField]
-    private LineRenderer _lineRenderer;
+    //private LineRenderer _lineRenderer;
 
     public void Start()
     {
-        target = new Vector2(10, 10);
+        //target = new Vector2(10, 10);
         
     }
 
@@ -34,33 +34,33 @@ public class AIController : MonoBehaviour
 
 
         position = transform.position;
-        _lineRenderer.SetPosition(0, position);
+        //_lineRenderer.SetPosition(0, position);
         switch (_pathingType)
         {
             case PathingType.Direct:
-                transform.position = Vector3.MoveTowards(position, new Vector3(target.x, 0.1f, target.y), speed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(position, new Vector3(target.x, 1f, target.y), speed * Time.deltaTime);
                 break;
 
             case PathingType.AroundObject:
                 
 
-                if (/*(_updateFrequency < _updateTimeRemaining || IsStale) &&*/ Vector3.Distance(position, new Vector3(target.x, 0.1f, target.y)) > 0.01f)
+                if (/*(_updateFrequency < _updateTimeRemaining || IsStale) &&*/ Vector3.Distance(position, new Vector3(target.x, 1f, target.y)) > 0.01f)
                 {
                     
                     _Path = RetrieveNewPath();
-                    _lineRenderer.SetPosition(1, new Vector3(_Path.cleanedPath.Peek().x, 0.1f, _Path.cleanedPath.Peek().y));
+                    //_lineRenderer.SetPosition(1, new Vector3(_Path.cleanedPath.Peek().x, 0.1f, _Path.cleanedPath.Peek().y));
                 }
                 if (_Path != null && _Path.cleanedPath.Count > 0)
                 {
-                    transform.position = Vector3.MoveTowards(position, new Vector3(_Path.cleanedPath.Peek().x, 0.1f, _Path.cleanedPath.Peek().y), speed * Time.deltaTime);
-                    if (Vector3.Distance(position, new Vector3(_Path.cleanedPath.Peek().x, 0.1f, _Path.cleanedPath.Peek().y)) < 0.01f)
+                    transform.position = Vector3.MoveTowards(position, new Vector3(_Path.cleanedPath.Peek().x, 1f, _Path.cleanedPath.Peek().y), speed * Time.deltaTime);
+                    if (Vector3.Distance(position, new Vector3(_Path.cleanedPath.Peek().x, 1f, _Path.cleanedPath.Peek().y)) < 0.01f)
                     {
                         _Path.cleanedPath.Dequeue();
                     }
                 }
-                else if (_Path != null && Vector3.Distance(position, new Vector3(_Path.End.x, 0.1f, _Path.End.y)) > 0.01f)
+                else if (_Path != null && Vector3.Distance(position, new Vector3(_Path.End.x, 1f, _Path.End.y)) > 0.01f)
                 {
-                    transform.position = Vector3.MoveTowards(position, new Vector3(_Path.End.x, 0.1f, _Path.End.y), speed * Time.deltaTime);
+                    transform.position = Vector3.MoveTowards(position, new Vector3(_Path.End.x, 1f, _Path.End.y), speed * Time.deltaTime);
                 }
                 break;
 
