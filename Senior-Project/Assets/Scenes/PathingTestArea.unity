@@ -639,7 +639,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.25, y: 1, z: 1.25}
+  m_Size: {x: 1.5, y: 1, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &534750659
 MeshRenderer:
@@ -985,7 +985,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67ae88b0ea2bbfe45b7cde702739f6c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridSize: {x: 100, y: 100}
   ObstructedTiles: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
