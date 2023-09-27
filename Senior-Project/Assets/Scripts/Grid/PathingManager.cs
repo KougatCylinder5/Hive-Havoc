@@ -25,13 +25,13 @@ using Unity.Collections.NotBurstCompatible;
 public class PathingManager : MonoBehaviour
 {
     [SerializeField]
-    public Vector2Int gridSize { get; private set; }
+    public static Vector2Int GridSize { get; private set; }
     private const int MOVE_STRAIGHT_COST = 10;
     private const int MOVE_DIAGONAL_COST = 14;
 
     public List<PathInfo> Paths { get; private set; }
 
-    public List<bool> ObstructedTiles = new List<bool>();
+    public static List<bool> ObstructedTiles = new List<bool>();
 
     private Queue<PathInfo> _pathsToGenerate;
 
@@ -39,18 +39,17 @@ public class PathingManager : MonoBehaviour
 
     public void Awake()
     {
-        gridSize = new(100, 100);
+        GridSize = new(15, 15);
 
         Instance = this;
         _pathsToGenerate = new();
         Paths = new();
         InvokeRepeating(nameof(DestroyAllPaths), 0, 60);
 
-        for(int i = 0; i < gridSize.x * gridSize.y; i++)
+        for(int i = 0; i < GridSize.x * GridSize.y; i++)
         {
             ObstructedTiles.Add(true);
         }
-        ObstructedTiles[CalculateIndex(5,5,gridSize.x)] = false;
     }
 
     public void LateUpdate()
@@ -86,7 +85,7 @@ public class PathingManager : MonoBehaviour
         List<NativeList<float2>> rawPath = new List<NativeList<float2>>();
         List<PathInfo> paths = new();
 
-        bool[] obstructedTiles = new bool[gridSize.x * gridSize.y];
+        bool[] obstructedTiles = new bool[GridSize.x * GridSize.y];
         for( int j = 0; j < ObstructedTiles.Count; j++)
         {
             obstructedTiles[j] = ObstructedTiles[j];
@@ -109,7 +108,7 @@ public class PathingManager : MonoBehaviour
                 endPosition = new int2(Mathf.RoundToInt(pathsToGen.Peek().End.x), Mathf.RoundToInt(pathsToGen.Peek().End.y)),
                 path = rawPath[^1],
                 obstructedGrid = obstructedTilesList[^1],
-                gridSize = new int2(gridSize.x,gridSize.y)
+                GridSize = new int2(GridSize.x,GridSize.y)
                 
                 
             };
@@ -159,26 +158,26 @@ public class PathingManager : MonoBehaviour
         public int2 endPosition;
         public NativeList<float2> path;
 
-        public int2 gridSize;
+        public int2 GridSize;
         public void Execute()
         {
 
-            NativeArray<PathNode> pathNodeArray = new NativeArray<PathNode>(gridSize.x * gridSize.y, Allocator.Temp);
+            NativeArray<PathNode> pathNodeArray = new NativeArray<PathNode>(GridSize.x * GridSize.y, Allocator.Temp);
 
-            for (int x = 0; x < gridSize.x; x++)
+            for (int x = 0; x < GridSize.x; x++)
             {
-                for (int y = 0; y < gridSize.y; y++)
+                for (int y = 0; y < GridSize.y; y++)
                 {
                     PathNode pathNode = new()
                     {
                         x = x,
                         y = y,
-                        index = CalculateIndex(x, y, gridSize.x),
+                        index = CalculateIndex(x, y, GridSize.x),
 
                         gCost = int.MaxValue,
                         hCost = CalculateDistanceCost(new int2(x, y), endPosition),
 
-                        isWalkable = obstructedGrid[CalculateIndex(x, y, gridSize.x)],
+                        isWalkable = obstructedGrid[CalculateIndex(x, y, GridSize.x)],
                         cameFromNodeIndex = -1
                     };
                     pathNode.CalculateFCost();
@@ -194,9 +193,9 @@ public class PathingManager : MonoBehaviour
             neighbourOffsetArray[2] = new int2(0, +1); // Up
             neighbourOffsetArray[3] = new int2(0, -1); // Down
 
-            int endNodeIndex = CalculateIndex(endPosition.x, endPosition.y, gridSize.x);
+            int endNodeIndex = CalculateIndex(endPosition.x, endPosition.y, GridSize.x);
 
-            PathNode startNode = pathNodeArray[CalculateIndex(startPosition.x, startPosition.y, gridSize.x)];
+            PathNode startNode = pathNodeArray[CalculateIndex(startPosition.x, startPosition.y, GridSize.x)];
             startNode.gCost = 0;
             startNode.CalculateFCost();
             pathNodeArray[startNode.index] = startNode;
@@ -234,13 +233,13 @@ public class PathingManager : MonoBehaviour
                     int2 neighbourOffset = neighbourOffsetArray[i];
                     int2 neighbourPosition = new int2(currentNode.x + neighbourOffset.x, currentNode.y + neighbourOffset.y);
 
-                    if (!IsPositionInsideGrid(neighbourPosition, gridSize))
+                    if (!IsPositionInsideGrid(neighbourPosition, GridSize))
                     {
                         // Neighbour not valid position
                         continue;
                     }
 
-                    int neighbourNodeIndex = CalculateIndex(neighbourPosition.x, neighbourPosition.y, gridSize.x);
+                    int neighbourNodeIndex = CalculateIndex(neighbourPosition.x, neighbourPosition.y, GridSize.x);
 
                     if (closedList.Contains(neighbourNodeIndex))
                     {
@@ -301,13 +300,13 @@ public class PathingManager : MonoBehaviour
             closedList.Dispose();
         }
 
-        private bool IsPositionInsideGrid(int2 gridPosition, int2 gridSize)
+        private bool IsPositionInsideGrid(int2 gridPosition, int2 GridSize)
         {
             return
                 gridPosition.x >= 0 &&
                 gridPosition.y >= 0 &&
-                gridPosition.x < gridSize.x &&
-                gridPosition.y < gridSize.y;
+                gridPosition.x < GridSize.x &&
+                gridPosition.y < GridSize.y;
         }
 
         private int CalculateIndex(int x, int y, int gridWidth)
@@ -365,7 +364,7 @@ public class PathingManager : MonoBehaviour
         }
 
     }
-    private int CalculateIndex(int x, int y, int gridWidth)
+    public static int CalculateIndex(int x, int y, int gridWidth)
     {
         return x + y * gridWidth;
     }
