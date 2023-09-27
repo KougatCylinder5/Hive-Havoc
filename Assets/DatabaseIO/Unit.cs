@@ -38,4 +38,20 @@ public class Unit {
     public float getYTarget() {
         return yTarget;
     }
+
+    public void setXPos(float xPos) {
+        this.xPos = xPos;
+    }
+
+    public void setYPos(float yPos) {
+        this.yPos = yPos;
+    }
+
+    public void setXTarget(float xTarget) {
+        this.xTarget = xTarget;
+    }
+
+    public void setYTarget(float yTarget) {
+        this.yTarget = yTarget;
+    }
 }
