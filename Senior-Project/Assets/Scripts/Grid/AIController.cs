@@ -21,7 +21,7 @@ public class AIController : MonoBehaviour
 
 
     [SerializeField]
-    private LineRenderer _lineRenderer;
+    //private LineRenderer _lineRenderer;
 
     public void Start()
     {
@@ -34,7 +34,7 @@ public class AIController : MonoBehaviour
 
 
         position = transform.position;
-        _lineRenderer.SetPosition(0, position);
+        //_lineRenderer.SetPosition(0, position);
         switch (_pathingType)
         {
             case PathingType.Direct:
@@ -48,11 +48,11 @@ public class AIController : MonoBehaviour
                 {
                     
                     _Path = RetrieveNewPath();
-                    
+                    //_lineRenderer.SetPosition(1, new Vector3(_Path.cleanedPath.Peek().x, 0.1f, _Path.cleanedPath.Peek().y));
                 }
                 if (_Path != null && _Path.cleanedPath.Count > 0)
                 {
-                    _lineRenderer.SetPosition(1, new Vector3(_Path.cleanedPath.Peek().x, 0.1f, _Path.cleanedPath.Peek().y));
+                    //_lineRenderer.SetPosition(1, new Vector3(_Path.cleanedPath.Peek().x, 0.1f, _Path.cleanedPath.Peek().y));
                     
                     transform.position = Vector3.MoveTowards(position, new Vector3(_Path.cleanedPath.Peek().x, 1f, _Path.cleanedPath.Peek().y), speed * Time.deltaTime);
                     if (Vector3.Distance(position, new Vector3(_Path.cleanedPath.Peek().x, 1f, _Path.cleanedPath.Peek().y)) < 0.01f)
