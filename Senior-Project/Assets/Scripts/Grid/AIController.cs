@@ -117,7 +117,7 @@ public class AIController : MonoBehaviour
 
     public void SetTarget(Transform target)
     {
-        this.target = target.position;
+        this.target = new Vector2(target.position.x, target.position.z);
     }
 
 
