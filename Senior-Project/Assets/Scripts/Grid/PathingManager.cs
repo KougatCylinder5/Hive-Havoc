@@ -25,7 +25,7 @@ using Unity.Collections.NotBurstCompatible;
 public class PathingManager : MonoBehaviour
 {
     [SerializeField]
-    private Vector2Int gridSize;
+    public Vector2Int gridSize { get; private set; }
     private const int MOVE_STRAIGHT_COST = 10;
     private const int MOVE_DIAGONAL_COST = 14;
 
@@ -39,6 +39,8 @@ public class PathingManager : MonoBehaviour
 
     public void Awake()
     {
+        gridSize = new(100, 100);
+
         Instance = this;
         _pathsToGenerate = new();
         Paths = new();
@@ -48,7 +50,7 @@ public class PathingManager : MonoBehaviour
         {
             ObstructedTiles.Add(true);
         }
-        ObstructedTiles[80] = false;
+        ObstructedTiles[CalculateIndex(5,5,gridSize.x)] = false;
     }
 
     public void LateUpdate()
@@ -106,7 +108,9 @@ public class PathingManager : MonoBehaviour
                 startPosition = new int2(Mathf.RoundToInt(pathsToGen.Peek().Start.x), Mathf.RoundToInt(pathsToGen.Peek().Start.y)),
                 endPosition = new int2(Mathf.RoundToInt(pathsToGen.Peek().End.x), Mathf.RoundToInt(pathsToGen.Peek().End.y)),
                 path = rawPath[^1],
-                obstructedGrid = obstructedTilesList[^1]
+                obstructedGrid = obstructedTilesList[^1],
+                gridSize = new int2(gridSize.x,gridSize.y)
+                
                 
             };
             jobs.Add(findPathJob.Schedule());
@@ -144,7 +148,7 @@ public class PathingManager : MonoBehaviour
 
 
 
-    //[BurstCompile]
+    [BurstCompile]
     private struct FindPathJob : IJob
     {
         public float2 exactEndPosition;
@@ -154,9 +158,10 @@ public class PathingManager : MonoBehaviour
         public int2 startPosition;
         public int2 endPosition;
         public NativeList<float2> path;
+
+        public int2 gridSize;
         public void Execute()
         {
-            int2 gridSize = new int2(100, 100);
 
             NativeArray<PathNode> pathNodeArray = new NativeArray<PathNode>(gridSize.x * gridSize.y, Allocator.Temp);
 
@@ -173,7 +178,7 @@ public class PathingManager : MonoBehaviour
                         gCost = int.MaxValue,
                         hCost = CalculateDistanceCost(new int2(x, y), endPosition),
 
-                        isWalkable = true,//obstructedGrid[CalculateIndex(x, y, gridSize.x)],
+                        isWalkable = obstructedGrid[CalculateIndex(x, y, gridSize.x)],
                         cameFromNodeIndex = -1
                     };
                     pathNode.CalculateFCost();
@@ -183,15 +188,11 @@ public class PathingManager : MonoBehaviour
             }
 
 
-            NativeArray<int2> neighbourOffsetArray = new NativeArray<int2>(8, Allocator.Temp);
+            NativeArray<int2> neighbourOffsetArray = new(4, Allocator.Temp);
             neighbourOffsetArray[0] = new int2(-1, 0); // Left
             neighbourOffsetArray[1] = new int2(+1, 0); // Right
             neighbourOffsetArray[2] = new int2(0, +1); // Up
             neighbourOffsetArray[3] = new int2(0, -1); // Down
-            //neighbourOffsetArray[4] = new int2(-1, -1); // Left Down
-            //neighbourOffsetArray[5] = new int2(-1, +1); // Left Up
-            //neighbourOffsetArray[6] = new int2(+1, -1); // Right Down
-            //neighbourOffsetArray[7] = new int2(+1, +1); // Right Up
 
             int endNodeIndex = CalculateIndex(endPosition.x, endPosition.y, gridSize.x);
 
@@ -364,5 +365,8 @@ public class PathingManager : MonoBehaviour
         }
 
     }
-
+    private int CalculateIndex(int x, int y, int gridWidth)
+    {
+        return x + y * gridWidth;
+    }
 }
