@@ -42,7 +42,6 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
                 {
                     cleanedPath.Enqueue(priorNode);
                     curNode = priorNode;
-                    copyPath.Dequeue();
                 }
                 priorNode = copyPath.Dequeue();
 
