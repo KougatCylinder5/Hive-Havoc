@@ -46,7 +46,7 @@ public class PathingManager : MonoBehaviour
         Paths = new();
         InvokeRepeating(nameof(DestroyAllPaths), 0, 60);
 
-        for(int i = 0; i < GridSize.x * GridSize.y; i++)
+        for (int i = 0; i < GridSize.x * GridSize.y; i++)
         {
             ObstructedTiles.Add(true);
         }
@@ -59,15 +59,15 @@ public class PathingManager : MonoBehaviour
 
         foreach (PathInfo path in tempGeneratedPath)
         {
-            if(Paths.IndexOf(path) == -1)
+            if (Paths.IndexOf(path) == -1)
             {
                 Paths.Add(path);
             }
         }
-        
-        
+
+
         _pathsToGenerate.Clear();
-        
+
     }
     public void QueuePath(PathInfo pathToQueue)
     {
@@ -86,14 +86,14 @@ public class PathingManager : MonoBehaviour
         List<PathInfo> paths = new();
 
         NativeArray<bool> obstructedTiles = new(GridSize.x * GridSize.y, Allocator.TempJob);
-        for( int j = 0; j < ObstructedTiles.Count; j++)
+        for (int j = 0; j < ObstructedTiles.Count; j++)
         {
             obstructedTiles[j] = ObstructedTiles[j];
         }
 
         while (pathsToGen.Count > 0)
         {
-            
+
             rawPath.Add(new NativeList<float2>(Allocator.Persistent));
             FindPathJob findPathJob = new()
             {
@@ -102,25 +102,25 @@ public class PathingManager : MonoBehaviour
                 endPosition = new int2(Mathf.RoundToInt(pathsToGen.Peek().End.x), Mathf.RoundToInt(pathsToGen.Peek().End.y)),
                 path = rawPath[^1],
                 obstructedGrid = obstructedTiles.AsReadOnly(),
-                GridSize = new int2(GridSize.x,GridSize.y)
-                
-                
+                GridSize = new int2(GridSize.x, GridSize.y)
+
+
             };
             jobs.Add(findPathJob.Schedule());
             paths.Add(pathsToGen.Dequeue());
         }
-        
+
         JobHandle.CompleteAll(jobs);
 
         obstructedTiles.Dispose();
         int i = 0;
-        foreach(NativeList<float2> iPath in rawPath)
+        foreach (NativeList<float2> iPath in rawPath)
         {
 
             Queue<Vector2> path = new Queue<Vector2>();
-            for (int j = iPath.Length-1; j >= 0; j--) 
+            for (int j = iPath.Length - 1; j >= 0; j--)
             {
-                
+
                 float2 node = iPath[j];
 
                 path.Enqueue(new Vector2(node.x, node.y));

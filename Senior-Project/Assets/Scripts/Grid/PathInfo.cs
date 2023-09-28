@@ -27,10 +27,10 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
         Queue<Vector2> copyPath = new Queue<Vector2>(path);
 
         Vector2 curNode = Start;
-        
+
         cleanedPath.Clear();
 
-        if(copyPath.Count > 0)
+        if (copyPath.Count > 0)
         {
             Vector2 priorNode = curNode;
 
@@ -38,7 +38,7 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
             {
                 Ray ray = new Ray(ConvertToVector3(curNode, 0.6f), ConvertToVector3(copyPath.Peek() - curNode, 0.6f));
 
-                if (Physics.Raycast(ray : ray,maxDistance: (copyPath.Peek() - curNode).magnitude/*, layerMask: raycastLayers*/))
+                if (Physics.Raycast(ray: ray, maxDistance: (copyPath.Peek() - curNode).magnitude/*, layerMask: raycastLayers*/))
                 {
                     cleanedPath.Enqueue(priorNode);
                     curNode = priorNode;
@@ -46,12 +46,12 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
                 priorNode = copyPath.Dequeue();
 
             }
-            if (!priorNode.Equals(new Vector2(-1,-1)))
+            if (!priorNode.Equals(new Vector2(-1, -1)))
                 cleanedPath.Enqueue(priorNode);
         }
-        
 
-        
+
+
 
 
     }
@@ -60,7 +60,7 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
     {
         return new Vector3(obj.x, height, obj.y);
     }
-    
+
     public bool Equals(PathInfo other)
     {
         return Start == other.Start && End == other.End;

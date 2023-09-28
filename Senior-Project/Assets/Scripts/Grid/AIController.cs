@@ -9,7 +9,7 @@ public class AIController : MonoBehaviour
     [SerializeField]
     private Vector2 target;
     private Vector3 position;
-    
+
     public float speed;
     public bool IsStale { get; private set; }
 
@@ -24,7 +24,7 @@ public class AIController : MonoBehaviour
     private LineRenderer _lineRenderer;
 
     public void Start()
-    {        
+    {
     }
 
     public void Update()
@@ -40,18 +40,18 @@ public class AIController : MonoBehaviour
                 break;
 
             case PathingType.AroundObject:
-                
+
 
                 if (/*(_updateFrequency < _updateTimeRemaining || IsStale) &&*/ Vector3.Distance(position, new Vector3(target.x, 1f, target.y)) > 0.01f)
                 {
-                    
+
                     _Path = RetrieveNewPath();
-                    
+
                 }
                 if (_Path != null && _Path.cleanedPath.Count > 0)
                 {
                     _lineRenderer.SetPosition(1, new Vector3(_Path.cleanedPath.Peek().x, 0.1f, _Path.cleanedPath.Peek().y));
-                    
+
                     transform.position = Vector3.MoveTowards(position, new Vector3(_Path.cleanedPath.Peek().x, 1f, _Path.cleanedPath.Peek().y), speed * Time.deltaTime);
                     if (Vector3.Distance(position, new Vector3(_Path.cleanedPath.Peek().x, 1f, _Path.cleanedPath.Peek().y)) < 0.01f)
                     {
@@ -71,14 +71,14 @@ public class AIController : MonoBehaviour
 
 
         }
-        
-        
+
+
     }
-    
+
 
     public void LateUpdate()
     {
-        if(_pathingType == PathingType.AroundObject)
+        if (_pathingType == PathingType.AroundObject)
         {
             RequestNewPath();
         }
@@ -121,7 +121,7 @@ public class AIController : MonoBehaviour
     }
 
 
-    
+
 
 }
 
