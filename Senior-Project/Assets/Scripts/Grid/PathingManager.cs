@@ -79,27 +79,21 @@ public class PathingManager : MonoBehaviour
         Paths.Clear();
     }
 
-    public List<PathInfo> ReturnPaths(Queue<PathInfo> pathsToGen)
+    private List<PathInfo> ReturnPaths(Queue<PathInfo> pathsToGen)
     {
-        NativeList<JobHandle> jobs = new NativeList<JobHandle>(pathsToGen.Count, Allocator.Temp);
-        List<NativeList<float2>> rawPath = new List<NativeList<float2>>();
+        NativeList<JobHandle> jobs = new(pathsToGen.Count, Allocator.Temp);
+        List<NativeList<float2>> rawPath = new();
         List<PathInfo> paths = new();
 
-        bool[] obstructedTiles = new bool[GridSize.x * GridSize.y];
+        NativeArray<bool> obstructedTiles = new(GridSize.x * GridSize.y, Allocator.TempJob);
         for( int j = 0; j < ObstructedTiles.Count; j++)
         {
             obstructedTiles[j] = ObstructedTiles[j];
         }
-        List<NativeList<bool>> obstructedTilesList = new();
 
         while (pathsToGen.Count > 0)
         {
-            NativeList<bool> tempObstructed = new NativeList<bool>(Allocator.TempJob);
-            foreach (bool tile in obstructedTiles)
-            {
-                tempObstructed.Add(tile);
-            }
-            obstructedTilesList.Add(tempObstructed);
+            
             rawPath.Add(new NativeList<float2>(Allocator.Persistent));
             FindPathJob findPathJob = new()
             {
@@ -107,7 +101,7 @@ public class PathingManager : MonoBehaviour
                 startPosition = new int2(Mathf.RoundToInt(pathsToGen.Peek().Start.x), Mathf.RoundToInt(pathsToGen.Peek().Start.y)),
                 endPosition = new int2(Mathf.RoundToInt(pathsToGen.Peek().End.x), Mathf.RoundToInt(pathsToGen.Peek().End.y)),
                 path = rawPath[^1],
-                obstructedGrid = obstructedTilesList[^1],
+                obstructedGrid = obstructedTiles.AsReadOnly(),
                 GridSize = new int2(GridSize.x,GridSize.y)
                 
                 
@@ -118,12 +112,11 @@ public class PathingManager : MonoBehaviour
         
         JobHandle.CompleteAll(jobs);
 
-        
+        obstructedTiles.Dispose();
         int i = 0;
         foreach(NativeList<float2> iPath in rawPath)
         {
 
-            obstructedTilesList[i].Dispose();
             Queue<Vector2> path = new Queue<Vector2>();
             for (int j = iPath.Length-1; j >= 0; j--) 
             {
@@ -151,8 +144,8 @@ public class PathingManager : MonoBehaviour
     private struct FindPathJob : IJob
     {
         public float2 exactEndPosition;
-
-        public NativeList<bool> obstructedGrid;
+        [ReadOnly]
+        public NativeArray<bool>.ReadOnly obstructedGrid;
 
         public int2 startPosition;
         public int2 endPosition;

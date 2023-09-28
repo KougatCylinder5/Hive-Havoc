@@ -24,9 +24,7 @@ public class AIController : MonoBehaviour
     private LineRenderer _lineRenderer;
 
     public void Start()
-    {
-        //target = new Vector2(10, 10);
-        
+    {        
     }
 
     public void Update()
