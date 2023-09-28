@@ -14,7 +14,7 @@
 - exitSave() : void
 
 ### Tile Item:
-- addTileItem(string itemName, int natural) : bool
+- addTileItem(string itemName) : bool
 - getTileItem(string itemName) : int
 
 ### Tile Date:
@@ -34,7 +34,7 @@
 - getPlaceables() : List<Placeable>
 - getNaturalPlaceables() : List<Placeable>
 - getUnnaturalPlaceables() : List<Placeable>
-- addPlaceable(int tileItemID, float xPos, float yPos, float xTarget, float yTarget, float health) : int
+- addPlaceable(int tileItemID, float xPos, float yPos, float xTarget, float yTarget, float health, int natural) : int
 - setPlaceable(int id, float xPos, float yPos, float health, float heading) : void
 
 ### Inventory
