@@ -172,7 +172,7 @@ MonoBehaviour:
   speed: 0.5
   _updateFrequency: 0
   _updateTimeRemaining: 0
-  _pathingType: 2
+  _pathingType: 0
   _lineRenderer: {fileID: 139228803}
 --- !u!120 &139228803
 LineRenderer:
@@ -1483,6 +1483,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f982c4c3c6c28349a9e7691c92cbbc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _startPoint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

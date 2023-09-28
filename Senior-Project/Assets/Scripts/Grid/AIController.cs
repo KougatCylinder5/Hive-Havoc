@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
 using System.Linq;
+using static FlowFieldGenerator;
 
 public class AIController : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class AIController : MonoBehaviour
     [SerializeField]
     private Vector2 target;
     private Vector3 position;
-
+    private Vector2 position2D;
     public float speed;
     public bool IsStale { get; private set; }
 
@@ -32,6 +33,7 @@ public class AIController : MonoBehaviour
 
 
         position = transform.position;
+        position2D = new(position.x, position.z);
         _lineRenderer.SetPosition(0, position);
         switch (_pathingType)
         {
@@ -65,7 +67,11 @@ public class AIController : MonoBehaviour
                 break;
 
             case PathingType.Flow:
-
+                FlowFieldJob.PathNode node = FlowTiles[Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.z)];
+                Vector2 flowPosition = node.direction;
+                flowPosition += (node.position - position2D);
+                flowPosition.Normalize();
+                transform.Translate(new(flowPosition.x * Time.deltaTime, 0, flowPosition.y * Time.deltaTime));
 
                 break;
 

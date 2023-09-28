@@ -10,30 +10,53 @@ using UnityEngine.UIElements;
 
 public class FlowFieldGenerator : MonoBehaviour
 {
-    FlowFieldJob.PathNode[,] flowTiles;
-    Vector3 startPoint;
+    public static FlowFieldJob.PathNode[,] FlowTiles { get; private set; }
+    public List<bool> NaturalObstructedTiles { get; private set; }
+    [SerializeField]
+    private Vector3 _startPoint;
 
+    void Awake()
+    {
+        NaturalObstructedTiles = new();
+        for (int i = 0; i < PathingManager.GridSize.x * PathingManager.GridSize.y; i++)
+        {
+            NaturalObstructedTiles.Add(PathingManager.ObstructedTiles[i]);
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {
-        startPoint = GameObject.FindGameObjectWithTag("CommandCenter").transform.position;
-        NativeList<FlowFieldJob.PathNode> positionsToCheck = new(Allocator.TempJob) { new() { position = new((int)startPoint.x, (int)startPoint.z), direction = Vector2.zero, gCost = 0, fCost = 0, hCost = 0, isWalkable = true } };
+        
+
+        FlowTiles = new FlowFieldJob.PathNode[PathingManager.GridSize.x,PathingManager.GridSize.y];
+
+        _startPoint = GameObject.FindGameObjectWithTag("CommandCenter").transform.position;
+        NativeList<FlowFieldJob.PathNode> positionsToCheck = new(Allocator.TempJob) { new() { position = new((int)_startPoint.x, (int)_startPoint.z), direction = Vector2.zero, gCost = 0, fCost = 0, hCost = 0, isWalkable = true } };
         NativeList<FlowFieldJob.PathNode> closedList = new(Allocator.TempJob);
 
         NativeList<JobHandle> handles = new NativeList<JobHandle>(Allocator.TempJob);
+
+        NativeArray<bool> obstructedTiles = new(PathingManager.GridSize.x * PathingManager.GridSize.y, Allocator.TempJob);
+        for (int j = 0; j < NaturalObstructedTiles.Count; j++)
+        {
+            obstructedTiles[j] = NaturalObstructedTiles[j];
+        }
+
+
         while (positionsToCheck.Length > 0)
         {
             NativeList<FlowFieldJob.PathNode> newPositionsToCheck = new(positionsToCheck.Length * 8, Allocator.TempJob);
             FlowFieldJob job = new()
             {
-                startPosition = new((int)startPoint.x, (int)startPoint.z),
+                startPosition = new((int)_startPoint.x, (int)_startPoint.z),
                 positionsToCheck = positionsToCheck.AsParallelReader(),
                 newPositionsToCheck = newPositionsToCheck.AsParallelWriter(),
+                obstructedTiles = obstructedTiles.AsReadOnly(),
                 closedList = closedList.AsParallelReader(),
                 gridSize = PathingManager.GridSize
             };
 
-            handles.Add(job.Schedule(positionsToCheck.Length, 32));
+            handles.Add(job.Schedule(positionsToCheck.Length, 16));
             JobHandle.CompleteAll(handles);
             foreach (FlowFieldJob.PathNode oldNode in positionsToCheck)
             {
@@ -51,6 +74,12 @@ public class FlowFieldGenerator : MonoBehaviour
             newPositionsToCheck.Dispose();
         }
 
+        foreach(FlowFieldJob.PathNode node in closedList)
+        {
+            FlowTiles[node.position.x, node.position.y] = node;
+        }
+
+        obstructedTiles.Dispose();
         closedList.Dispose();
         handles.Dispose();
         positionsToCheck.Dispose();
@@ -63,6 +92,7 @@ public class FlowFieldGenerator : MonoBehaviour
         public Vector2Int startPosition;
         public NativeArray<PathNode>.ReadOnly positionsToCheck;
         public NativeArray<PathNode>.ReadOnly closedList;
+        public NativeArray<bool>.ReadOnly obstructedTiles;
         public Vector2Int gridSize;
         [WriteOnly]
         public NativeList<PathNode>.ParallelWriter newPositionsToCheck;
@@ -90,7 +120,6 @@ public class FlowFieldGenerator : MonoBehaviour
                     direction = -neighbour,
                     hCost = Vector2.Distance(startPosition, positionsToCheck[index].position + neighbour),
                     gCost = positionsToCheck[index].gCost + 1,
-                    isWalkable = true
 
                 };
                 node.CalculateFCost();
@@ -98,6 +127,7 @@ public class FlowFieldGenerator : MonoBehaviour
                 {
                     continue;
                 }
+                node.isWalkable = obstructedTiles[CalculateIndex(positionsToCheck[index].position + neighbour, gridSize.x)];
 
 
                 if (node.isWalkable)
@@ -150,7 +180,10 @@ public class FlowFieldGenerator : MonoBehaviour
         {
             return x + y * gridWidth;
         }
-
+        private int CalculateIndex(Vector2Int pos, int gridWidth)
+        {
+            return pos.x + pos.y * gridWidth;
+        }
     }
 
 }
