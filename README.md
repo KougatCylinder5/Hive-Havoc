@@ -38,7 +38,8 @@
 - setPlaceable(int id, float xPos, float yPos, float health, float heading) : void
 
 ### Inventory
-- updateInventory(int id, int value) : void TODO
+- addItemToInventory(int id, int value) : void
+- updateInventory(int id, int value) : void
 - amountInInventory(int id) : int
 
 ### Tables:

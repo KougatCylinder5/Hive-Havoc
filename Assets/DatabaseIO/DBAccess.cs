@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Data;
 using Mono.Data.Sqlite;
+using UnityEngine.UIElements.Experimental;
 
 
 public class DBAccess : MonoBehaviour
@@ -418,8 +419,26 @@ public class DBAccess : MonoBehaviour
         }
     }
 
+    public static void addItemToInventory(int id, int value) {
+        if (!transactionActive) {
+            Debug.LogError(noTransactionError);
+        } else {
+            var sqliteCommand = sqliteDB.CreateCommand();
+            try {
+                sqliteCommand.CommandText = "INSERT INTO tile_data ('resource_id', 'amount', save_id) VALUES ('" + id + "', '" + value + "', '" + saveID + "');";
+            } catch { }
+            sqliteCommand.ExecuteNonQuery();
+        }
+    }
+
     public static void updateInventory(int id, int value) {
-        //todo
+        if (!transactionActive) {
+            Debug.LogError(noTransactionError);
+        } else {
+            var sqliteCommand = sqliteDB.CreateCommand();
+            sqliteCommand.CommandText = " UPDATE placeable SET amount=" + value + " WHERE resource_id IS " + id + " AND save_id IS " + saveID + ";";
+            sqliteCommand.ExecuteNonQuery();
+        }
     }
 
     public static int amountInInventory(int id) {
