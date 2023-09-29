@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class Unit {
     private int id;
+    private int type;
     private float xPos;
     private float yPos;
     private float xTarget;
     private float yTarget;
     private float health;
 
-    public Unit(int id, float xPos, float yPos, float xTarget, float yTarget, float health) {
+    public Unit(int id, int type, float xPos, float yPos, float xTarget, float yTarget, float health) {
         this.id = id;
+        this.type = type;
         this.xPos = xPos;
         this.yPos = yPos;
         this.xTarget = xTarget;
@@ -21,6 +23,11 @@ public class Unit {
 
     public int getID() {
         return id;
+    }
+
+    public int getType()
+    {
+        return type;
     }
 
     public float getXPos() {

@@ -137,12 +137,12 @@ public class DBAccess : MonoBehaviour
 
             var sqliteCommand = sqliteDB.CreateCommand(); 
             
-            sqliteCommand.CommandText = "SELECT id, x_pos, y_pos, target_x, target_y, health FROM unit WHERE save_id IS " + saveID + ";";
+            sqliteCommand.CommandText = "SELECT id, type, x_pos, y_pos, target_x, target_y, health FROM unit WHERE save_id IS " + saveID + ";";
             IDataReader aunit = sqliteCommand.ExecuteReader();
 
             try {
                 while(aunit.Read()) {
-                    units.Add(new Unit(aunit.GetInt32(0), aunit.GetFloat(1), aunit.GetFloat(2), aunit.GetFloat(3), aunit.GetFloat(4), aunit.GetFloat(5)));
+                    units.Add(new Unit(aunit.GetInt32(0), aunit.GetInt32(1), aunit.GetFloat(2), aunit.GetFloat(3), aunit.GetFloat(4), aunit.GetFloat(5), aunit.GetFloat(6)));
                 }
             } catch {}
 
@@ -150,14 +150,14 @@ public class DBAccess : MonoBehaviour
         }
     }
 
-    public static int addUnit(float xPos, float yPos, float xTarget, float yTarget, float health) {
+    public static int addUnit(int type, float xPos, float yPos, float xTarget, float yTarget, float health) {
         if(!transactionActive) {
             Debug.LogError(noTransactionError);
             return 0;
         } else {
             int rowid = 0;
             var sqliteCommand = sqliteDB.CreateCommand();
-            sqliteCommand.CommandText = "INSERT INTO unit ('x_pos', 'y_pos', 'target_x', 'target_y', 'health', save_id) VALUES ('" + xPos + "', '" + yPos + "', '" + xTarget + "', '" + yTarget + "', '" + health + "', '" + saveID + "');";
+            sqliteCommand.CommandText = "INSERT INTO unit ('x_pos', 'y_pos', 'target_x', 'target_y', 'health', 'type', 'save_id') VALUES ('" + xPos + "', '" + yPos + "', '" + xTarget + "', '" + yTarget + "', '" + health + "', '" + type + "', '" + saveID + "');";
             sqliteCommand.ExecuteNonQuery();
 
             sqliteCommand.CommandText = "SELECT last_insert_rowid() FROM unit;";
