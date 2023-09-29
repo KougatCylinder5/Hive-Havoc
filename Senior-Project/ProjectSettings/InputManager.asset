@@ -485,7 +485,4 @@ InputManager:
     type: 2
     axis: 5
     joyNum: 0
-<<<<<<<< HEAD:Senior-Project/ProjectSettings/InputManager.asset
   m_UsePhysicalKeys: 1
-========
->>>>>>>> origin/sqlTesting:ProjectSettings/InputManager.asset
