@@ -19,7 +19,7 @@ public class Mouse : MonoBehaviour
         _mousePosition.z = _camera.nearClipPlane;
         Ray ray = _camera.ScreenPointToRay(_mousePosition);
         Physics.Raycast(ray, out RaycastHit hit);
-        return hit.point;
+        return new(hit.point.x, hit.point.z);
     }
 
 }

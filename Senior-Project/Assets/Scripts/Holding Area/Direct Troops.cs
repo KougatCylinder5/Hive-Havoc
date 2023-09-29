@@ -16,13 +16,17 @@ public class DirectTroops : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(getClickedObject.getTroop() != null)
+        if(Input.GetMouseButtonDown(0))
         {
-            AI = getClickedObject.getTroop().GetComponent<AIController>();
+            if (getClickedObject.getTroop() != null)
+            {
+                AI = getClickedObject.getTroop().GetComponent<AIController>();
+            }
+            if (AI != null && getClickedObject.getCube() != null)
+            {
+                AI.SetDestination(Mouse.MouseToWorldPoint());
+            }
         }
-        if(AI != null && getClickedObject.getCube() != null)
-        {
-            AI.SetTarget(getClickedObject.getCube().transform);
-        }
+            
     }
 }
