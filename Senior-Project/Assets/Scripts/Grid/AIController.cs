@@ -46,7 +46,7 @@ public class AIController : MonoBehaviour
 
                 if (/*(_updateFrequency < _updateTimeRemaining || IsStale) &&*/ Vector3.Distance(position, new Vector3(target.x, 1f, target.y)) > 0.01f)
                 {
-
+                    
                     _Path = RetrieveNewPath();
 
                 }
@@ -67,11 +67,28 @@ public class AIController : MonoBehaviour
                 break;
 
             case PathingType.Flow:
-                FlowFieldJob.PathNode node = FlowTiles[Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.z)];
-                Vector2 flowPosition = node.direction;
-                flowPosition += (node.position - position2D);
-                flowPosition.Normalize();
-                transform.Translate(new(flowPosition.x * Time.deltaTime, 0, flowPosition.y * Time.deltaTime));
+                Vector2Int roundedPosition = new(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.z));
+
+                Vector2Int[] posToObserve = new Vector2Int[4] { new Vector2Int(0, -1), new Vector2Int(0, 1),  new Vector2Int(1, 0),  new Vector2Int(-1, 0) };
+
+                Vector2 totalDirection = new();
+                for (int i = 0; i < 4; i++)
+                {
+                    try
+                    {
+                        totalDirection += FlowTiles[roundedPosition.x + posToObserve[i].x, roundedPosition.y + posToObserve[i].y].direction;
+                    }
+                    catch
+                    {
+                        Debug.Log("Outside Bounds");
+                    }
+                }
+
+
+                totalDirection.Normalize();
+
+
+                transform.Translate(new Vector3(totalDirection.x * Time.deltaTime, 0.0f, totalDirection.y * Time.deltaTime) * speed);
 
                 break;
 

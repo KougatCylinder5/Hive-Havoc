@@ -85,7 +85,7 @@ public class FlowFieldGenerator : MonoBehaviour
         positionsToCheck.Dispose();
     }
 
-    //[BurstCompile]
+    [BurstCompile]
     public struct FlowFieldJob : IJobParallelFor
     {
         [ReadOnly]
@@ -106,10 +106,10 @@ public class FlowFieldGenerator : MonoBehaviour
             neighbourOffsetArray[1] = new Vector2Int(+1, 0); // Right
             neighbourOffsetArray[2] = new Vector2Int(0, +1); // Up
             neighbourOffsetArray[3] = new Vector2Int(0, -1); // Down
-            neighbourOffsetArray[4] = new Vector2Int(-1, -1); // Left
-            neighbourOffsetArray[5] = new Vector2Int(+1, -1); // Right
-            neighbourOffsetArray[6] = new Vector2Int(-1, +1); // Up
-            neighbourOffsetArray[7] = new Vector2Int(-1, -1); // Down
+            //neighbourOffsetArray[4] = new Vector2Int(-1, -1); // Left
+            //neighbourOffsetArray[5] = new Vector2Int(+1, -1); // Right
+            //neighbourOffsetArray[6] = new Vector2Int(-1, +1); // Up
+            //neighbourOffsetArray[7] = new Vector2Int(-1, -1); // Down
 
 
             foreach (Vector2Int neighbour in neighbourOffsetArray)
@@ -117,7 +117,7 @@ public class FlowFieldGenerator : MonoBehaviour
                 PathNode node = new()
                 {
                     position = positionsToCheck[index].position + neighbour,
-                    direction = -neighbour,
+                    direction = -neighbour * 2,
                     hCost = Vector2.Distance(startPosition, positionsToCheck[index].position + neighbour),
                     gCost = positionsToCheck[index].gCost + 1,
 
