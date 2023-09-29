@@ -22,7 +22,7 @@ public class DBInit : MonoBehaviour
         DBAccess.commitSave();
 
         DBAccess.startSave();
-        Debug.Log(DBAccess.addUnit(0,0,0,0,0));
+        Debug.Log(DBAccess.addUnit(0,0,0,0,0,0));
         DBAccess.commitSave();
 
         //DBAccess.setUnit(1,1,1,1,1,1);
