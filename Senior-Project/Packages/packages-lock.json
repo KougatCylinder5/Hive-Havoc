@@ -1,6 +1,5 @@
 {
   "dependencies": {
-<<<<<<<< HEAD:Senior-Project/Packages/packages-lock.json
     "com.unity.2d.animation": {
       "version": "9.0.3",
       "depth": 1,
@@ -98,11 +97,6 @@
     "com.unity.burst": {
       "version": "1.8.8",
       "depth": 0,
-========
-    "com.unity.burst": {
-      "version": "1.8.8",
-      "depth": 1,
->>>>>>>> origin/sqlTesting:Packages/packages-lock.json
       "source": "registry",
       "dependencies": {
         "com.unity.mathematics": "1.2.1"
