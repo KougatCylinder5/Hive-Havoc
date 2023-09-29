@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Senior-Project/Assets/Scripts/CameraControls/CameraBounds.cs.meta
 guid: 820d3cc9521a24b47bac7887d7312256
+========
+guid: 435cfdbd84d5c7649b497ddffcb7ddf3
+>>>>>>>> origin/sqlTesting:Assets/DatabaseIO/DBAccess.cs.meta
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
