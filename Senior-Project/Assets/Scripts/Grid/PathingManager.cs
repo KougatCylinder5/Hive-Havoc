@@ -37,9 +37,11 @@ public class PathingManager : MonoBehaviour
 
     public static PathingManager Instance;
 
+    NativeArray<bool> obstructedTiles;
+
     public void Awake()
     {
-        GridSize = new(256, 256);
+        GridSize = new(100, 100);
 
         Instance = this;
         _pathsToGenerate = new();
@@ -50,10 +52,17 @@ public class PathingManager : MonoBehaviour
         {
             ObstructedTiles.Add(true);
         }
+        
     }
+    public void Start()
+    {
+        obstructedTiles = new(GridSize.x * GridSize.y, Allocator.Persistent);
 
+        
+    }
     public void LateUpdate()
     {
+        
 
         List<PathInfo> tempGeneratedPath = ReturnPaths(_pathsToGenerate);
 
@@ -84,11 +93,12 @@ public class PathingManager : MonoBehaviour
         NativeList<JobHandle> jobs = new(pathsToGen.Count, Allocator.Temp);
         List<NativeList<float2>> rawPath = new();
         List<PathInfo> paths = new();
-
-        NativeArray<bool> obstructedTiles = new(GridSize.x * GridSize.y, Allocator.TempJob);
-        for (int j = 0; j < ObstructedTiles.Count; j++)
+        if (pathsToGen.Count > 0)
         {
-            obstructedTiles[j] = ObstructedTiles[j];
+            for (int j = 0; j < ObstructedTiles.Count; j++)
+            {
+                obstructedTiles[j] = ObstructedTiles[j];
+            }
         }
 
         while (pathsToGen.Count > 0)
@@ -112,7 +122,6 @@ public class PathingManager : MonoBehaviour
 
         JobHandle.CompleteAll(jobs);
 
-        obstructedTiles.Dispose();
         int i = 0;
         foreach (NativeList<float2> iPath in rawPath)
         {
@@ -138,7 +147,10 @@ public class PathingManager : MonoBehaviour
         return paths;
     }
 
-
+    public void OnDestroy()
+    {
+        obstructedTiles.Dispose();
+    }
 
     [BurstCompile]
     private struct FindPathJob : IJob

@@ -23,10 +23,6 @@ public class AIController : MonoBehaviour
     [SerializeField]
     private PathingType _pathingType;
 
-
-    [SerializeField]
-    private LineRenderer _lineRenderer;
-
     public void Start()
     {
     }
@@ -37,7 +33,6 @@ public class AIController : MonoBehaviour
 
         position = transform.position;
         position2D = new(position.x, position.z);
-        _lineRenderer.SetPosition(0, position);
         switch (_pathingType)
         {
             case PathingType.Direct:
@@ -47,7 +42,7 @@ public class AIController : MonoBehaviour
             case PathingType.AroundObject:
 
 
-                if (/*(_updateFrequency < _updateTimeRemaining || IsStale) &&*/ Vector3.Distance(position, new Vector3(target.x, 1f, target.y)) > 0.01f)
+                if ((_updateFrequency < _updateTimeRemaining || IsStale) && Vector3.Distance(position, new Vector3(target.x, 1f, target.y)) > 0.01f)
                 {
                     
                     _Path = RetrieveNewPath();
@@ -55,7 +50,6 @@ public class AIController : MonoBehaviour
                 }
                 if (_Path != null && _Path.cleanedPath.Count > 0)
                 {
-                    _lineRenderer.SetPosition(1, new Vector3(_Path.cleanedPath.Peek().x, 0.1f, _Path.cleanedPath.Peek().y));
 
                     transform.position = Vector3.MoveTowards(position, new Vector3(_Path.cleanedPath.Peek().x, 1f, _Path.cleanedPath.Peek().y), speed * Time.deltaTime);
                     if (Vector3.Distance(position, new Vector3(_Path.cleanedPath.Peek().x, 1f, _Path.cleanedPath.Peek().y)) < 0.01f)
@@ -123,7 +117,7 @@ public class AIController : MonoBehaviour
 
     private void RequestNewPath()
     {
-        if (_updateFrequency < _updateTimeRemaining || IsStale)
+        if ((_updateFrequency < _updateTimeRemaining || IsStale) && Vector3.Distance(position, new Vector3(target.x, 1f, target.y)) > 0.01f)
         {
             _requestedPath = new PathInfo() { Start = new(position.x, position.z), End = target };
             PathingManager.Instance.QueuePath(_requestedPath);

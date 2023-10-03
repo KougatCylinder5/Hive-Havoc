@@ -26,7 +26,7 @@ public class UnitController : MonoBehaviour
             {
                 foreach (GameObject unit in units)
                 {
-                    unit.GetComponent<AIController>().SetDestination(Mouse.MouseToWorldPoint() + (Random.insideUnitCircle * units.Count / _unitSpacing));
+                    while(!unit.GetComponent<AIController>().SetDestination(Mouse.MouseToWorldPoint() + (Random.insideUnitCircle * units.Count / _unitSpacing)));
                 }
             }
         }
