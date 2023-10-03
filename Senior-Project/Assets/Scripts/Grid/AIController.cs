@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Linq;
 using static FlowFieldGenerator;
+using Unity.VisualScripting;
 
 public class AIController : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class AIController : MonoBehaviour
     private Vector3 position;
     private Vector2 position2D;
     public float speed;
+    public Vector2 totalDirection;
+
     public bool IsStale { get; private set; }
 
     private PathInfo _Path, _requestedPath;
@@ -69,20 +72,31 @@ public class AIController : MonoBehaviour
             case PathingType.Flow:
                 Vector2Int roundedPosition = new(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.z));
 
-                Vector2Int[] posToObserve = new Vector2Int[4] { new Vector2Int(0, -1), new Vector2Int(0, 1),  new Vector2Int(1, 0),  new Vector2Int(-1, 0) };
+                Vector2Int[] posToObserve = new Vector2Int[8] { new Vector2Int(0, -1), new Vector2Int(0, 1), new Vector2Int(1, 0), new Vector2Int(-1, 0), new Vector2Int(1, 1), new Vector2Int(-1, 1), new Vector2Int(-1, -1), new Vector2Int(1, -1) };
 
-                Vector2 totalDirection = new();
-                for (int i = 0; i < 4; i++)
-                {
-                    try
-                    {
-                        totalDirection += FlowTiles[roundedPosition.x + posToObserve[i].x, roundedPosition.y + posToObserve[i].y].direction;
-                    }
-                    catch
-                    {
-                        Debug.Log("Outside Bounds");
-                    }
-                }
+                totalDirection = new();
+
+                totalDirection = FlowTiles[roundedPosition.x, roundedPosition.y].direction;
+
+                //for (int i = 0; i < 4; i++)
+                //{
+                //    try
+                //    {
+                //        Vector2 direction = FlowTiles[roundedPosition.x + posToObserve[i].x, roundedPosition.y + posToObserve[i].y].direction;
+                //        if (direction.Equals(Vector2.zero))
+                //        {
+                //            direction = FlowTiles[roundedPosition.x + posToObserve[i].x, roundedPosition.y + posToObserve[i].y].position - position2D;
+                //            direction.Normalize();
+                //            direction /= 2;
+                //        }
+
+                //        totalDirection += direction;
+                //    }
+                //    catch
+                //    {
+                //        Debug.Log("Outside Bounds");
+                //    }
+                //}
 
 
                 totalDirection.Normalize();
@@ -133,14 +147,30 @@ public class AIController : MonoBehaviour
 
     }
 
-    public void SetDestination(Vector2 destination)
+    public bool SetDestination(Vector2 destination)
     {
-        target = destination;
+        
+        bool canPath = PathingManager.ObstructedTiles[PathingManager.CalculateIndex(Mathf.RoundToInt(destination.x), Mathf.RoundToInt(destination.y))];
+
+        if (canPath)
+        {
+            this.target = destination;
+        }
+        return canPath;
     }
 
-    public void SetTarget(ref Transform target)
+    public bool SetTarget(Transform target)
     {
-        this.target = new Vector2(target.position.x, target.position.z);
+        Vector2 temp = new Vector2(target.position.x, target.position.z);
+
+        bool canPath = PathingManager.ObstructedTiles[PathingManager.CalculateIndex(Mathf.RoundToInt(target.position.x), Mathf.RoundToInt(target.position.z))];
+
+        if(canPath)
+        {
+            this.target = temp;
+        }
+        return canPath;
+
     }
 
 

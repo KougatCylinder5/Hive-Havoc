@@ -361,4 +361,8 @@ public class PathingManager : MonoBehaviour
     {
         return x + y * gridWidth;
     }
+    public static int CalculateIndex(int x, int y)
+    {
+        return x + y * GridSize.x;
+    }
 }
