@@ -46,7 +46,7 @@ public class PathingManager : MonoBehaviour
         Paths = new();
         InvokeRepeating(nameof(DestroyAllPaths), 0, 60);
 
-        for(int i = 0; i < GridSize.x * GridSize.y; i++)
+        for (int i = 0; i < GridSize.x * GridSize.y; i++)
         {
             ObstructedTiles.Add(true);
         }
@@ -59,15 +59,15 @@ public class PathingManager : MonoBehaviour
 
         foreach (PathInfo path in tempGeneratedPath)
         {
-            if(Paths.IndexOf(path) == -1)
+            if (Paths.IndexOf(path) == -1)
             {
                 Paths.Add(path);
             }
         }
-        
-        
+
+
         _pathsToGenerate.Clear();
-        
+
     }
     public void QueuePath(PathInfo pathToQueue)
     {
@@ -79,27 +79,21 @@ public class PathingManager : MonoBehaviour
         Paths.Clear();
     }
 
-    public List<PathInfo> ReturnPaths(Queue<PathInfo> pathsToGen)
+    private List<PathInfo> ReturnPaths(Queue<PathInfo> pathsToGen)
     {
-        NativeList<JobHandle> jobs = new NativeList<JobHandle>(pathsToGen.Count, Allocator.Temp);
-        List<NativeList<float2>> rawPath = new List<NativeList<float2>>();
+        NativeList<JobHandle> jobs = new(pathsToGen.Count, Allocator.Temp);
+        List<NativeList<float2>> rawPath = new();
         List<PathInfo> paths = new();
 
-        bool[] obstructedTiles = new bool[GridSize.x * GridSize.y];
-        for( int j = 0; j < ObstructedTiles.Count; j++)
+        NativeArray<bool> obstructedTiles = new(GridSize.x * GridSize.y, Allocator.TempJob);
+        for (int j = 0; j < ObstructedTiles.Count; j++)
         {
             obstructedTiles[j] = ObstructedTiles[j];
         }
-        List<NativeList<bool>> obstructedTilesList = new();
 
         while (pathsToGen.Count > 0)
         {
-            NativeList<bool> tempObstructed = new NativeList<bool>(Allocator.TempJob);
-            foreach (bool tile in obstructedTiles)
-            {
-                tempObstructed.Add(tile);
-            }
-            obstructedTilesList.Add(tempObstructed);
+
             rawPath.Add(new NativeList<float2>(Allocator.Persistent));
             FindPathJob findPathJob = new()
             {
@@ -107,27 +101,26 @@ public class PathingManager : MonoBehaviour
                 startPosition = new int2(Mathf.RoundToInt(pathsToGen.Peek().Start.x), Mathf.RoundToInt(pathsToGen.Peek().Start.y)),
                 endPosition = new int2(Mathf.RoundToInt(pathsToGen.Peek().End.x), Mathf.RoundToInt(pathsToGen.Peek().End.y)),
                 path = rawPath[^1],
-                obstructedGrid = obstructedTilesList[^1],
-                GridSize = new int2(GridSize.x,GridSize.y)
-                
-                
+                obstructedGrid = obstructedTiles.AsReadOnly(),
+                GridSize = new int2(GridSize.x, GridSize.y)
+
+
             };
             jobs.Add(findPathJob.Schedule());
             paths.Add(pathsToGen.Dequeue());
         }
-        
+
         JobHandle.CompleteAll(jobs);
 
-        
+        obstructedTiles.Dispose();
         int i = 0;
-        foreach(NativeList<float2> iPath in rawPath)
+        foreach (NativeList<float2> iPath in rawPath)
         {
 
-            obstructedTilesList[i].Dispose();
             Queue<Vector2> path = new Queue<Vector2>();
-            for (int j = iPath.Length-1; j >= 0; j--) 
+            for (int j = iPath.Length - 1; j >= 0; j--)
             {
-                
+
                 float2 node = iPath[j];
 
                 path.Enqueue(new Vector2(node.x, node.y));
@@ -151,8 +144,8 @@ public class PathingManager : MonoBehaviour
     private struct FindPathJob : IJob
     {
         public float2 exactEndPosition;
-
-        public NativeList<bool> obstructedGrid;
+        [ReadOnly]
+        public NativeArray<bool>.ReadOnly obstructedGrid;
 
         public int2 startPosition;
         public int2 endPosition;
@@ -367,5 +360,9 @@ public class PathingManager : MonoBehaviour
     public static int CalculateIndex(int x, int y, int gridWidth)
     {
         return x + y * gridWidth;
+    }
+    public static int CalculateIndex(int x, int y)
+    {
+        return x + y * GridSize.x;
     }
 }

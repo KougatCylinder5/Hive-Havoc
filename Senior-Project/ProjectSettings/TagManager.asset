@@ -6,8 +6,7 @@ TagManager:
   tags:
   - Cube
   - Component
-  - Troop
-  - ResourceTile
+  - CommandCenter
   layers:
   - Default
   - TransparentFX
@@ -16,7 +15,7 @@ TagManager:
   - Water
   - UI
   - Terrain
-  - Unit
+  - 
   - 
   - 
   - 

@@ -16,5 +16,8 @@ public class ObstructTile : MonoBehaviour
         
     }
 
-
+    private void OnDestroy()
+    {
+        PathingManager.ObstructedTiles[PathingManager.CalculateIndex((int)(transform.position.x), (int)(transform.position.z), PathingManager.GridSize.x)] = true;
+    }
 }

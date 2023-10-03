@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
 using System.Linq;
+using static FlowFieldGenerator;
+using Unity.VisualScripting;
 
 public class AIController : MonoBehaviour
 {
@@ -9,8 +11,10 @@ public class AIController : MonoBehaviour
     [SerializeField]
     private Vector2 target;
     private Vector3 position;
-    
+    private Vector2 position2D;
     public float speed;
+    public Vector2 totalDirection;
+
     public bool IsStale { get; private set; }
 
     private PathInfo _Path, _requestedPath;
@@ -21,12 +25,10 @@ public class AIController : MonoBehaviour
 
 
     [SerializeField]
-    //private LineRenderer _lineRenderer;
+    private LineRenderer _lineRenderer;
 
     public void Start()
     {
-        //target = new Vector2(10, 10);
-        
     }
 
     public void Update()
@@ -34,7 +36,8 @@ public class AIController : MonoBehaviour
 
 
         position = transform.position;
-        //_lineRenderer.SetPosition(0, position);
+        position2D = new(position.x, position.z);
+        _lineRenderer.SetPosition(0, position);
         switch (_pathingType)
         {
             case PathingType.Direct:
@@ -42,18 +45,18 @@ public class AIController : MonoBehaviour
                 break;
 
             case PathingType.AroundObject:
-                
+
 
                 if (/*(_updateFrequency < _updateTimeRemaining || IsStale) &&*/ Vector3.Distance(position, new Vector3(target.x, 1f, target.y)) > 0.01f)
                 {
                     
                     _Path = RetrieveNewPath();
-                    //_lineRenderer.SetPosition(1, new Vector3(_Path.cleanedPath.Peek().x, 0.1f, _Path.cleanedPath.Peek().y));
+
                 }
                 if (_Path != null && _Path.cleanedPath.Count > 0)
                 {
-                    //_lineRenderer.SetPosition(1, new Vector3(_Path.cleanedPath.Peek().x, 0.1f, _Path.cleanedPath.Peek().y));
-                    
+                    _lineRenderer.SetPosition(1, new Vector3(_Path.cleanedPath.Peek().x, 0.1f, _Path.cleanedPath.Peek().y));
+
                     transform.position = Vector3.MoveTowards(position, new Vector3(_Path.cleanedPath.Peek().x, 1f, _Path.cleanedPath.Peek().y), speed * Time.deltaTime);
                     if (Vector3.Distance(position, new Vector3(_Path.cleanedPath.Peek().x, 1f, _Path.cleanedPath.Peek().y)) < 0.01f)
                     {
@@ -67,20 +70,52 @@ public class AIController : MonoBehaviour
                 break;
 
             case PathingType.Flow:
+                Vector2Int roundedPosition = new(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.z));
 
+                Vector2Int[] posToObserve = new Vector2Int[8] { new Vector2Int(0, -1), new Vector2Int(0, 1), new Vector2Int(1, 0), new Vector2Int(-1, 0), new Vector2Int(1, 1), new Vector2Int(-1, 1), new Vector2Int(-1, -1), new Vector2Int(1, -1) };
+
+                totalDirection = new();
+
+                totalDirection = FlowTiles[roundedPosition.x, roundedPosition.y].direction;
+
+                //for (int i = 0; i < 4; i++)
+                //{
+                //    try
+                //    {
+                //        Vector2 direction = FlowTiles[roundedPosition.x + posToObserve[i].x, roundedPosition.y + posToObserve[i].y].direction;
+                //        if (direction.Equals(Vector2.zero))
+                //        {
+                //            direction = FlowTiles[roundedPosition.x + posToObserve[i].x, roundedPosition.y + posToObserve[i].y].position - position2D;
+                //            direction.Normalize();
+                //            direction /= 2;
+                //        }
+
+                //        totalDirection += direction;
+                //    }
+                //    catch
+                //    {
+                //        Debug.Log("Outside Bounds");
+                //    }
+                //}
+
+
+                totalDirection.Normalize();
+
+
+                transform.Translate(new Vector3(totalDirection.x * Time.deltaTime, 0.0f, totalDirection.y * Time.deltaTime) * speed);
 
                 break;
 
 
         }
-        
-        
+
+
     }
-    
+
 
     public void LateUpdate()
     {
-        if(_pathingType == PathingType.AroundObject)
+        if (_pathingType == PathingType.AroundObject)
         {
             RequestNewPath();
         }
@@ -112,18 +147,34 @@ public class AIController : MonoBehaviour
 
     }
 
-    public void SetDestination(Vector2 destination)
+    public bool SetDestination(Vector2 destination)
     {
-        target = destination;
+        
+        bool canPath = PathingManager.ObstructedTiles[PathingManager.CalculateIndex(Mathf.RoundToInt(destination.x), Mathf.RoundToInt(destination.y))];
+
+        if (canPath)
+        {
+            this.target = destination;
+        }
+        return canPath;
     }
 
-    public void SetTarget(Transform target)
+    public bool SetTarget(Transform target)
     {
-        this.target = new Vector2(target.position.x, target.position.z);
+        Vector2 temp = new Vector2(target.position.x, target.position.z);
+
+        bool canPath = PathingManager.ObstructedTiles[PathingManager.CalculateIndex(Mathf.RoundToInt(target.position.x), Mathf.RoundToInt(target.position.z))];
+
+        if(canPath)
+        {
+            this.target = temp;
+        }
+        return canPath;
+
     }
 
 
-    
+
 
 }
 
