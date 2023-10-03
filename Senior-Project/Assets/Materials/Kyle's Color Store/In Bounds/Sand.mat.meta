@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Senior-Project/Assets/Materials/Kyle's Color Store/In Bounds/Sand.mat.meta
+guid: 10c7188d70fce8c48acaff6c88ce2517
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+========
+guid: ac0316ca287ba459492b669ff1317a6f
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+>>>>>>>> origin/sqlTesting:Assets/Settings/HDRPDefaultResources/HDRenderPipelineGlobalSettings.asset.meta
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

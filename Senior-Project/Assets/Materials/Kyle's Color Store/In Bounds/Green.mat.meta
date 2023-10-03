@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Senior-Project/Assets/Materials/Kyle's Color Store/In Bounds/Green.mat.meta
+guid: 922c2de1bfd57494ca39b4f8d9f14e5b
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+========
+guid: b9f3086da92434da0bc1518f19f0ce86
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+>>>>>>>> origin/sqlTesting:Assets/Settings/HDRPDefaultResources/HDRenderPipelineAsset.asset.meta
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

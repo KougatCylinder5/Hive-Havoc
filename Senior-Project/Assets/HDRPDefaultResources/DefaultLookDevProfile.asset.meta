@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Senior-Project/Assets/HDRPDefaultResources/DefaultLookDevProfile.asset.meta
 guid: 2f1bdddca28b67744a726c80880fb8b6
+========
+guid: 4594f4a3fb14247e192bcca6dc23c8ed
+>>>>>>>> origin/sqlTesting:Assets/Settings/HDRPDefaultResources/DefaultLookDevProfile.asset.meta
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 11400000

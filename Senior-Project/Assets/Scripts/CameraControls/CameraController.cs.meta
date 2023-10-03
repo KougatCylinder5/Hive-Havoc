@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Senior-Project/Assets/Scripts/CameraControls/CameraController.cs.meta
+guid: 1a2d2f4f3b3464141a62be88ab301d3a
+========
+guid: 599d788dd5625d94cac8763b2517a626
+>>>>>>>> origin/sqlTesting:Assets/DatabaseIO/DBInit.cs.meta
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
