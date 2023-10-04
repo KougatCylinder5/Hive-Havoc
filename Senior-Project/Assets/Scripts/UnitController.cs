@@ -27,19 +27,19 @@ public class UnitController : MonoBehaviour
             else
             {
                 int j = 0;
-                for(int i = 0; i < units.Count;)
+                for(int i = 0; i < units.Count; i++)
                 {
                     float genX;
                     float genY;
                     do
                     {
-                        float idk = 2 * i * n / r;
+                        float idk = 2 * j * n / r;
                         genX = r * Mathf.Sqrt(idk) * Mathf.Cos(Mathf.Sqrt(idk));
                         genY = r * Mathf.Sqrt(idk) * Mathf.Sin(Mathf.Sqrt(idk));
-                        i++;
+                        j++;
                     }
-                    while (!units[j].GetComponent<AIController>().SetDestination(Mouse.MouseToWorldPoint() + new Vector2(genX, genY)));
-                    j++;
+                    while (!units[i].GetComponent<AIController>().SetDestination(Mouse.MouseToWorldPoint() + new Vector2(genX, genY)));
+                    
                     
                 }
             }

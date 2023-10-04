@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1994545680056018041}
   - component: {fileID: 8400291486926223928}
   - component: {fileID: 3195785117636897023}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: OutboundWater
   m_TagString: Cube
   m_Icon: {fileID: 0}
