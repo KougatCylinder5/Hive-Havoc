@@ -24,7 +24,7 @@ public class DirectTroops : MonoBehaviour
             }
             if (AI != null && getClickedObject.getCube() != null)
             {
-                AI.SetDestination(Mouse.MouseToWorldPoint());
+                AI.SetDestination(Mouse.MouseToWorldPoint(~LayerMask.GetMask(new string[4]{"Terrain", "Building", "PlayerUnit", "EnemyUnit"})));
             }
         }
             

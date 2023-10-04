@@ -72,25 +72,25 @@ public class AIController : MonoBehaviour
 
                 totalDirection = FlowTiles[roundedPosition.x, roundedPosition.y].direction;
 
-                //for (int i = 0; i < 4; i++)
-                //{
-                //    try
-                //    {
-                //        Vector2 direction = FlowTiles[roundedPosition.x + posToObserve[i].x, roundedPosition.y + posToObserve[i].y].direction;
-                //        if (direction.Equals(Vector2.zero))
-                //        {
-                //            direction = FlowTiles[roundedPosition.x + posToObserve[i].x, roundedPosition.y + posToObserve[i].y].position - position2D;
-                //            direction.Normalize();
-                //            direction /= 2;
-                //        }
+                for (int i = 0; i < posToObserve.Length; i++)
+                {
+                    try
+                    {
+                        Vector2 direction = FlowTiles[roundedPosition.x + posToObserve[i].x, roundedPosition.y + posToObserve[i].y].direction;
+                        if (direction.Equals(Vector2.zero))
+                        {
+                            direction = FlowTiles[roundedPosition.x + posToObserve[i].x, roundedPosition.y + posToObserve[i].y].position - position2D;
+                            direction.Normalize();
+                            direction /= 2;
+                        }
 
-                //        totalDirection += direction;
-                //    }
-                //    catch
-                //    {
-                //        Debug.Log("Outside Bounds");
-                //    }
-                //}
+                        totalDirection += direction;
+                    }
+                    catch
+                    {
+                        Debug.Log("Outside Bounds");
+                    }
+                }
 
 
                 totalDirection.Normalize();

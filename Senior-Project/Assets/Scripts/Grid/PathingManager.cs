@@ -95,7 +95,7 @@ public class PathingManager : MonoBehaviour
         List<PathInfo> paths = new();
         if (pathsToGen.Count > 0)
         {
-            for (int j = 0; j < ObstructedTiles.Count; j++)
+            for (int j = 0; j < ObstructedTiles.Count - 1; j++)
             {
                 obstructedTiles[j] = ObstructedTiles[j];
             }
