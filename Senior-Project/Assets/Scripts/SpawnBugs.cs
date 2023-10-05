@@ -5,6 +5,7 @@ using UnityEngine;
 public class SpawnBugs : MonoBehaviour
 {
     public GameObject bug;
+    public Vector3 offset;
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +21,6 @@ public class SpawnBugs : MonoBehaviour
 
     public void SpawnBug()
     {
-        Instantiate(bug, transform.position, Quaternion.identity);
+        Instantiate(bug, transform.position + offset, Quaternion.identity);
     }
 }
