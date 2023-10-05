@@ -16,11 +16,8 @@ using Unity.Mathematics;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Burst;
-using Unity.VisualScripting;
-using UnityEditor;
 using System.Linq;
 using System;
-using Unity.Collections.NotBurstCompatible;
 
 public class PathingManager : MonoBehaviour
 {

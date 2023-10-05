@@ -3,7 +3,6 @@ using UnityEngine;
 using System.Collections;
 using System.Linq;
 using static FlowFieldGenerator;
-using Unity.VisualScripting;
 
 public class AIController : MonoBehaviour
 {
@@ -56,10 +55,18 @@ public class AIController : MonoBehaviour
                     {
                         _Path.cleanedPath.Dequeue();
                     }
+                    if (_Path.cleanedPath.Count == 1)
+                    {
+                        _pathingType = PathingType.Direct;
+                    }
                 }
                 else if (_Path != null && Vector3.Distance(position, new Vector3(_Path.End.x, 1f, _Path.End.y)) > 0.01f)
                 {
                     transform.position = Vector3.MoveTowards(position, new Vector3(_Path.End.x, 1f, _Path.End.y), speed * Time.deltaTime);
+                    if(_Path.cleanedPath.Count == 1)
+                    {
+                        _pathingType = PathingType.Direct;
+                    }
                 }
                 break;
 
@@ -145,10 +152,10 @@ public class AIController : MonoBehaviour
     {
         
         bool canPath = PathingManager.ObstructedTiles[PathingManager.CalculateIndex(Mathf.RoundToInt(destination.x), Mathf.RoundToInt(destination.y))];
-
         if (canPath)
         {
             this.target = destination;
+            _pathingType = PathingType.AroundObject;
         }
         return canPath;
     }
@@ -162,6 +169,7 @@ public class AIController : MonoBehaviour
         if(canPath)
         {
             this.target = temp;
+            _pathingType = PathingType.AroundObject;
         }
         return canPath;
 
