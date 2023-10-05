@@ -1,16 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 
 public class MusicLooper : MonoBehaviour
 {
     private AudioSource musicSource;
+    private AudioHighPassFilter musicHighPassFilter;
     public AudioClip musicClip;
     public float musicLoopPoint;
     public float musicResetPoint;
     // Start is called before the first frame update
     void Start() {
         musicSource = GetComponent<AudioSource>();
+        musicHighPassFilter = GetComponent<AudioHighPassFilter>();
         musicSource.clip = musicClip;
         musicSource.Play();
     }
@@ -20,6 +24,19 @@ public class MusicLooper : MonoBehaviour
         if(musicSource.time >= musicResetPoint || musicSource.time == musicClip.length) {
             musicSource.time = musicLoopPoint;
             musicSource.Play();
+        }
+        if(Time.timeScale == 0) {
+            if(musicHighPassFilter.cutoffFrequency < 2000){
+                musicHighPassFilter.cutoffFrequency += 30;
+            }
+        } else {
+            try {
+                if (musicHighPassFilter.cutoffFrequency > 10) {
+                    musicHighPassFilter.cutoffFrequency -= 30;
+                }
+            } catch {
+                musicHighPassFilter.cutoffFrequency = 0;
+            }
         }
     }
 }
