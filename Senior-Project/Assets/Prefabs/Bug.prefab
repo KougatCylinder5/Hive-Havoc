@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6194155668668213725}
   - component: {fileID: 5691766426410501344}
   - component: {fileID: 8348769785200244805}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Bug
   m_TagString: Troop
   m_Icon: {fileID: 0}
@@ -120,7 +120,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {x: 50, y: 50}
   speed: 5
-  totalDirection: {x: 0, y: 0}
   _updateFrequency: 0.5
   _updateTimeRemaining: 0
   _pathingType: 2
