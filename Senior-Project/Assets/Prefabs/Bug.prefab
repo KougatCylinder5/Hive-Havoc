@@ -119,8 +119,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {x: 50, y: 50}
-  speed: 5
+  speed: 2
   totalDirection: {x: 0, y: 0}
-  _updateFrequency: 0.5
+  _updateFrequency: 0.1
   _updateTimeRemaining: 0
-  _pathingType: 2
+  _pathingType: 0
+  velocity: {x: 0, y: 0}

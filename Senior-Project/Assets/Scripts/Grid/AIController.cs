@@ -4,6 +4,8 @@ using System.Collections;
 using System.Linq;
 using static FlowFieldGenerator;
 using Unity.VisualScripting;
+using UnityEngine.UIElements;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class AIController : MonoBehaviour
 {
@@ -19,10 +21,11 @@ public class AIController : MonoBehaviour
 
     private PathInfo _Path, _requestedPath;
     [SerializeField]
-    private float _updateFrequency = 0.5f, _updateTimeRemaining = 0f;
+    private float _updateFrequency = 0.1f, _updateTimeRemaining = 0f;
     [SerializeField]
     private PathingType _pathingType;
 
+    public Vector2 velocity; 
     public void Start()
     {
     }
@@ -71,7 +74,7 @@ public class AIController : MonoBehaviour
                 totalDirection = new();
 
                 totalDirection = FlowTiles[roundedPosition.x, roundedPosition.y].direction;
-
+                totalDirection += Random.insideUnitCircle * 2;
                 for (int i = 0; i < posToObserve.Length; i++)
                 {
                     try
@@ -79,12 +82,13 @@ public class AIController : MonoBehaviour
                         Vector2 direction = FlowTiles[roundedPosition.x + posToObserve[i].x, roundedPosition.y + posToObserve[i].y].direction;
                         if (direction.Equals(Vector2.zero))
                         {
-                            direction = FlowTiles[roundedPosition.x + posToObserve[i].x, roundedPosition.y + posToObserve[i].y].position - position2D;
-                            direction.Normalize();
-                            direction /= 2;
+                            direction = position2D - roundedPosition + posToObserve[i];
+                            float mag = 0.1f / direction.magnitude;
+                            direction *= -mag;
+                            
                         }
 
-                        totalDirection += direction;
+                        totalDirection += direction.normalized;
                     }
                     catch
                     {
@@ -94,9 +98,10 @@ public class AIController : MonoBehaviour
 
 
                 totalDirection.Normalize();
+                velocity += totalDirection / Random.Range(10f,25f);
+                velocity.Normalize();
 
-
-                transform.Translate(new Vector3(totalDirection.x * Time.deltaTime, 0.0f, totalDirection.y * Time.deltaTime) * speed);
+                transform.Translate(new Vector3(velocity.x * Time.deltaTime, 0.0f, velocity.y * Time.deltaTime) * speed);
 
                 break;
 
