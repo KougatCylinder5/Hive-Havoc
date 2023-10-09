@@ -7,7 +7,7 @@ public class UnitController : MonoBehaviour
 {
     public List<GameObject> units = new();
     public GetClickedObject gco;
-    private float r = 0.15f;
+    private float r = 0.05f;
     private float n = 0.5f;
 
     // Update is called once per frame
@@ -15,31 +15,31 @@ public class UnitController : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(0))
         {
-            if(Input.GetKey(KeyCode.LeftControl))
+            if (Input.GetKey(KeyCode.LeftControl))
             {
                 GameObject temp = gco.getTroop();
-                if(!units.Contains(temp))
+                if (!units.Contains(temp))
                 {
                     units.Add(temp);
                 }
             }
             else
             {
-                int j = 0;
-                for(int i = 0; i < units.Count;)
+                int j = 1;
+
+                Vector2 mousePos = Mouse.MouseToWorldPoint();
+                for (int i = 0; i < units.Count; i++)
                 {
                     float genX;
                     float genY;
                     do
                     {
-                        float idk = 2 * i * n / r;
+                        float idk = 2 * j * n / r;
                         genX = r * Mathf.Sqrt(idk) * Mathf.Cos(Mathf.Sqrt(idk));
                         genY = r * Mathf.Sqrt(idk) * Mathf.Sin(Mathf.Sqrt(idk));
-                        i++;
+                        j++;
                     }
-                    while (!units[j].GetComponent<AIController>().SetDestination(Mouse.MouseToWorldPoint() + new Vector2(genX, genY)));
-                    j++;
-                    
+                    while (!units[i].GetComponent<AIController>().SetDestination(mousePos + new Vector2(genX, genY)));
                 }
             }
         }

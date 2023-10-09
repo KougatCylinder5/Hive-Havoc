@@ -18,13 +18,14 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
 
     public PathInfo()
     {
-        raycastLayers = LayerMask.GetMask(new string[] { "Building", "Terrain" });
+        raycastLayers = LayerMask.GetMask(new string[] {"Water", "Building", "Terrain" });
         
     }
 
     public void CleanPath()
     {
         Queue<Vector2> copyPath = new Queue<Vector2>(path);
+        copyPath.Enqueue(End);
 
         Vector2 curNode = Start;
 
@@ -49,11 +50,6 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
             if (!priorNode.Equals(new Vector2(-1, -1)))
                 cleanedPath.Enqueue(priorNode);
         }
-
-
-
-
-
     }
 
     private Vector3 ConvertToVector3(Vector2 obj, float height)
