@@ -8,21 +8,19 @@ public class MusicLooper : MonoBehaviour
 {
     private AudioSource musicSource;
     private AudioHighPassFilter musicHighPassFilter;
-    public AudioClip musicClip;
     public float musicLoopPoint;
     public float musicResetPoint;
     // Start is called before the first frame update
     void Start() {
         musicSource = GetComponent<AudioSource>();
         musicHighPassFilter = GetComponent<AudioHighPassFilter>();
-        musicSource.clip = musicClip;
         musicSource.Play();
     }
 
     // Update is called once per frame
     void Update() {
-        if(musicSource.time >= musicResetPoint || musicSource.time == musicClip.length) {
-            musicSource.time = musicLoopPoint;
+        if(musicSource.time >= musicResetPoint || musicSource.time == musicSource.clip.length) {
+            musicSource.time -= musicResetPoint - musicLoopPoint;
             musicSource.Play();
         }
         if(Time.timeScale == 0) {
@@ -36,6 +34,16 @@ public class MusicLooper : MonoBehaviour
                 }
             } catch {
                 musicHighPassFilter.cutoffFrequency = 0;
+            }
+        }
+
+        if(Input.GetKeyDown(KeyCode.Space)) {
+            if(Time.timeScale == 0) {
+                Time.timeScale = 1;
+                Debug.Log("Play");
+            } else {
+                Time.timeScale = 0;
+                Debug.Log("Pause");
             }
         }
     }

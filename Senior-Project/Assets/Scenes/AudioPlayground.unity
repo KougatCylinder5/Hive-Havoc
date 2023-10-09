@@ -169,7 +169,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53cb80eed9b63474cb89a0db3fb1caf7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  musicClip: {fileID: 8300000, guid: 79a4c247739a0c146ad6d5cab218bd6b, type: 3}
   musicLoopPoint: 130.667
   musicResetPoint: 258.667
 --- !u!82 &237442550
@@ -183,7 +182,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -3122892223093136676, guid: ec9d3c713acf3de489b7f10944a4abb4,
     type: 2}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 79a4c247739a0c146ad6d5cab218bd6b, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
