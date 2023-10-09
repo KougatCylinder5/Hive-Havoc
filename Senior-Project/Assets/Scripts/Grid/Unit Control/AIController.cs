@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Linq;
 using static FlowFieldGenerator;
+using System.Data.SqlTypes;
 
 public class AIController : MonoBehaviour
 {
@@ -22,7 +23,12 @@ public class AIController : MonoBehaviour
     [SerializeField]
     private PathingType _pathingType;
 
-    public Vector2 velocity; 
+    public Vector2 velocity;
+
+    [SerializeField]
+    private CharacterController _characterController;
+
+
     public void Start()
     {
         position = transform.position;
@@ -39,39 +45,31 @@ public class AIController : MonoBehaviour
         switch (_pathingType)
         {
             case PathingType.Direct:
-                transform.position = Vector3.MoveTowards(position, new Vector3(target.x, 1f, target.y), speed * Time.deltaTime);
+                _characterController.Move(new Vector3(target.x, -1f, target.y)* speed * Time.deltaTime);
                 break;
 
             case PathingType.AroundObject:
 
-
-                if ((_updateFrequency < _updateTimeRemaining || IsStale) && Vector3.Distance(position, new Vector3(target.x, 1f, target.y)) > 0.01f)
+                if(_updateFrequency > _updateTimeRemaining)
                 {
-                    
                     _Path = RetrieveNewPath();
-
+                    _updateTimeRemaining += Time.deltaTime;
                 }
-                if (_Path != null && _Path.cleanedPath.Count > 0)
+                else
                 {
-
-                    transform.position = Vector3.MoveTowards(position, new Vector3(_Path.cleanedPath.Peek().x, 1f, _Path.cleanedPath.Peek().y), speed * Time.deltaTime);
-                    if (Vector3.Distance(position, new Vector3(_Path.cleanedPath.Peek().x, 1f, _Path.cleanedPath.Peek().y)) < 0.01f)
-                    {
-                        _Path.cleanedPath.Dequeue();
-                    }
-                    if (_Path.cleanedPath.Count == 1)
-                    {
-                        _pathingType = PathingType.Direct;
-                    }
+                    _updateTimeRemaining = 0;
                 }
-                else if (_Path != null && Vector3.Distance(position, new Vector3(_Path.End.x, 1f, _Path.End.y)) > 0.01f)
+                if(_Path != null && _Path.cleanedPath.TryPeek(out Vector2 movementVector))
                 {
-                    transform.position = Vector3.MoveTowards(position, new Vector3(_Path.End.x, 1f, _Path.End.y), speed * Time.deltaTime);
-                    if(_Path.cleanedPath.Count == 1)
+                    movementVector -= position2D;
+
+                    if(movementVector.sqrMagnitude > 0.001)
                     {
-                        _pathingType = PathingType.Direct;
+                        _characterController.Move(new Vector3(movementVector.x, -1f, movementVector.y) * speed * Time.deltaTime);
                     }
                 }
+
+
                 break;
 
             case PathingType.Flow:
@@ -82,7 +80,7 @@ public class AIController : MonoBehaviour
                 totalDirection = new();
 
                 totalDirection = FlowTiles[roundedPosition.x, roundedPosition.y].direction;
-                totalDirection += Random.insideUnitCircle * 2;
+                totalDirection += Random.insideUnitCircle.normalized * 10;
                 for (int i = 0; i < posToObserve.Length; i++)
                 {
                     try
@@ -91,7 +89,7 @@ public class AIController : MonoBehaviour
                         if (direction.Equals(Vector2.zero))
                         {
                             direction = position2D - roundedPosition + posToObserve[i];
-                            float mag = 0.1f / direction.magnitude;
+                            float mag = 1.25f / direction.magnitude;
                             direction *= -mag;
                             
                         }
@@ -103,13 +101,13 @@ public class AIController : MonoBehaviour
                         Debug.Log("Outside Bounds");
                     }
                 }
-
+                
 
                 totalDirection.Normalize();
                 velocity += totalDirection / Random.Range(10f,25f);
                 velocity.Normalize();
 
-                transform.Translate(new Vector3(velocity.x * Time.deltaTime, 0.0f, velocity.y * Time.deltaTime) * speed);
+                _characterController.Move(new Vector3(velocity.x * Time.deltaTime, -1.0f, velocity.y * Time.deltaTime) * speed);
 
 
                 break;
