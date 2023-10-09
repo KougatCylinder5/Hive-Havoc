@@ -57,8 +57,6 @@ public class PathingManager : MonoBehaviour
     public void Start()
     {
         obstructedTiles = new(GridSize.x * GridSize.y, Allocator.Persistent);
-
-        
     }
     public void LateUpdate()
     {
