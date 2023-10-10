@@ -1,9 +1,6 @@
-using System.Collections.Generic;
-using UnityEngine;
-using System.Collections;
 using System.Linq;
+using UnityEngine;
 using static FlowFieldGenerator;
-using System.Data.SqlTypes;
 
 public class AIController : MonoBehaviour
 {
@@ -45,12 +42,12 @@ public class AIController : MonoBehaviour
         switch (_pathingType)
         {
             case PathingType.Direct:
-                _characterController.Move(new Vector3(target.x, -1f, target.y)* speed * Time.fixedDeltaTime);
+                _characterController.Move(new Vector3(target.x, -1f, target.y) * speed * Time.fixedDeltaTime);
                 break;
 
             case PathingType.AroundObject:
 
-                if(_updateFrequency > _updateTimeRemaining && Vector2.Distance(position2D, target) > 0.1f)
+                if (_updateFrequency > _updateTimeRemaining && Vector2.Distance(position2D, target) > 0.1f)
                 {
                     _Path = RetrieveNewPath();
                     _updateTimeRemaining += Time.fixedDeltaTime;
@@ -59,11 +56,11 @@ public class AIController : MonoBehaviour
                 {
                     _updateTimeRemaining = 0;
                 }
-                if(_Path != null && _Path.cleanedPath.TryPeek(out Vector2 pathTarget))
+                if (_Path != null && _Path.cleanedPath.TryPeek(out Vector2 pathTarget))
                 {
                     Vector2 movementVector = pathTarget - position2D;
                     movementVector.Normalize();
-                    if(Vector2.Distance(position2D, pathTarget) > 0.1f)
+                    if (Vector2.Distance(position2D, pathTarget) > 0.1f)
                     {
                         _characterController.Move(new Vector3(movementVector.x, -1f, movementVector.y) * speed * Time.fixedDeltaTime);
                     }
@@ -95,7 +92,6 @@ public class AIController : MonoBehaviour
                             direction = position2D - roundedPosition + posToObserve[i];
                             float mag = 1.25f / direction.magnitude;
                             direction *= -mag;
-                            
                         }
 
                         totalDirection += direction.normalized;
@@ -105,10 +101,10 @@ public class AIController : MonoBehaviour
                         Debug.Log("Outside Bounds");
                     }
                 }
-                
+
 
                 totalDirection.Normalize();
-                velocity += totalDirection / Random.Range(10f,25f);
+                velocity += totalDirection / Random.Range(10f, 25f);
                 velocity.Normalize();
 
                 _characterController.Move(new Vector3(velocity.x * Time.fixedDeltaTime, -1.0f, velocity.y * Time.fixedDeltaTime) * speed);
@@ -159,7 +155,7 @@ public class AIController : MonoBehaviour
 
     public bool SetDestination(Vector2 destination)
     {
-        
+
         bool canPath = PathingManager.ObstructedTiles[PathingManager.CalculateIndex(Mathf.RoundToInt(destination.x), Mathf.RoundToInt(destination.y))];
         if (canPath)
         {
@@ -175,7 +171,7 @@ public class AIController : MonoBehaviour
 
         bool canPath = PathingManager.ObstructedTiles[PathingManager.CalculateIndex(Mathf.RoundToInt(target.position.x), Mathf.RoundToInt(target.position.z))];
 
-        if(canPath)
+        if (canPath)
         {
             this.target = temp;
             _pathingType = PathingType.AroundObject;
