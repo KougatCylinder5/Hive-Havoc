@@ -42,7 +42,7 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
                 if (Physics.Raycast(ray: ray, maxDistance: (copyPath.Peek() - curNode).magnitude, layerMask: raycastLayers))
                 {
                     cleanedPath.Enqueue(priorNode);
-                    curNode = priorNode;
+                    break;
                 }
                 priorNode = copyPath.Dequeue();
 

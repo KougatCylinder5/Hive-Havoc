@@ -2,6 +2,7 @@ using System.Linq;
 using UnityEngine;
 using static FlowFieldGenerator;
 
+[RequireComponent(typeof(LineRenderer))]
 public class AIController : MonoBehaviour
 {
 
@@ -25,20 +26,24 @@ public class AIController : MonoBehaviour
     [SerializeField]
     private CharacterController _characterController;
 
+    private LineRenderer _pathRenderer;
 
     public void Start()
     {
         position = transform.position;
         position2D = new(position.x, position.z);
         target = position2D;
+        _pathRenderer = GetComponent<LineRenderer>();
+        _pathRenderer.endWidth = 0.3f;
+        _pathRenderer.startWidth = 0.1f;
+
     }
 
     public void FixedUpdate()
     {
-
-
         position = transform.position;
         position2D = new(position.x, position.z);
+
         switch (_pathingType)
         {
             case PathingType.Direct:
@@ -51,6 +56,7 @@ public class AIController : MonoBehaviour
                 {
                     _Path = RetrieveNewPath();
                     _updateTimeRemaining += Time.fixedDeltaTime;
+                    _pathRenderer.Simplify(0.1f);
                 }
                 else
                 {
@@ -58,6 +64,10 @@ public class AIController : MonoBehaviour
                 }
                 if (_Path != null && _Path.cleanedPath.TryPeek(out Vector2 pathTarget))
                 {
+                    _pathRenderer.SetPositions(new Vector3[2] { new(position.x, 0.5f, position.z), new(_Path.End.x, 0.5f, _Path.End.y) });
+
+                    _pathRenderer.enabled = (_pathRenderer.GetPosition(0) - _pathRenderer.GetPosition(1)).sqrMagnitude > 0.01f;
+
                     Vector2 movementVector = pathTarget - position2D;
                     movementVector.Normalize();
                     if (Vector2.Distance(position2D, pathTarget) > 0.1f)
