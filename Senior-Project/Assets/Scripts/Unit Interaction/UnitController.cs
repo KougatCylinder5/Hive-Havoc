@@ -3,14 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class UnitController : MonoBehaviour
 {
-    public List<GameObject> units = new();
+    [SerializeField]
+    private List<GameObject> units = new();
     public GetClickedObject gco;
     private float r = 0.15f;
     private float n = 0.5f;
 
+    public void Start()
+    {
+        
+    }
     // Update is called once per frame
     void Update()
     {
@@ -48,5 +54,19 @@ public class UnitController : MonoBehaviour
         {
             units.Clear();
         }
+    }
+
+    private void CheckIfAdded(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    {
+
+    }
+    public bool AddUnit(GameObject unit)
+    {
+        if (!units.Contains(unit))
+        {
+            units.Add(unit);
+            return true;
+        }
+        return false;
     }
 }
