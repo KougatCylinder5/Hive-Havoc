@@ -10,6 +10,12 @@ public class UnitController : MonoBehaviour
     private float r = 0.05f;
     private float n = 0.5f;
 
+
+    private void Start()
+    {
+        gco = GetComponent<GetClickedObject>();
+    }
+
     // Update is called once per frame
     void Update()
     {
