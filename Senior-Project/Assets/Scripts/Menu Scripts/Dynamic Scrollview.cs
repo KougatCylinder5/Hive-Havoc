@@ -12,16 +12,14 @@ public class DynamicScrollview : MonoBehaviour
     private GameObject prefab;
 
     [SerializeField]
-    private List<Sprite> icons;
+    private List<int> saveNum;
 
     private void Start()
     {
-        foreach (Sprite icon in icons)
+        foreach (int icon in saveNum)
         {
             GameObject newIcon = Instantiate(prefab, scrollViewContent);
-            if(newIcon.TryGetComponent<ScrollViewItem>(out ScrollViewItem item)){
-                item.ChangeImage(icon);
-            }
+            if (newIcon.TryGetComponent<ScrollViewItem>(out ScrollViewItem item));
         }
     }
 }

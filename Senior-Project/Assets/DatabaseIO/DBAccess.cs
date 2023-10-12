@@ -4,12 +4,13 @@ using UnityEngine;
 using System.Data;
 using Mono.Data.Sqlite;
 using UnityEngine.UIElements.Experimental;
+using UnityEngine.Rendering.HighDefinition;
 
-
-public class DBAccess : MonoBehaviour
+public class DBAccess
 {
     private static int saveID = 0;
-    private static string dbConnectionString = "URI=file:" + Application.persistentDataPath + "\\storage.db";
+    private static int diff = -1;
+    private static string dbConnectionString = "URI=file:" + Application.persistentDataPath + "\\storage.db"; //e
     private static bool transactionActive = false;
     private const string noTransactionError = "Transaction has not been started!";
     private static SqliteConnection sqliteDB = new SqliteConnection(dbConnectionString);
@@ -85,7 +86,7 @@ public class DBAccess : MonoBehaviour
             return false;
         } else {
             var sqliteCommand = sqliteDB.CreateCommand();
-            sqliteCommand.CommandText = "SELECT id FROM saves WHERE name LIKE '" + savename + "';";
+            sqliteCommand.CommandText = "SELECT id, dif FROM saves WHERE name LIKE '" + savename + "';";
             IDataReader saves = sqliteCommand.ExecuteReader();
 
             try {
@@ -95,6 +96,7 @@ public class DBAccess : MonoBehaviour
             } catch {}
 
             if(saveID != 0) {
+                diff = saves.GetInt32(1);
                 return true;
             }
 
@@ -106,7 +108,7 @@ public class DBAccess : MonoBehaviour
         saveID = 0;
     }
 
-    public static bool addSave(string savename) {
+    public static bool addSave(string savename, int diff) {
         if(!transactionActive) {
             Debug.LogError(noTransactionError);
             return false;
@@ -115,7 +117,7 @@ public class DBAccess : MonoBehaviour
 
             var sqliteCommand = sqliteDB.CreateCommand();
 
-            sqliteCommand.CommandText = "INSERT INTO saves ('name', 'last_play', 'rank', 'play_time') VALUES ('" + savename + "', + '" + System.DateTime.Now + "', 0, 0);";
+            sqliteCommand.CommandText = "INSERT INTO saves ('name', 'dif', 'last_play', 'rank', 'play_time') VALUES ('" + savename + "', '" + diff + "', + '" + System.DateTime.Now + "', 0, 0);";
             try {
                 sqliteCommand.ExecuteNonQuery();
                 passed = true;
