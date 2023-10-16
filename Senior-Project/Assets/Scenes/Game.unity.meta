@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Senior-Project/Assets/Scenes/Game.unity.meta
-guid: dda95949404474143bd9aa8b07a21105
-========
-guid: ad6c2b2b4ef7db2428eace369f6a00bb
->>>>>>>> origin/sqlTesting:Assets/Plugins/sqlite3.def.meta
+guid: 4621871dcf632f64d9d83f4ad60bd6ba
 DefaultImporter:
   externalObjects: {}
   userData: 
