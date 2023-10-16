@@ -18,7 +18,7 @@
 - addTileItem(string itemName) : bool
 - getTileItem(string itemName) : int
 
-### Tile Date:
+### Tile Data:
 - addTile(int xPos, int yPos, int type) : int
 - getTile(int xPos, int yPos) : int
 - deleteTime(int id) : void
