@@ -17,7 +17,7 @@ public class GetClickedObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(0))
         {
             RaycastHit hitInfo = new RaycastHit();
             bool hit = Physics.Raycast(ray:Camera.main.ScreenPointToRay(Input.mousePosition),maxDistance: float.MaxValue, hitInfo: out hitInfo,layerMask: notTerrain);
@@ -25,21 +25,23 @@ public class GetClickedObject : MonoBehaviour
             {
                 if(hitInfo.transform.CompareTag("Cube"))
                 {
-                    Debug.Log("Hit " + hitInfo.transform.gameObject.name + " in " + hitInfo.transform.parent.name + " in " + hitInfo.transform.parent.parent.name);
                     cube = hitInfo.transform.gameObject;
                 }
                 else if(hitInfo.transform.CompareTag("Troop"))
                 {
-                    Debug.Log("Hit " + hitInfo.transform.gameObject.name);
                     troop = hitInfo.transform.gameObject;
                 }
             }
             else
             {
-                Debug.Log("No hit");
                 troop = null;
                 cube = null;
             }
+        }
+        if(Input.GetMouseButtonDown(1))
+        {
+            troop = null;
+            cube = null;
         }
     }
 
