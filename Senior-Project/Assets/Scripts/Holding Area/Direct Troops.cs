@@ -19,6 +19,14 @@ public class DirectTroops : MonoBehaviour
         if(gco.getTroop() != null)
         {
             AI = gco.getTroop().GetComponent<AIController>();
+            if (getClickedObject.getTroop() != null)
+            {
+                AI = getClickedObject.getTroop().GetComponent<AIController>();
+            }
+            if (AI != null && getClickedObject.getCube() != null)
+            {
+                AI.SetDestination(Mouse.MouseToWorldPoint(~LayerMask.GetMask(new string[4]{"Terrain", "Building", "PlayerUnit", "EnemyUnit"})));
+            }
         }
         if(gco.getTroop() != null && gco.getCube() != null && Input.GetMouseButton(0))
         {

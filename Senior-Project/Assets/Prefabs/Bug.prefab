@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 3483130440133651877}
   - component: {fileID: 810640080948504249}
   - component: {fileID: 6194155668668213725}
-  - component: {fileID: 5691766426410501344}
   - component: {fileID: 8348769785200244805}
+  - component: {fileID: 6934275942339447078}
   m_Layer: 8
   m_Name: Bug
   m_TagString: Troop
@@ -85,8 +85,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &5691766426410501344
-SphereCollider:
+--- !u!114 &8348769785200244805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3706112903273544462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 766873538f89a774c9cbc00ad46518af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {x: 0, y: 0}
+  speed: 2
+  totalDirection: {x: 0, y: 0}
+  _updateFrequency: 0.1
+  _updateTimeRemaining: 0
+  _pathingType: 0
+  velocity: {x: 0, y: 0}
+  _characterController: {fileID: 6934275942339447078}
+--- !u!143 &6934275942339447078
+CharacterController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -104,23 +124,10 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
+  m_Height: 2
   m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8348769785200244805
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3706112903273544462}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4351c91a70d30614aaf0ac8389b51158, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {x: 50, y: 50}
-  speed: 5
-  totalDirection: {x: 0, y: 0}
-  _updateFrequency: 0.5
-  _updateTimeRemaining: 0
-  _pathingType: 2
+  m_SlopeLimit: 45
+  m_StepOffset: 0.1
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0.5, z: 0}

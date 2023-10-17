@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 7573815339778066296}
   - component: {fileID: 2576908532496686760}
   - component: {fileID: 8595809250631626990}
-  - component: {fileID: 4014822313613151711}
   - component: {fileID: 5422386118411688884}
+  - component: {fileID: 6208674078431285330}
   m_Layer: 4
   m_Name: InboundWater
   m_TagString: Cube
@@ -85,8 +85,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4014822313613151711
-BoxCollider:
+--- !u!114 &5422386118411688884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4689229458878035767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94f96d41722f30b4bb201ac455cba7e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!64 &6208674078431285330
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -103,18 +115,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 0.5, z: 1}
-  m_Center: {x: 0, y: 0.75, z: 0}
---- !u!114 &5422386118411688884
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4689229458878035767}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94f96d41722f30b4bb201ac455cba7e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}

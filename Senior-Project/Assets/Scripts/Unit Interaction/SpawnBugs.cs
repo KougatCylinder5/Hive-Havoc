@@ -5,11 +5,12 @@ using UnityEngine;
 public class SpawnBugs : MonoBehaviour
 {
     public GameObject bug;
+    public Vector3 offset;
 
     // Start is called before the first frame update
     void Start()
     {
-        InvokeRepeating("SpawnBug", 0, 5);
+        InvokeRepeating(nameof(SpawnBug), 0, 1);
     }
 
     // Update is called once per frame
@@ -20,6 +21,6 @@ public class SpawnBugs : MonoBehaviour
 
     public void SpawnBug()
     {
-        Instantiate(bug, transform.position, Quaternion.identity);
+        Instantiate(bug, transform.position + offset, Quaternion.identity);
     }
 }
