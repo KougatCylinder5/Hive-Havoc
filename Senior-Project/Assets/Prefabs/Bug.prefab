@@ -95,11 +95,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3706112903273544462}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 766873538f89a774c9cbc00ad46518af, type: 3}
+  m_Script: {fileID: 11500000, guid: 86a5e4c019a2c3b45895b585a679a304, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   target: {x: 0, y: 0}
-  speed: 2
+  speed: 0
   totalDirection: {x: 0, y: 0}
   _updateFrequency: 0.1
   _updateTimeRemaining: 0
