@@ -10,8 +10,9 @@ public class Unit {
     private float xTarget;
     private float yTarget;
     private float health;
+    private int pathMode;
 
-    public Unit(int id, int type, float xPos, float yPos, float xTarget, float yTarget, float health) {
+    public Unit(int id, int type, float xPos, float yPos, float xTarget, float yTarget, float health, int pathMode) {
         this.id = id;
         this.type = type;
         this.xPos = xPos;
@@ -19,6 +20,8 @@ public class Unit {
         this.xTarget = xTarget;
         this.yTarget = yTarget;
         this.health = health;
+        this.pathMode = pathMode;
+
     }
 
     public int getID() {
@@ -44,6 +47,14 @@ public class Unit {
 
     public float getYTarget() {
         return yTarget;
+    }
+
+    public float getHealth() {
+        return health;
+    }
+
+    public int getPathMode() {
+        return pathMode;
     }
 
     public void setXPos(float xPos) {
