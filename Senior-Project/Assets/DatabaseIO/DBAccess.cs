@@ -4,12 +4,13 @@ using UnityEngine;
 using System.Data;
 using Mono.Data.Sqlite;
 using UnityEngine.UIElements.Experimental;
+using UnityEngine.Rendering.HighDefinition;
 
-
-public class DBAccess : MonoBehaviour
+public class DBAccess
 {
     private static int saveID = 0;
-    private static string dbConnectionString = "URI=file:" + Application.persistentDataPath + "\\storage.db";
+    private static int diff = -1;
+    private static string dbConnectionString = "URI=file:" + Application.persistentDataPath + "\\storage.db"; //e
     private static bool transactionActive = false;
     private const string noTransactionError = "Transaction has not been started!";
     private static SqliteConnection sqliteDB = new SqliteConnection(dbConnectionString);
@@ -18,7 +19,7 @@ public class DBAccess : MonoBehaviour
         return dbConnectionString;
     }
 
-    public static void startSave() {
+    public static void startTransaction() {
         if (!transactionActive) {
             sqliteDB.Open();
             var sqliteCommand = sqliteDB.CreateCommand();
@@ -34,7 +35,7 @@ public class DBAccess : MonoBehaviour
         }
     }
 
-    public static void commitSave() {
+    public static void commitTransaction() {
         if(transactionActive) {
             var sqliteCommand = sqliteDB.CreateCommand();
 
@@ -50,7 +51,7 @@ public class DBAccess : MonoBehaviour
         }
     }
 
-    public static void rollbackSave() {
+    public static void rollbackTransaction() {
         if(transactionActive) {
             var sqliteCommand = sqliteDB.CreateCommand();
 
@@ -85,7 +86,7 @@ public class DBAccess : MonoBehaviour
             return false;
         } else {
             var sqliteCommand = sqliteDB.CreateCommand();
-            sqliteCommand.CommandText = "SELECT id FROM saves WHERE name LIKE '" + savename + "';";
+            sqliteCommand.CommandText = "SELECT id, dif FROM saves WHERE name LIKE '" + savename + "';";
             IDataReader saves = sqliteCommand.ExecuteReader();
 
             try {
@@ -95,6 +96,7 @@ public class DBAccess : MonoBehaviour
             } catch {}
 
             if(saveID != 0) {
+                diff = saves.GetInt32(1);
                 return true;
             }
 
@@ -102,29 +104,58 @@ public class DBAccess : MonoBehaviour
         }
     }
 
+    public static List<Save> getSaves() {
+        if (!transactionActive) {
+            Debug.LogError(noTransactionError);
+            return new List<Save>();
+        } else {
+            List<Save> saves = new List<Save>();
+
+            var sqliteCommand = sqliteDB.CreateCommand();
+
+            sqliteCommand.CommandText = "SELECT name, dif, rank, last_play, play_time, thumbnail FROM saves;";
+            IDataReader asave = sqliteCommand.ExecuteReader();
+
+            try {
+                while (asave.Read()) {
+                    saves.Add(new Save(asave.GetString(0), asave.GetInt32(1), asave.GetInt32(2), asave.GetString(3), asave.GetInt32(4), asave.GetString(5)));
+                }
+            } catch { }
+            return saves;
+        }
+    }
+
     public static void exitSave() {
         saveID = 0;
     }
 
-    public static bool addSave(string savename) {
+    public static bool addSave(string savename, int diff) {
         if(!transactionActive) {
             Debug.LogError(noTransactionError);
             return false;
         } else {
             bool passed = false;
 
-            var sqliteCommand = sqliteDB.CreateCommand();
-
-            sqliteCommand.CommandText = "INSERT INTO saves ('name', 'last_play', 'rank', 'play_time') VALUES ('" + savename + "', + '" + System.DateTime.Now + "', 0, 0);";
-            try {
-                sqliteCommand.ExecuteNonQuery();
-                passed = true;
-
-            } catch {
-                passed = false;
-            }
+            
 
             return passed;
+        }
+    }
+
+    public static void deleteSave(string savename) {
+        if (!transactionActive) {
+            Debug.LogError(noTransactionError);
+        } else {
+            var sqliteCommand = sqliteDB.CreateCommand();
+
+            sqliteCommand.CommandText = "DELETE FROM saves WHERE name LIKE '" + savename + "';";
+            try {
+                sqliteCommand.ExecuteNonQuery();
+
+            } catch {
+                Debug.LogWarning("Can't delete save: " + savename);
+                
+            }
         }
     }
 
@@ -137,12 +168,12 @@ public class DBAccess : MonoBehaviour
 
             var sqliteCommand = sqliteDB.CreateCommand(); 
             
-            sqliteCommand.CommandText = "SELECT id, type, x_pos, y_pos, target_x, target_y, health FROM unit WHERE save_id IS " + saveID + ";";
+            sqliteCommand.CommandText = "SELECT id, type, x_pos, y_pos, target_x, target_y, health, path_mode FROM unit WHERE save_id IS " + saveID + ";";
             IDataReader aunit = sqliteCommand.ExecuteReader();
 
             try {
                 while(aunit.Read()) {
-                    units.Add(new Unit(aunit.GetInt32(0), aunit.GetInt32(1), aunit.GetFloat(2), aunit.GetFloat(3), aunit.GetFloat(4), aunit.GetFloat(5), aunit.GetFloat(6)));
+                    units.Add(new Unit(aunit.GetInt32(0), aunit.GetInt32(1), aunit.GetFloat(2), aunit.GetFloat(3), aunit.GetFloat(4), aunit.GetFloat(5), aunit.GetFloat(6), aunit.GetInt32(7)));
                 }
             } catch {}
 
@@ -150,14 +181,14 @@ public class DBAccess : MonoBehaviour
         }
     }
 
-    public static int addUnit(int type, float xPos, float yPos, float xTarget, float yTarget, float health) {
+    public static int addUnit(int type, float xPos, float yPos, float xTarget, float yTarget, float health, int pathMode) {
         if(!transactionActive) {
             Debug.LogError(noTransactionError);
             return 0;
         } else {
             int rowid = 0;
             var sqliteCommand = sqliteDB.CreateCommand();
-            sqliteCommand.CommandText = "INSERT INTO unit ('x_pos', 'y_pos', 'target_x', 'target_y', 'health', 'type', 'save_id') VALUES ('" + xPos + "', '" + yPos + "', '" + xTarget + "', '" + yTarget + "', '" + health + "', '" + type + "', '" + saveID + "');";
+            sqliteCommand.CommandText = "INSERT INTO unit ('x_pos', 'y_pos', 'target_x', 'target_y', 'health', 'type', 'path_mode', 'save_id') VALUES ('" + xPos + "', '" + yPos + "', '" + xTarget + "', '" + yTarget + "', '" + health + "', '" + type + "', '" + pathMode + "','" + saveID + "');";
             sqliteCommand.ExecuteNonQuery();
 
             sqliteCommand.CommandText = "SELECT last_insert_rowid() FROM unit;";
@@ -173,13 +204,30 @@ public class DBAccess : MonoBehaviour
         }
     }
 
-    public static void setUnit(int id, float xPos, float yPos, float xTarget, float yTarget, float health) {
+    public static void setUnit(int id, float xPos, float yPos, float xTarget, float yTarget, float health, int pathMode) {
         if(!transactionActive) {
             Debug.LogError(noTransactionError);
         } else {
             var sqliteCommand = sqliteDB.CreateCommand();
-            sqliteCommand.CommandText = " UPDATE unit SET x_pos=" + xPos + ", y_pos=" + yPos + ", target_x=" + xTarget + ", target_y=" + yTarget + ", health=" + health + " WHERE id IS " + id + ";";
+            sqliteCommand.CommandText = " UPDATE unit SET x_pos=" + xPos + ", y_pos=" + yPos + ", target_x=" + xTarget + ", target_y=" + yTarget + ", health=" + health + ", path_mode=" + pathMode + " WHERE id IS " + id + ";";
             sqliteCommand.ExecuteNonQuery();
+        }
+    }
+
+    public static void deleteUnit(int id) {
+        if (!transactionActive) {
+            Debug.LogError(noTransactionError);
+        } else {
+            var sqliteCommand = sqliteDB.CreateCommand();
+
+            sqliteCommand.CommandText = "DELETE FROM unit WHERE save_id LIKE '" + saveID + "' AND id IS " + id + ";";
+            try {
+                sqliteCommand.ExecuteNonQuery();
+
+            } catch {
+                Debug.LogWarning("Can't delete Unit: " + id);
+
+            }
         }
     }
 
@@ -374,6 +422,23 @@ public class DBAccess : MonoBehaviour
         }
     }
 
+    public static void deletePlaceable(int id) {
+        if (!transactionActive) {
+            Debug.LogError(noTransactionError);
+        } else {
+            var sqliteCommand = sqliteDB.CreateCommand();
+
+            sqliteCommand.CommandText = "DELETE FROM placeable WHERE save_id LIKE '" + saveID + "' AND id IS " + id + ";";
+            try {
+                sqliteCommand.ExecuteNonQuery();
+
+            } catch {
+                Debug.LogWarning("Can't delete Unit: " + id);
+
+            }
+        }
+    }
+
     public static int addTile(int xPos, int yPos, int type) {
         if (!transactionActive) {
             Debug.LogError(noTransactionError);
@@ -416,6 +481,23 @@ public class DBAccess : MonoBehaviour
             catch { }
 
             return tileTypeID;
+        }
+    }
+
+    public static void deleteTile(int id) {
+        if (!transactionActive) {
+            Debug.LogError(noTransactionError);
+        } else {
+            var sqliteCommand = sqliteDB.CreateCommand();
+
+            sqliteCommand.CommandText = "DELETE FROM tile_data WHERE save_id LIKE '" + saveID + "' AND id IS " + id + ";";
+            try {
+                sqliteCommand.ExecuteNonQuery();
+
+            } catch {
+                Debug.LogWarning("Can't delete Unit: " + id);
+
+            }
         }
     }
 
