@@ -1,4 +1,5 @@
 using System.Linq;
+using Unity.Burst;
 using UnityEngine;
 using static FlowFieldGenerator;
 
@@ -38,12 +39,12 @@ public class AIController : MonoBehaviour
         _pathRenderer.startWidth = 0.1f;
 
     }
-
+    //[BurstCompile]
     public void FixedUpdate()
     {
         position = transform.position;
         position2D = new(position.x, position.z);
-
+        
         switch (_pathingType)
         {
             case PathingType.Direct:
@@ -65,7 +66,7 @@ public class AIController : MonoBehaviour
                 if (_Path != null && _Path.cleanedPath.TryPeek(out Vector2 pathTarget))
                 {
                     _pathRenderer.SetPositions(new Vector3[2] { new(position.x, 0.5f, position.z), new(_Path.End.x, 0.5f, _Path.End.y) });
-
+                    _pathRenderer.positionCount = 2;
                     _pathRenderer.enabled = (_pathRenderer.GetPosition(0) - _pathRenderer.GetPosition(1)).sqrMagnitude > 0.01f;
 
                     Vector2 movementVector = pathTarget - position2D;
@@ -90,7 +91,7 @@ public class AIController : MonoBehaviour
 
                 totalDirection = new();
 
-                totalDirection = FlowTiles[roundedPosition.x, roundedPosition.y].direction;
+                totalDirection = FlowFieldGenerator.FlowTiles[roundedPosition.x, roundedPosition.y].direction;
                 totalDirection += Random.insideUnitCircle.normalized * 5;
                 for (int i = 0; i < posToObserve.Length; i++)
                 {
