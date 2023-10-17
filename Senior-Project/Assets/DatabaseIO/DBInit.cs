@@ -11,30 +11,7 @@ public class DBInit : MonoBehaviour
         FixMissing();
         DBAccess.commitSave();
 
-        //TESTING ONLY. REMOVE LATER!
-
-        DBAccess.startSave();
-        Debug.Log("Was save created? " + DBAccess.addSave("test2"));
-        DBAccess.commitSave();
-        
-        DBAccess.startSave();
-        Debug.Log("Can the save be accessed? " + DBAccess.selectSave("test2"));
-        DBAccess.commitSave();
-
-        DBAccess.startSave();
-        Debug.Log(DBAccess.addUnit(0,0,0,0,0,0));
-        DBAccess.commitSave();
-
-        //DBAccess.setUnit(1,1,1,1,1,1);
-
-        DBAccess.startSave();
-        List<Unit> units = DBAccess.getUnits();
-        foreach(Unit unit in units){
-            Debug.Log("Has Unit ID: " + unit.getID());
-        }
-        DBAccess.commitSave();
-
-        //END TESTING.
+       
     }
 
     private void FixMissing() {
