@@ -7,6 +7,9 @@ using static FlowFieldGenerator;
 public class AIController : MonoBehaviour
 {
 
+    protected Vector2 _target;
+
+
     [SerializeField]
     private Vector2 target;
     private Vector3 position;
@@ -25,9 +28,15 @@ public class AIController : MonoBehaviour
     public Vector2 velocity;
 
     [SerializeField]
-    private CharacterController _characterController;
+    protected CharacterController _characterController;
 
     private LineRenderer _pathRenderer;
+
+    public void Awake()
+    {
+        _characterController = GetComponent<CharacterController>();
+    }
+
 
     public void Start()
     {
@@ -196,9 +205,4 @@ public class AIController : MonoBehaviour
 
 }
 
-public enum PathingType
-{
-    Flow,
-    Direct,
-    AroundObject
-}
+
