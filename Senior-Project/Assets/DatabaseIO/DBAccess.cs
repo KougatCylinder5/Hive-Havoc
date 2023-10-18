@@ -513,12 +513,12 @@ public class DBAccess
         }
     }
 
-    public static void updateInventory(int id, int value) {
+    public static void updateInventory(int id, int value, int max) {
         if (!transactionActive) {
             Debug.LogError(noTransactionError);
         } else {
             var sqliteCommand = sqliteDB.CreateCommand();
-            sqliteCommand.CommandText = " UPDATE placeable SET amount=" + value + " WHERE resource_id IS " + id + " AND save_id IS " + saveID + ";";
+            sqliteCommand.CommandText = " UPDATE placeable SET amount=" + value + "max=" + max + " WHERE resource_id IS " + id + " AND save_id IS " + saveID + ";";
             sqliteCommand.ExecuteNonQuery();
         }
     }

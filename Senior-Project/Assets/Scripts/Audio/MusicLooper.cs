@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SocialPlatforms;
 public class MusicLooper : MonoBehaviour {
     private AudioSource musicSource;
     private AudioHighPassFilter musicHighPassFilter;
@@ -23,18 +21,16 @@ public class MusicLooper : MonoBehaviour {
         }
 
         if (Time.timeScale == 0) {
-            if (Time.timeScale == 0) {
-                if (musicHighPassFilter.cutoffFrequency < 2000) {
-                    musicHighPassFilter.cutoffFrequency += 30;
+            if (musicHighPassFilter.cutoffFrequency < 2000) {
+                musicHighPassFilter.cutoffFrequency += 30;
+            }
+        } else {
+            try {
+                if (musicHighPassFilter.cutoffFrequency > 10) {
+                    musicHighPassFilter.cutoffFrequency -= 30;
                 }
-            } else {
-                try {
-                    if (musicHighPassFilter.cutoffFrequency > 10) {
-                        musicHighPassFilter.cutoffFrequency -= 30;
-                    }
-                } catch {
-                    musicHighPassFilter.cutoffFrequency = 0;
-                }
+            } catch {
+                musicHighPassFilter.cutoffFrequency = 0;
             }
         }
     }

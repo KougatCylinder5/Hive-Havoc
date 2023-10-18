@@ -30,9 +30,9 @@ Transform:
   m_GameObject: {fileID: 8130099494824521781}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 26, y: 1, z: 30}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -95,7 +95,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8130099494824521781}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 766873538f89a774c9cbc00ad46518af, type: 3}
+  m_Script: {fileID: 11500000, guid: cef30eb3ab2fdbe469b35062211d39f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   target: {x: 0, y: 0}
@@ -185,7 +185,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.1
+        value: 1
         inSlope: 0
         outSlope: 0.20000002
         tangentMode: 69
