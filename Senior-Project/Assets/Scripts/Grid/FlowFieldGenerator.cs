@@ -18,9 +18,9 @@ public class FlowFieldGenerator : MonoBehaviour
     private Vector3 _startPoint;
 
 
-    
 
 
+    [BurstCompile]
     void Awake()
     {
         NaturalObstructedTiles = new();

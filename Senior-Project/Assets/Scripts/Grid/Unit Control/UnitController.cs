@@ -37,9 +37,9 @@ public class UnitController : MonoBehaviour
                     float genY;
                     do
                     {
-                        float idk = 2 * j * n / r;
-                        genX = r * Mathf.Sqrt(idk) * Mathf.Cos(Mathf.Sqrt(idk));
-                        genY = r * Mathf.Sqrt(idk) * Mathf.Sin(Mathf.Sqrt(idk));
+                        float j2nr = 2 * j * n / r;
+                        genX = r * Mathf.Sqrt(j2nr) * Mathf.Cos(Mathf.Sqrt(j2nr));
+                        genY = r * Mathf.Sqrt(j2nr) * Mathf.Sin(Mathf.Sqrt(j2nr));
                         j++;
                     }
                     while (!units[i].GetComponent<AIController>().SetDestination(mousePos + new Vector2(genX, genY)));

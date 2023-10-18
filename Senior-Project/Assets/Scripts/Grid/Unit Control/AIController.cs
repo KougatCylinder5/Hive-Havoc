@@ -91,7 +91,7 @@ public class AIController : MonoBehaviour
 
                 totalDirection = new();
 
-                totalDirection = FlowFieldGenerator.FlowTiles[roundedPosition.x, roundedPosition.y].direction;
+                totalDirection = FlowTiles[roundedPosition.x, roundedPosition.y].direction;
                 totalDirection += Random.insideUnitCircle.normalized * 5;
                 for (int i = 0; i < posToObserve.Length; i++)
                 {
