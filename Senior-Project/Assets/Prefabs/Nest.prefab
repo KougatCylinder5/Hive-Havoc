@@ -117,8 +117,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 5105626110259817009}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33ab1c6bec5c7f041abfeb64f47acfcd, type: 3}
+  m_Script: {fileID: 11500000, guid: 416861a023cb3164f996215f8973d147, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bug: {fileID: 3706112903273544462, guid: 3de5af6c7789f0a4cb4c499a570a998c, type: 3}
-  offset: {x: 0, y: 0, z: 0}
+  bug: {fileID: 3706112903273544462, guid: 16890873399a47e46acd5edd3b5ebe9d, type: 3}
+  offset: {x: 0, y: 0.25, z: 0}
