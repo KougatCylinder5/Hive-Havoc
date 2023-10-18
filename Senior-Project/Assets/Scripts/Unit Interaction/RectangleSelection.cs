@@ -9,8 +9,8 @@ using UnityEngine.Experimental.GlobalIllumination;
 [RequireComponent(typeof(LineRenderer))]
 public class RectangleSelection : MonoBehaviour
 {
-    public Vector2 _initPos;
-    public Vector2 _curPos;
+    private Vector2 _initPos;
+    private Vector2 _curPos;
     private Vector3[] _pointList = new Vector3[4];
     private LayerMask _terrainWater;
     private LineRenderer _lineRenderer;
