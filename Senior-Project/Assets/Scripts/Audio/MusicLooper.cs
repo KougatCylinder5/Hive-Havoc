@@ -22,12 +22,15 @@ public class MusicLooper : MonoBehaviour {
 
         if (Time.timeScale == 0) {
             if (musicHighPassFilter.cutoffFrequency < 2000) {
-                musicHighPassFilter.cutoffFrequency += 30;
+                musicHighPassFilter.cutoffFrequency += 5;
             }
         } else {
             try {
                 if (musicHighPassFilter.cutoffFrequency > 10) {
                     musicHighPassFilter.cutoffFrequency -= 30;
+                }
+                if (musicHighPassFilter.cutoffFrequency < 10) {
+                    musicHighPassFilter.cutoffFrequency = 10;
                 }
             } catch {
                 musicHighPassFilter.cutoffFrequency = 0;
