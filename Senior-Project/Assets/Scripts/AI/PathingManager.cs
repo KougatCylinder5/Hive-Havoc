@@ -18,6 +18,7 @@ using Unity.Jobs;
 using Unity.Burst;
 using System.Linq;
 using System;
+using static UnityEngine.GraphicsBuffer;
 
 public class PathingManager : MonoBehaviour
 {
@@ -371,5 +372,9 @@ public class PathingManager : MonoBehaviour
     public static int CalculateIndex(int x, int y)
     {
         return x + y * GridSize.x;
+    }
+    public static bool IsOpen(Vector2 point)
+    {
+        return ObstructedTiles[CalculateIndex(Mathf.RoundToInt(point.x), Mathf.RoundToInt(point.y))];
     }
 }

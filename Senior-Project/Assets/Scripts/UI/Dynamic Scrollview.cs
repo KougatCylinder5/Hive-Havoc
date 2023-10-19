@@ -19,7 +19,7 @@ public class DynamicScrollview : MonoBehaviour
         foreach (int icon in saveNum)
         {
             GameObject newIcon = Instantiate(prefab, scrollViewContent);
-            if (newIcon.TryGetComponent<ScrollViewItem>(out ScrollViewItem item));
+            //if (newIcon.TryGetComponent<ScrollViewItem>(out ScrollViewItem item));
         }
     }
 }

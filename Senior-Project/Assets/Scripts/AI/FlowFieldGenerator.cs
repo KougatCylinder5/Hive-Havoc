@@ -15,13 +15,13 @@ public class FlowFieldGenerator : MonoBehaviour
     public static FlowFieldJob.PathNode[,] FlowTiles { get; private set; }
     public List<bool> NaturalObstructedTiles { get; private set; }
     [SerializeField]
-    private Vector3 _startPoint;
+    public static Vector3 _startPoint { private set; get; }
 
 
 
 
     [BurstCompile]
-    void Awake()
+    public void Awake()
     {
         NaturalObstructedTiles = new();
         for (int i = 0; i < PathingManager.GridSize.x * PathingManager.GridSize.y; i++)
@@ -31,12 +31,8 @@ public class FlowFieldGenerator : MonoBehaviour
         FlowTiles = new FlowFieldJob.PathNode[PathingManager.GridSize.x, PathingManager.GridSize.y];
     }
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
-        
-
-        
-
         _startPoint = GameObject.FindGameObjectWithTag("CommandCenter").transform.position;
         NativeList<FlowFieldJob.PathNode> positionsToCheck = new(Allocator.Persistent) { new() { position = new((int)_startPoint.x, (int)_startPoint.z), direction = Vector2.zero, gCost = 0, fCost = 0, hCost = 0, isWalkable = true } };
         NativeList<FlowFieldJob.PathNode> closedList = new(Allocator.Persistent);

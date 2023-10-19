@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3483130440133651877}
   - component: {fileID: 810640080948504249}
   - component: {fileID: 6194155668668213725}
-  - component: {fileID: 8348769785200244805}
+  - component: {fileID: 9209854419597864166}
   - component: {fileID: 6934275942339447078}
   - component: {fileID: 8462047349454952488}
   m_Layer: 8
@@ -86,7 +86,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &8348769785200244805
+--- !u!114 &9209854419597864166
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -95,17 +95,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 3706112903273544462}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 766873538f89a774c9cbc00ad46518af, type: 3}
+  m_Script: {fileID: 11500000, guid: 46eb37c4e95c31740b6526eb2901ebda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {x: 0, y: 0}
+  _target: {x: 0, y: 0}
+  _position: {x: 0, y: 0, z: 0}
   speed: 2
-  totalDirection: {x: 0, y: 0}
   _updateFrequency: 0.1
   _updateTimeRemaining: 0
-  _pathingType: 0
-  velocity: {x: 0, y: 0}
-  _characterController: {fileID: 6934275942339447078}
+  _characterController: {fileID: 0}
+  _type: 0
+  _listenRadius: 10
 --- !u!143 &6934275942339447078
 CharacterController:
   m_ObjectHideFlags: 0

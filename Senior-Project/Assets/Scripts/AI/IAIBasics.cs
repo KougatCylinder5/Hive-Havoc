@@ -7,6 +7,8 @@ public interface IAIBasics
     abstract Vector2 Target { get; set; }
 
     abstract void ExecutePath();
+    abstract bool SetDestination(Vector2 target);
+    abstract bool SetDestination(Transform target);
 
 }
 
