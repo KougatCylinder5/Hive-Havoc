@@ -10,7 +10,7 @@ public class SpawnBugs : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        InvokeRepeating(nameof(SpawnBug), 0, 1);
+        InvokeRepeating(nameof(SpawnBug), 0, 0.25f);
     }
 
     // Update is called once per frame
@@ -21,6 +21,10 @@ public class SpawnBugs : MonoBehaviour
 
     public void SpawnBug()
     {
-        Instantiate(bug, transform.position + offset, Quaternion.identity);
+        if (FlowFieldGenerator.Finished)
+        {
+            Instantiate(bug, transform.position + offset, Quaternion.identity);
+        }
+        
     }
 }

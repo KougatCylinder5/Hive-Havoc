@@ -14,9 +14,9 @@ public class EnemyAI : AIController, IAIBasics
     {
         base.Awake();
     }
-    public new void FixedUpdate()
+    public void Update()
     {
-        base.FixedUpdate();
+        FixedUpdate();
 
         //if (LookForTarget(out GameObject target, _listenRadius))
         //{
@@ -69,11 +69,11 @@ public class EnemyAI : AIController, IAIBasics
         totalDirection.Normalize();
         _velocity += totalDirection / Random.Range(10f, 25f);
         _velocity.Normalize();
-        Vector3 movementDirection = new Vector3(_velocity.x * Time.fixedDeltaTime, -1.0f, _velocity.y * Time.fixedDeltaTime) * speed;
+        Vector3 movementDirection = new Vector3(_velocity.x * Time.deltaTime, 0, _velocity.y * Time.deltaTime) * speed;
         Ray movementRay = new Ray(_position, _velocity);
-        if (!Physics.Raycast(movementRay, movementDirection.magnitude/2, LayerMask.GetMask("EnemyUnit")))
+        if (!Physics.Raycast(movementRay, movementDirection.magnitude/4, LayerMask.GetMask("EnemyUnit")))
         {
-            _characterController.Move(movementDirection);
+            transform.Translate(movementDirection);
         }
     }
 

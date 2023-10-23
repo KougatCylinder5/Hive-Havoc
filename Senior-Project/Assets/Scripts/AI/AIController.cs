@@ -2,7 +2,7 @@ using System.Linq;
 using Unity.Burst;
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterController))]
+
 public class AIController : MonoBehaviour
 {
     [SerializeField]
