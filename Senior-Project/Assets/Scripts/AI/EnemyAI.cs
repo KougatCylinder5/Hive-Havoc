@@ -69,8 +69,12 @@ public class EnemyAI : AIController, IAIBasics
         totalDirection.Normalize();
         _velocity += totalDirection / Random.Range(10f, 25f);
         _velocity.Normalize();
-
-        _characterController.Move(new Vector3(_velocity.x * Time.fixedDeltaTime, -1.0f, _velocity.y * Time.fixedDeltaTime) * speed);
+        Vector3 movementDirection = new Vector3(_velocity.x * Time.fixedDeltaTime, -1.0f, _velocity.y * Time.fixedDeltaTime) * speed;
+        Ray movementRay = new Ray(_position, _velocity);
+        if (!Physics.Raycast(movementRay, movementDirection.magnitude/2, LayerMask.GetMask("EnemyUnit")))
+        {
+            _characterController.Move(movementDirection);
+        }
     }
 
     /**
