@@ -10,14 +10,16 @@ public class Save : MonoBehaviour
     private string lastPlay;
     private int playTime;
     private string thumbnail;
+    private string levelName;
 
-    public Save(string saveName, int dif, int rank, string lastPlay, int playTime , string thumbnail) {
+    public Save(string saveName, int dif, int rank, string lastPlay, int playTime , string thumbnail, string levelName) {
         this.saveName = saveName;
         this.dif = dif;
         this.rank = rank;
         this.lastPlay = lastPlay;
         this.playTime = playTime;
         this.thumbnail = thumbnail;
+        this.levelName = levelName;
     }
 
     public string getSaveName() {
@@ -42,6 +44,10 @@ public class Save : MonoBehaviour
 
     public string getThumbnail() {
         return thumbnail;
+    }
+
+    public string getLevelName() {
+        return levelName;
     }
 
     public void increaseRank() {
