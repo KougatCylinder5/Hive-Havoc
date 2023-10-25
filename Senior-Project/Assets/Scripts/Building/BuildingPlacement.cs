@@ -16,6 +16,7 @@ public class BuildingPlacement : MonoBehaviour
     private bool _made;
     private List<KeyCode> keycodes = new();
     private int _pressed;
+    private List<int> _costs = new();
 
     private enum Buildings
     {
@@ -27,12 +28,16 @@ public class BuildingPlacement : MonoBehaviour
         TowerGhost
     }
 
+
     // Start is called before the first frame update
     void Start()
     {
         keycodes.Add(KeyCode.Z); 
         keycodes.Add(KeyCode.X);
         keycodes.Add(KeyCode.C);
+        _costs.Add(8);
+        _costs.Add(1);
+        _costs.Add(3);
     }
 
     // Update is called once per frame
@@ -61,6 +66,7 @@ public class BuildingPlacement : MonoBehaviour
                 inPlaceMode = false;
                 _made = false;
                 Instantiate(currentBuilding, ghostBuilding.transform.position, Quaternion.identity);
+                ResourceStruct.Wood -= _costs[_pressed];
                 Destroy(ghostBuilding);
             }
         }
