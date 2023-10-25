@@ -26,6 +26,9 @@ public class PathingManager : MonoBehaviour
     private const int MOVE_STRAIGHT_COST = 10;
     private const int MOVE_DIAGONAL_COST = 14;
 
+
+    
+
     public List<PathInfo> Paths { get; private set; }
 
     public static List<bool> ObstructedTiles = new List<bool>();
@@ -38,7 +41,7 @@ public class PathingManager : MonoBehaviour
 
     public void Awake()
     {
-        GridSize = new(100, 100);
+        GridSize = new(81, 81);
 
         Instance = this;
         _pathsToGenerate = new();
@@ -371,5 +374,9 @@ public class PathingManager : MonoBehaviour
     public static int CalculateIndex(int x, int y)
     {
         return x + y * GridSize.x;
+    }
+    public static bool IsOpen(Vector2 point)
+    {
+        return ObstructedTiles[CalculateIndex(Mathf.RoundToInt(point.x), Mathf.RoundToInt(point.y))];
     }
 }

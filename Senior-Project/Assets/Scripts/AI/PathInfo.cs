@@ -53,7 +53,7 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
         }
     }
 
-    private Vector3 ConvertToVector3(Vector2 obj, float height)
+    public static Vector3 ConvertToVector3(Vector2 obj, float height)
     {
         return new Vector3(obj.x, height, obj.y);
     }
