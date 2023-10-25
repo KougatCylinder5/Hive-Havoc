@@ -38,9 +38,9 @@ public class BuildingPlacement : MonoBehaviour
         _keycodes.Add(KeyCode.C);
         // Wood, Coal, Copper Ore, Copper Ingot, Iron Ore, Iron Ingot, Steel, Stone
 
-        _costs.Add(new int[_resourceCount] {8, 0, 0, 0, 0, 0, 0, 0});
-        _costs.Add(new int[_resourceCount] {1, 0, 0, 0, 0, 0, 0, 0});
-        _costs.Add(new int[_resourceCount] {3, 0, 0, 0, 0, 0, 0, 0});
+        _costs.Add(new int[_resourceCount] {8, 7, 6, 5, 4, 3, 2, 1});
+        _costs.Add(new int[_resourceCount] {1, 1, 1, 1, 1, 1, 1, 1});
+        _costs.Add(new int[_resourceCount] {3, 1, 4, 1, 5, 9, 2, 6});
     }
 
     // Update is called once per frame
@@ -51,8 +51,13 @@ public class BuildingPlacement : MonoBehaviour
         {
             if(Input.GetKeyDown(key))
             {
+                if(_ghostBuilding != null)
+                    Destroy(_ghostBuilding);
+                _currentBuilding = null;
                 _inPlaceMode = true;
                 _pressed = _keycodes.IndexOf(key);
+                _made = false;
+                break;
             }
         }
         if(_inPlaceMode)
@@ -74,7 +79,7 @@ public class BuildingPlacement : MonoBehaviour
                 else
                 {
                     Debug.Log("Not enough resources...");
-                    Destroy(_currentBuilding);
+                    _currentBuilding = null;
                 }
                 _inPlaceMode = false;
                 _made = false;

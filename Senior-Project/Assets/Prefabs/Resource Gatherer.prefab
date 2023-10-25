@@ -95,15 +95,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 8130099494824521781}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 766873538f89a774c9cbc00ad46518af, type: 3}
+  m_Script: {fileID: 11500000, guid: 0484afcc43eb5c141b731181390a9541, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   target: {x: 0, y: 0}
-  speed: 4
+  speed: 0
   totalDirection: {x: 0, y: 0}
   _updateFrequency: 0.1
   _updateTimeRemaining: 0
-  _pathingType: 2
+  _pathingType: 0
   velocity: {x: 0, y: 0}
   _characterController: {fileID: 8374161661854508239}
 --- !u!143 &8374161661854508239
