@@ -19,6 +19,14 @@ public class PopulateSave : MonoBehaviour
         
     }
 
+    public void hide() {
+        gameObject.SetActive(false);
+    }
+
+    public void show() {
+        gameObject.SetActive(true);
+    }
+
     public void refreshWithSave(Save saveData) {
         textFeilds = GetComponentsInChildren<TextMeshProUGUI>();
         foreach(TextMeshProUGUI textFeild in textFeilds) {

@@ -39,6 +39,7 @@ public class SaveManager : MonoBehaviour
         {
             try
             {
+                save.show();
                 switch (save.slotID)
                 {
                     case 1:
@@ -57,6 +58,7 @@ public class SaveManager : MonoBehaviour
             }
             catch
             {
+                save.hide();
             }
         }
 

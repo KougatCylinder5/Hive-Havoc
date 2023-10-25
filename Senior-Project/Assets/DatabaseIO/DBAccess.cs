@@ -127,6 +127,17 @@ public class DBAccess
         }
     }
 
+    public static void removeSave(string savename) {
+        if (!transactionActive) {
+            Debug.LogError(noTransactionError);
+        } else {
+            var sqliteCommand = sqliteDB.CreateCommand();
+            sqliteCommand.CommandText = " DELETE FROM saves WHERE name LIKE '" + savename + "';";
+            sqliteCommand.ExecuteNonQuery();
+
+        }
+    }
+
     public static void exitSave() {
         saveID = 0;
     }

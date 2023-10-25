@@ -280,6 +280,7 @@ GameObject:
   - component: {fileID: 16901118}
   - component: {fileID: 16901117}
   - component: {fileID: 16901116}
+  - component: {fileID: 16901119}
   m_Layer: 0
   m_Name: Create Save
   m_TagString: Untagged
@@ -350,7 +351,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 16901117}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 16901119}
+        m_TargetAssemblyTypeName: MakeSave, Assembly-CSharp
+        m_MethodName: makeASave
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &16901117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -389,6 +402,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 16901114}
   m_CullTransparentMesh: 1
+--- !u!114 &16901119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 16901114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 855e6713a3212f6428d2635cdd4cfc70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  saveName: {fileID: 1917607798}
+  saveDifficulty: {fileID: 788067884}
 --- !u!1 &81940880
 GameObject:
   m_ObjectHideFlags: 0
