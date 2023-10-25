@@ -71,7 +71,7 @@ public class BuildingPlacement : MonoBehaviour
             showBuilding(_ghostBuilding, position);
             if(Input.GetMouseButtonDown(0))
             {
-                if (CheckCost(_costs[_pressed], ResourceStruct.Total, out int[] dep))
+                if (CheckCost(_costs[_pressed], ResourceStruct.Total, out int[] dep) && _ghostBuilding.GetComponent<BuildingClass>().CheckPlacementArea(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.y))) //amognus
                 {
                     Instantiate(_currentBuilding, _ghostBuilding.transform.position, Quaternion.identity);
                     DepleteResources(dep);
