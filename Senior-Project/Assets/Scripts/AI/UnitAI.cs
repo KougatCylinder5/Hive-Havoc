@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(LineRenderer))]
 public class UnitAI : AIController, IAIBasics
 {
@@ -22,9 +21,9 @@ public class UnitAI : AIController, IAIBasics
         
     }
 
-    private new void FixedUpdate()
+    private new void Update()
     {
-        base.FixedUpdate();
+        base.Update();
         DisplayLine();
         ExecutePath();
     }

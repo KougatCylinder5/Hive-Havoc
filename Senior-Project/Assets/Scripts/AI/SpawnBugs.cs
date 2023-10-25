@@ -10,7 +10,7 @@ public class SpawnBugs : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        InvokeRepeating(nameof(SpawnBug), 0, 0.25f);
+        InvokeRepeating(nameof(SpawnBug), 0, 1f);
     }
 
     // Update is called once per frame

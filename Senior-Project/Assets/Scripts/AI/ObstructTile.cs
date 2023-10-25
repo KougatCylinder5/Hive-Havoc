@@ -10,12 +10,6 @@ public class ObstructTile : MonoBehaviour
         PathingManager.ObstructedTiles[PathingManager.CalculateIndex((int)(transform.position.x), (int)(transform.position.z), PathingManager.GridSize.x)] = false;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnDestroy()
     {
         PathingManager.ObstructedTiles[PathingManager.CalculateIndex((int)(transform.position.x), (int)(transform.position.z), PathingManager.GridSize.x)] = true;

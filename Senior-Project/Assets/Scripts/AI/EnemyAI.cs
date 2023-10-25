@@ -13,10 +13,11 @@ public class EnemyAI : AIController, IAIBasics
     public new void Awake()
     {
         base.Awake();
+        StartCoroutine(nameof(UpdateDirection));
     }
-    public void Update()
+    public new void Update()
     {
-        FixedUpdate();
+        base.Update();
 
         //if (LookForTarget(out GameObject target, _listenRadius))
         //{
@@ -36,44 +37,50 @@ public class EnemyAI : AIController, IAIBasics
     {
 
     }
+    
     public void Flow()
-    {
-        
-        Vector2Int roundedPosition = new(Mathf.RoundToInt(_position.x), Mathf.RoundToInt(_position.z));
-
-        Vector2Int[] posToObserve = new Vector2Int[8] { new Vector2Int(0, -1), new Vector2Int(0, 1), new Vector2Int(1, 0), new Vector2Int(-1, 0), new Vector2Int(1, 1), new Vector2Int(-1, 1), new Vector2Int(-1, -1), new Vector2Int(1, -1) };
-
-        Vector2 totalDirection = FlowTiles[roundedPosition.x, roundedPosition.y].direction;
-        totalDirection += Random.insideUnitCircle.normalized * 5;
-        for (int i = 0; i < posToObserve.Length; i++)
-        {
-            try
-            {
-                Vector2 direction = FlowTiles[roundedPosition.x + posToObserve[i].x, roundedPosition.y + posToObserve[i].y].direction;
-                if (direction.Equals(Vector2.zero))
-                {
-                    direction = _position2D - roundedPosition + posToObserve[i];
-                    float mag = 1.25f / direction.magnitude;
-                    direction *= -mag;
-                }
-
-                totalDirection += direction.normalized;
-            }
-            catch
-            {
-                Debug.Log("Outside Bounds");
-            }
-        }
-
-
-        totalDirection.Normalize();
-        _velocity += totalDirection / Random.Range(10f, 25f);
-        _velocity.Normalize();
-        Vector3 movementDirection = new Vector3(_velocity.x * Time.deltaTime, 0, _velocity.y * Time.deltaTime) * speed;
+    { 
+        Vector3 movementDirection = new Vector3(_velocity.x * Time.deltaTime, -1f, _velocity.y * Time.deltaTime) * speed;
         Ray movementRay = new Ray(_position, _velocity);
         if (!Physics.Raycast(movementRay, movementDirection.magnitude/4, LayerMask.GetMask("EnemyUnit")))
         {
-            transform.Translate(movementDirection);
+            _characterController.Move(movementDirection);
+        }
+    }
+    private IEnumerator UpdateDirection()
+    {
+        while (true)
+        {
+            Vector2Int roundedPosition = new(Mathf.RoundToInt(_position.x), Mathf.RoundToInt(_position.z));
+
+            Vector2Int[] posToObserve = new Vector2Int[8] { new Vector2Int(0, -1), new Vector2Int(0, 1), new Vector2Int(1, 0), new Vector2Int(-1, 0), new Vector2Int(1, 1), new Vector2Int(-1, 1), new Vector2Int(-1, -1), new Vector2Int(1, -1) };
+
+            Vector2 totalDirection = FlowTiles[roundedPosition.x, roundedPosition.y].direction;
+            totalDirection += Random.insideUnitCircle.normalized * 5;
+            for (int i = 0; i < posToObserve.Length; i++)
+            {
+                try
+                {
+                    Vector2 direction = FlowTiles[roundedPosition.x + posToObserve[i].x, roundedPosition.y + posToObserve[i].y].direction;
+                    if (direction.Equals(Vector2.zero))
+                    {
+                        direction = _position2D - roundedPosition + posToObserve[i];
+                        float mag = 1.25f / direction.magnitude;
+                        direction *= -mag;
+                    }
+
+                    totalDirection += direction.normalized;
+                }
+                catch
+                {
+                    Debug.Log("Outside Bounds");
+                }
+                totalDirection.Normalize();
+                _velocity += totalDirection / Random.Range(10f, 25f);
+                _velocity.Normalize();
+                
+            }
+            yield return new WaitForSecondsRealtime(_updateFrequency);
         }
     }
 

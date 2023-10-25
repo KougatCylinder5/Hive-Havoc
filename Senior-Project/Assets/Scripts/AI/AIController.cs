@@ -3,6 +3,7 @@ using Unity.Burst;
 using UnityEngine;
 
 
+[RequireComponent(typeof(CharacterController))]
 public class AIController : MonoBehaviour
 {
     [SerializeField]
@@ -15,7 +16,7 @@ public class AIController : MonoBehaviour
     public float speed;
 
     [SerializeField]
-    private float _updateFrequency = 0.1f, _updateTimeRemaining = 0f;
+    protected float _updateFrequency = 0.1f, _updateTimeRemaining = 0f;
 
     [SerializeField]
     protected CharacterController _characterController;
@@ -50,7 +51,7 @@ public class AIController : MonoBehaviour
         return pathable;
     }
 
-    public void FixedUpdate()
+    public void Update()
     {
         _position = transform.position;
         _position2D = new(_position.x, _position.z);
