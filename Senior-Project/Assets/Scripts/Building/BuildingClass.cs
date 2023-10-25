@@ -38,9 +38,9 @@ public class BuildingClass : MonoBehaviour
 
     public bool CheckPlacementArea(int x, int y)
     {
-        for(int i = 0; i < buildingX * buildingY; i++)
+        for(int i = 0; i < buildingSizeX * buildingSizeY; i++)
         {
-            if (!PathingManager.ObstructedTiles[PathingManager.CalculateIndex(x + buildingX, y + buildingY)])
+            if (!PathingManager.IsOpen(new(x - i / buildingSizeX, y - i % buildingSizeX)))
             {
                 return false;
             }

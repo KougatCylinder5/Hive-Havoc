@@ -41,7 +41,7 @@ public class PathingManager : MonoBehaviour
 
     public void Awake()
     {
-        GridSize = new(81, 81);
+        GridSize = new(90, 90);
 
         Instance = this;
         _pathsToGenerate = new();
