@@ -23,6 +23,8 @@ public class RectangleSelection : MonoBehaviour
         _lineRenderer = GetComponent<LineRenderer>();
         _terrainWater = LayerMask.GetMask("Terrain", "Water");
         _uc = GetComponent<UnitController>();
+        _lineRenderer.loop = true;
+        _lineRenderer.widthMultiplier = 0.1f;
     }
 
     // Update is called once per frame
@@ -72,6 +74,7 @@ public class RectangleSelection : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             selectTroops();
+            _lineRenderer.positionCount = 0;
         }
         return false;
     }

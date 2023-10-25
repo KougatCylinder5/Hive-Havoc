@@ -42,7 +42,7 @@ public class UnitController : MonoBehaviour
                         genY = r * Mathf.Sqrt(j2nr) * Mathf.Sin(Mathf.Sqrt(j2nr));
                         j++;
                     }
-                    while (!units[i].GetComponent<AIController>().SetDestination(mousePos + new Vector2(genX, genY)));
+                    while (!units[i].GetComponent<UnitAI>().SetDestination(mousePos + new Vector2(genX, genY)));
                 }
             }
         }

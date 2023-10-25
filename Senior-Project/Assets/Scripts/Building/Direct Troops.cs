@@ -5,7 +5,7 @@ using UnityEngine;
 public class DirectTroops : MonoBehaviour
 {
     public GetClickedObject gco;
-    public AIController AI;
+    public UnitAI AI;
 
     // Start is called before the first frame update
     void Start()
@@ -18,10 +18,10 @@ public class DirectTroops : MonoBehaviour
     {
         if(gco.getTroop() != null)
         {
-            AI = gco.getTroop().GetComponent<AIController>();
+            AI = gco.getTroop().GetComponent<UnitAI>();
             if (gco.getTroop() != null)
             {
-                AI = gco.getTroop().GetComponent<AIController>();
+                AI = gco.getTroop().GetComponent<UnitAI>();
             }
             if (AI != null && gco.getCube() != null)
             {
