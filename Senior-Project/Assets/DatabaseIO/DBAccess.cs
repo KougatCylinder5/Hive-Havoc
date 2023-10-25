@@ -113,12 +113,12 @@ public class DBAccess
 
             var sqliteCommand = sqliteDB.CreateCommand();
 
-            sqliteCommand.CommandText = "SELECT name, dif, rank, last_play, play_time, thumbnail FROM saves;";
+            sqliteCommand.CommandText = "SELECT name, dif, rank, last_play, play_time, thumbnail, level_name FROM saves;";
             IDataReader asave = sqliteCommand.ExecuteReader();
 
             try {
                 while (asave.Read()) {
-                    saves.Add(new Save(asave.GetString(0), asave.GetInt32(1), asave.GetInt32(2), asave.GetString(3), asave.GetInt32(4), asave.GetString(5)));
+                    saves.Add(new Save(asave.GetString(0), asave.GetInt32(1), asave.GetInt32(2), asave.GetString(3), asave.GetInt32(4), asave.GetString(5), asave.GetString(6)));
                 }
             } catch { }
             return saves;
@@ -513,12 +513,12 @@ public class DBAccess
         }
     }
 
-    public static void updateInventory(int id, int value) {
+    public static void updateInventory(int id, int value, int max) {
         if (!transactionActive) {
             Debug.LogError(noTransactionError);
         } else {
             var sqliteCommand = sqliteDB.CreateCommand();
-            sqliteCommand.CommandText = " UPDATE placeable SET amount=" + value + " WHERE resource_id IS " + id + " AND save_id IS " + saveID + ";";
+            sqliteCommand.CommandText = " UPDATE placeable SET amount=" + value + "max=" + max + " WHERE resource_id IS " + id + " AND save_id IS " + saveID + ";";
             sqliteCommand.ExecuteNonQuery();
         }
     }
