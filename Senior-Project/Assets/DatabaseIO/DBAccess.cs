@@ -5,6 +5,7 @@ using System.Data;
 using Mono.Data.Sqlite;
 using UnityEngine.UIElements.Experimental;
 using UnityEngine.Rendering.HighDefinition;
+using static UnityEngine.GraphicsBuffer;
 
 public class DBAccess
 {
@@ -116,11 +117,12 @@ public class DBAccess
             sqliteCommand.CommandText = "SELECT name, dif, rank, last_play, play_time, thumbnail, level_name FROM saves;";
             IDataReader asave = sqliteCommand.ExecuteReader();
 
-            try {
+  
                 while (asave.Read()) {
                     saves.Add(new Save(asave.GetString(0), asave.GetInt32(1), asave.GetInt32(2), asave.GetString(3), asave.GetInt32(4), asave.GetString(5), asave.GetString(6)));
+                    Debug.Log("save: " + asave.GetString(0));
                 }
-            } catch { }
+
             return saves;
         }
     }
@@ -134,11 +136,16 @@ public class DBAccess
             Debug.LogError(noTransactionError);
             return false;
         } else {
-            bool passed = false;
+            try
+            {
+                var sqliteCommand = sqliteDB.CreateCommand();
+                sqliteCommand.CommandText = "INSERT INTO saves ('name', 'dif', 'rank', last_play, play_time, thumbnail, level_name) VALUES ('" + savename + "', '" + diff + "', '0', 'Never', '0', '', 'Home Base');";
+                sqliteCommand.ExecuteNonQuery();
+                return true;
+            }
+            catch { }
 
-            
-
-            return passed;
+            return true;
         }
     }
 
