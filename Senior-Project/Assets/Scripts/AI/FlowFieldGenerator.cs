@@ -9,7 +9,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-
+using static PathingManager;
 
 public class FlowFieldGenerator : MonoBehaviour
 {
@@ -24,6 +24,7 @@ public class FlowFieldGenerator : MonoBehaviour
     private NativeList<JobHandle> handles;
     private NativeArray<bool> obstructedTiles;
     private Coroutine gridGenerator;
+
     [BurstCompile]
     public void Awake()
     {

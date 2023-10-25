@@ -42,10 +42,10 @@ public class EnemyAI : AIController, IAIBasics
     { 
         Vector3 movementDirection = new Vector3(_velocity.x * Time.deltaTime, -1f, _velocity.y * Time.deltaTime) * speed;
         Ray movementRay = new Ray(_position, _velocity);
-        if (!Physics.Raycast(movementRay, movementDirection.magnitude/4, LayerMask.GetMask("EnemyUnit")))
-        {
-            _characterController.Move(movementDirection);
-        }
+        //if (!Physics.Raycast(movementRay, movementDirection.magnitude/4, LayerMask.GetMask("EnemyUnit")))
+        //{
+              _characterController.Move(movementDirection);
+        //}
     }
     private IEnumerator UpdateDirection()
     {
@@ -55,30 +55,38 @@ public class EnemyAI : AIController, IAIBasics
 
             Vector2Int[] posToObserve = new Vector2Int[8] { new Vector2Int(0, -1), new Vector2Int(0, 1), new Vector2Int(1, 0), new Vector2Int(-1, 0), new Vector2Int(1, 1), new Vector2Int(-1, 1), new Vector2Int(-1, -1), new Vector2Int(1, -1) };
 
-            Vector2 totalDirection = FlowTiles[roundedPosition.x, roundedPosition.y].direction;
-            totalDirection += Random.insideUnitCircle.normalized * 5;
-            for (int i = 0; i < posToObserve.Length; i++)
+            try
             {
-                try
+                Vector2 totalDirection = FlowTiles[roundedPosition.x, roundedPosition.y].direction;
+                totalDirection += Random.insideUnitCircle.normalized * 5;
+                for (int i = 0; i < posToObserve.Length; i++)
                 {
-                    Vector2 direction = FlowTiles[roundedPosition.x + posToObserve[i].x, roundedPosition.y + posToObserve[i].y].direction;
-                    if (direction.Equals(Vector2.zero))
+                    try
                     {
-                        direction = _position2D - roundedPosition + posToObserve[i];
-                        float mag = 1.25f / direction.magnitude;
-                        direction *= -mag;
-                    }
+                        Vector2 direction = FlowTiles[roundedPosition.x + posToObserve[i].x, roundedPosition.y + posToObserve[i].y].direction;
+                        if (direction.Equals(Vector2.zero))
+                        {
+                            direction = _position2D - roundedPosition + posToObserve[i];
+                            float mag = 1.25f / direction.magnitude;
+                            direction *= -mag;
+                        }
 
-                    totalDirection += direction.normalized;
+                        totalDirection += direction.normalized;
+                    }
+                    catch
+                    {
+                        Debug.Log("Outside Bounds");
+                    }
+                    totalDirection.Normalize();
+                    _velocity += totalDirection / Random.Range(10f, 25f);
+                    _velocity.Normalize();
+
                 }
-                catch
-                {
-                    Debug.Log("Outside Bounds");
-                }
-                totalDirection.Normalize();
-                _velocity += totalDirection / Random.Range(10f, 25f);
-                _velocity.Normalize();
-                
+            }
+            catch
+            {
+                Debug.Log("Enemy Outside of Bounds... Removing...");
+                Destroy(gameObject);
             }
             yield return new WaitForSecondsRealtime(_updateFrequency);
         }

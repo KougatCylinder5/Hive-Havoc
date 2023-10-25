@@ -18,7 +18,6 @@ using Unity.Jobs;
 using Unity.Burst;
 using System.Linq;
 using System;
-using static UnityEngine.GraphicsBuffer;
 
 public class PathingManager : MonoBehaviour
 {
@@ -26,6 +25,9 @@ public class PathingManager : MonoBehaviour
     public static Vector2Int GridSize { get; private set; }
     private const int MOVE_STRAIGHT_COST = 10;
     private const int MOVE_DIAGONAL_COST = 14;
+
+
+    
 
     public List<PathInfo> Paths { get; private set; }
 
