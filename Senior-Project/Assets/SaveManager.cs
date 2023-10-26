@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -7,6 +8,7 @@ using UnityEngine.UIElements;
 public class SaveManager : MonoBehaviour
 {
     private static int pageNumber = 1;
+    private static int saveCount = 0;
 
     void Start()
     {
@@ -15,23 +17,34 @@ public class SaveManager : MonoBehaviour
 
     public void pageUp()
     {
-        pageNumber++;
+        if(pageNumber < Mathf.Ceil(saveCount / 4.0f)) {
+            pageNumber++;
+        }
         refresh();
+        Debug.Log("Page Number: " + pageNumber);
     }
 
     public void pageDown()
-    {
-        pageNumber--;
+    {   
+        if (pageNumber > 1) {
+            pageNumber--;
+        }
         refresh();
+        Debug.Log("Page Number: " + pageNumber);
     }
 
     public void refresh()
     {
-        DBAccess.startTransaction();
+        DBAccess.startTransaction(false);
         List<Save> saveList = DBAccess.getSaves();
-        DBAccess.commitTransaction();
+        DBAccess.commitTransaction(false);
 
-        Debug.Log(saveList.Count);
+        saveCount = saveList.Count;
+
+        PopulateSave[] oldSaves = gameObject.GetComponentsInChildren<PopulateSave>();
+        foreach (PopulateSave save in oldSaves) {
+            save.show();
+        }
 
         PopulateSave[] popSaves = gameObject.GetComponentsInChildren<PopulateSave>();
         int topsave = pageNumber * 4;
@@ -39,11 +52,11 @@ public class SaveManager : MonoBehaviour
         {
             try
             {
-                save.show();
                 switch (save.slotID)
                 {
                     case 1:
                         save.refreshWithSave(saveList[topsave - 4]);
+                        Debug.Log(saveList[topsave - 4].getSaveName());
                         break;
                     case 2:
                         save.refreshWithSave(saveList[topsave - 3]);
@@ -56,9 +69,10 @@ public class SaveManager : MonoBehaviour
                         break;
                 }
             }
-            catch
+            catch(Exception e)
             {
                 save.hide();
+                Debug.Log("Problem with: " + save.slotID + " Exc: " + e);
             }
         }
 

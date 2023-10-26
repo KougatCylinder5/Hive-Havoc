@@ -20,7 +20,7 @@ public class DBAccess
         return dbConnectionString;
     }
 
-    public static void startTransaction() {
+    public static void startTransaction(bool spitLog = true) {
         if (!transactionActive) {
             sqliteDB.Open();
             var sqliteCommand = sqliteDB.CreateCommand();
@@ -30,13 +30,15 @@ public class DBAccess
 
             transactionActive = true;
 
-            Debug.Log("Transaction started at: " + System.DateTime.Now);
+            if(spitLog) {
+                Debug.Log("Transaction started at: " + System.DateTime.Now);
+            }
         } else {
             Debug.LogWarning("Transaction alreaded started!");
         }
     }
 
-    public static void commitTransaction() {
+    public static void commitTransaction(bool spitLog = true) {
         if(transactionActive) {
             var sqliteCommand = sqliteDB.CreateCommand();
 
@@ -45,14 +47,15 @@ public class DBAccess
 
             sqliteDB.Close();
             transactionActive = false;
-            
-            Debug.Log("Transaction commited at: " + System.DateTime.Now);
+            if (spitLog) {
+                Debug.Log("Transaction commited at: " + System.DateTime.Now);
+            }
         } else {
             Debug.LogError("No transaction to commit!");
         }
     }
 
-    public static void rollbackTransaction() {
+    public static void rollbackTransaction(bool spitLog = true) {
         if(transactionActive) {
             var sqliteCommand = sqliteDB.CreateCommand();
 
@@ -61,8 +64,9 @@ public class DBAccess
 
             sqliteDB.Close();
             transactionActive = false;
-
-            Debug.Log("Transaction rollback at: " + System.DateTime.Now);
+            if (spitLog) {
+                Debug.Log("Transaction rollback at: " + System.DateTime.Now);
+            }
         } else {
             Debug.LogError("No transaction to rollback!");
         }
@@ -120,7 +124,6 @@ public class DBAccess
   
                 while (asave.Read()) {
                     saves.Add(new Save(asave.GetString(0), asave.GetInt32(1), asave.GetInt32(2), asave.GetString(3), asave.GetInt32(4), asave.GetString(5), asave.GetString(6)));
-                    Debug.Log("save: " + asave.GetString(0));
                 }
 
             return saves;

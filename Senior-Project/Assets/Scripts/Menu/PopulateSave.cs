@@ -2,12 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEditor;
 
 public class PopulateSave : MonoBehaviour
 {
     // Start is called before the first frame update
     public int slotID;
     private TextMeshProUGUI[] textFeilds;
+    private TextMeshProUGUI[] nameFeilds;
+    private TextMeshProUGUI[] levelFeilds;
+    private TextMeshProUGUI[] playtimeFeilds;
+    private TextMeshProUGUI[] difficultyFeilds;
+
+    public GameObject prefab;
     void Start()
     {
         //refreshWithSave(new Save("Test", 1, 0, "0", 1, "NONE", "Home"));
@@ -19,17 +26,30 @@ public class PopulateSave : MonoBehaviour
         
     }
 
+    public void setSlot(int newSlotID) {
+        slotID = newSlotID;
+    }
+
     public void hide() {
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
     }
 
     public void show() {
         gameObject.SetActive(true);
+        GameObject newFrame = Instantiate(prefab);
+        newFrame.transform.parent = GameObject.Find("Profile Menu").transform;
+        newFrame.transform.position = gameObject.transform.position;
+        newFrame.transform.localScale = gameObject.transform.localScale;
+        newFrame.GetComponent<PopulateSave>().setSlot(slotID);
+        newFrame.name = "Save";
+        Destroy(gameObject);
     }
 
     public void refreshWithSave(Save saveData) {
+        Debug.Log("Called Save in ID: " + slotID);
         textFeilds = GetComponentsInChildren<TextMeshProUGUI>();
-        foreach(TextMeshProUGUI textFeild in textFeilds) {
+
+        foreach (TextMeshProUGUI textFeild in textFeilds) {
             textFeild.text = textFeild.text.Replace("{name}", saveData.getSaveName());
             textFeild.text = textFeild.text.Replace("{current_level}", saveData.getLevelName());
             textFeild.text = textFeild.text.Replace("{playtime}", "N/a");
