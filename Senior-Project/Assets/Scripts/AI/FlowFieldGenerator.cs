@@ -25,7 +25,7 @@ public class FlowFieldGenerator : MonoBehaviour
     private NativeArray<bool> obstructedTiles;
     private Coroutine gridGenerator;
 
-    [BurstCompile]
+    //[BurstCompile]
     public void Awake()
     {
         Finished = false;

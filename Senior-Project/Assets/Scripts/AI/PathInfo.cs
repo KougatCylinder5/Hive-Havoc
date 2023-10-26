@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
 {
     public Vector2 Start;
@@ -19,7 +18,6 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
     public PathInfo()
     {
         raycastLayers = LayerMask.GetMask(new string[] {"Water", "Building", "Terrain" });
-        
     }
 
     public void CleanPath()
@@ -70,16 +68,18 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
 
     public int GetHashCode(PathInfo obj)
     {
-        return (Mathf.RoundToInt(obj.Start.x * 100) << 0) + (Mathf.RoundToInt(obj.Start.y * 100) << 4) + (Mathf.RoundToInt(obj.End.x * 100) << 8) + (Mathf.RoundToInt(obj.End.y * 100) << 12);
+        return Mathf.RoundToInt(obj.Start.x)+ Mathf.RoundToInt(obj.Start.y * 100) + Mathf.RoundToInt(obj.End.x * 10000) + Mathf.RoundToInt(obj.End.y * 1000000);
     }
 
     public override string ToString()
     {
+        string pathString = string.Empty;
+
         foreach (var item in path)
         {
-            item.ToString();
+            pathString += ", " + item.ToString();
         }
-        return "";
+        return pathString;
     }
 
 
