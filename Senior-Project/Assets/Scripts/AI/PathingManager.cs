@@ -26,9 +26,6 @@ public class PathingManager : MonoBehaviour
     private const int MOVE_STRAIGHT_COST = 10;
     private const int MOVE_DIAGONAL_COST = 14;
 
-
-    
-
     public List<PathInfo> Paths { get; private set; }
 
     public static List<bool> ObstructedTiles = new List<bool>();
@@ -60,7 +57,6 @@ public class PathingManager : MonoBehaviour
     }
     public void LateUpdate()
     {
-        
 
         List<PathInfo> tempGeneratedPath = ReturnPaths(_pathsToGenerate);
 
@@ -80,7 +76,10 @@ public class PathingManager : MonoBehaviour
     {
         _pathsToGenerate.Enqueue(pathToQueue);
     }
-
+    public PathInfo RetrievePath(PathInfo pathToGet)
+    {
+        return Array.Find(Paths.ToArray(), path => path.Equals(pathToGet));
+    }
     public void DestroyAllPaths()
     {
         Paths.Clear();
@@ -150,7 +149,7 @@ public class PathingManager : MonoBehaviour
         obstructedTiles.Dispose();
     }
 
-    [BurstCompile]
+    //[BurstCompile]
     private struct FindPathJob : IJob
     {
         public float2 exactEndPosition;
