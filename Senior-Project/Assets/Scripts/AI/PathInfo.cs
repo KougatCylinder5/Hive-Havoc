@@ -37,7 +37,7 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
             {
                 Vector3 center = ConvertToVector3(curNode, 0.6f);
                 Vector3 halfExtends = Vector3.one / 4f;
-                halfExtends.y *= 0;
+                halfExtends.y = 0;
                 Vector3 direction = ConvertToVector3(copyPath.Peek() - curNode, 0).normalized;
                 if (Physics.BoxCast(center: center,halfExtents: halfExtends, direction: direction, orientation: Quaternion.identity,hitInfo: out RaycastHit hit, maxDistance: (copyPath.Peek() - curNode).magnitude, layerMask: raycastLayers))
                 {

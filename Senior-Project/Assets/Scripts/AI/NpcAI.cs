@@ -11,6 +11,7 @@ public class NpcAI : AIController
     public PathInfo _pathToGen;
     [SerializeField]
     public PathInfo _movingPath;
+    public PathInfo _returnPath;
 
 
     private bool _metDesination = false;
@@ -25,6 +26,7 @@ public class NpcAI : AIController
             Start = _origin,
             End = _pickUpTarget
         };
+        _returnPath = new();
 
         Instance.QueuePath(_pathToGen);
         _movingPath = null;
@@ -38,13 +40,7 @@ public class NpcAI : AIController
         if ((_position2D - _pickUpTarget).sqrMagnitude < 0.2f && !_metDesination)
         {
             _metDesination = true;
-            _pathToGen = new()
-            {
-                Start = _pickUpTarget,
-                End = _origin
-            };
-            Instance.QueuePath(_pathToGen);
-            _movingPath = null;
+            _movingPath = _returnPath;
         }
 
 
@@ -56,7 +52,7 @@ public class NpcAI : AIController
             Vector3 direction = new(direction2D.x, -1f, direction2D.y);
             _characterController.Move(direction * speed * Time.deltaTime);
             if ((_movingPath.cleanedPath.Peek() - _position2D).sqrMagnitude < 0.2f){
-                _movingPath.cleanedPath.Dequeue();
+                _returnPath.cleanedPath.Enqueue(_movingPath.cleanedPath.Dequeue());
             }
         }
 
