@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9035405223024359609}
+  - component: {fileID: -7585876477140047848}
   m_Layer: 0
   m_Name: TentGhost
   m_TagString: Untagged
@@ -32,6 +33,20 @@ Transform:
   - {fileID: 3181665399975114847}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-7585876477140047848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3720317060426338062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c04933be6f0caec4098c2e65de88f3ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingSizeX: 1
+  buildingSizeY: 1
 --- !u!1 &8848733365196948916
 GameObject:
   m_ObjectHideFlags: 0

@@ -38,7 +38,7 @@ public class PathingManager : MonoBehaviour
 
     public void Awake()
     {
-        GridSize = new(81, 81);
+        GridSize = new(90, 90);
 
         Instance = this;
         _pathsToGenerate = new();
@@ -377,5 +377,16 @@ public class PathingManager : MonoBehaviour
     public static bool IsOpen(Vector2 point)
     {
         return ObstructedTiles[CalculateIndex(Mathf.RoundToInt(point.x), Mathf.RoundToInt(point.y))];
+    }
+
+    public void OnDrawGizmos()
+    {
+        for(int i = 0; i < ObstructedTiles.Count; i++)
+        {
+            if (ObstructedTiles[i])
+            {
+                Gizmos.DrawCube(new Vector3(i % GridSize.x, 0, i / GridSize.x), new Vector3(0.25f, 1.1f, 0.25f));
+            } 
+        }
     }
 }

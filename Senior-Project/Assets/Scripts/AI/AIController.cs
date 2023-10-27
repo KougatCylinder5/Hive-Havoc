@@ -163,10 +163,4 @@ public class AIController : MonoBehaviour
     //    return canPath;
 
     //}
-
-
-
-
 }
-
-
