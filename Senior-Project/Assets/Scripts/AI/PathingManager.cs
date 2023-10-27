@@ -378,4 +378,15 @@ public class PathingManager : MonoBehaviour
     {
         return ObstructedTiles[CalculateIndex(Mathf.RoundToInt(point.x), Mathf.RoundToInt(point.y))];
     }
+
+    public void OnDrawGizmos()
+    {
+        for(int i = 0; i < ObstructedTiles.Count; i++)
+        {
+            if (ObstructedTiles[i])
+            {
+                Gizmos.DrawCube(new Vector3(i % GridSize.x, 0, i / GridSize.x), new Vector3(0.25f, 1.1f, 0.25f));
+            } 
+        }
+    }
 }

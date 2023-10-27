@@ -42,7 +42,7 @@ public class BuildingClass : MonoBehaviour
     {
         for(int i = 0; i < buildingSizeX * buildingSizeY; i++)
         {
-            if (!IsOpen(new(x - i / buildingSizeX, y - i % buildingSizeX)))
+            if (!IsOpen(new(x - i % buildingSizeX, y - i / buildingSizeX)))
             {
                 return false;
             }
