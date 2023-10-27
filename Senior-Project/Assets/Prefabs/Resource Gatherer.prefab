@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 5382123839808731495}
   - component: {fileID: 4006753041663549175}
   - component: {fileID: 7262088233067085306}
-  - component: {fileID: 5282811502081137170}
   - component: {fileID: 8374161661854508239}
   - component: {fileID: 7155866876691559386}
-  m_Layer: 7
+  - component: {fileID: 5035366146553625164}
+  m_Layer: 9
   m_Name: Resource Gatherer
   m_TagString: Troop
   m_Icon: {fileID: 0}
@@ -86,24 +86,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &5282811502081137170
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8130099494824521781}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 847c7cd83816d314186a2b0dc383fd95, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _target: {x: 0, y: 0}
-  _position: {x: 0, y: 0, z: 0}
-  speed: 0
-  _updateFrequency: 0.1
-  _updateTimeRemaining: 0
-  _characterController: {fileID: 0}
 --- !u!143 &8374161661854508239
 CharacterController:
   m_ObjectHideFlags: 0
@@ -117,7 +99,7 @@ CharacterController:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 640
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -243,3 +225,22 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &5035366146553625164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8130099494824521781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e38684e6c7dc47546aae135f9af47a8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _target: {x: 0, y: 0}
+  _position: {x: 0, y: 0, z: 0}
+  speed: 2
+  _updateFrequency: 0.1
+  _characterController: {fileID: 0}
+  _origin: {x: 0, y: 0}
+  _pickUpTarget: {x: 30, y: 30}

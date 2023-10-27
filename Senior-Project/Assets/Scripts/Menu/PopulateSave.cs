@@ -6,10 +6,11 @@ using TMPro;
 public class PopulateSave : MonoBehaviour
 {
     // Start is called before the first frame update
+    public int slotID;
     private TextMeshProUGUI[] textFeilds;
     void Start()
     {
-        refreshWithSave(new Save("Test", 1, 0, "0", 1, "NONE", "Home"));
+        //refreshWithSave(new Save("Test", 1, 0, "0", 1, "NONE", "Home"));
     }
 
     // Update is called once per frame
@@ -18,7 +19,7 @@ public class PopulateSave : MonoBehaviour
         
     }
 
-    void refreshWithSave(Save saveData) {
+    public void refreshWithSave(Save saveData) {
         textFeilds = GetComponentsInChildren<TextMeshProUGUI>();
         foreach(TextMeshProUGUI textFeild in textFeilds) {
             textFeild.text = textFeild.text.Replace("{name}", saveData.getSaveName());

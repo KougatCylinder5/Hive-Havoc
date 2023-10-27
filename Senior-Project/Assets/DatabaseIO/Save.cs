@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Save : MonoBehaviour
+public class Save
 {
     private string saveName;
     private int dif;
