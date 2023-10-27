@@ -2,6 +2,8 @@ using System.Linq;
 using Unity.Burst;
 using UnityEngine;
 
+using static PathingManager;
+
 
 [RequireComponent(typeof(CharacterController))]
 public class AIController : MonoBehaviour
@@ -30,7 +32,7 @@ public class AIController : MonoBehaviour
     }
     public bool SetDestination(Vector2 target)
     {
-        bool pathable = PathingManager.IsOpen(target);
+        bool pathable = IsOpen(target);
 
         if (pathable)
         {
@@ -42,7 +44,7 @@ public class AIController : MonoBehaviour
     public bool SetDestination(Transform target)
     {
         Vector2 target2D = new(target.position.x, target.position.z);
-        bool pathable = PathingManager.IsOpen(target2D);
+        bool pathable = IsOpen(target2D);
 
         if (pathable)
         {
