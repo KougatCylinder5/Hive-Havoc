@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9035405223024359609}
   - component: {fileID: -7585876477140047848}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TentGhost
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47,6 +47,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildingSizeX: 1
   buildingSizeY: 1
+  buildingCost: 
+  key: 120
 --- !u!1 &8848733365196948916
 GameObject:
   m_ObjectHideFlags: 0
@@ -59,7 +61,7 @@ GameObject:
   - component: {fileID: 7302005509095083497}
   - component: {fileID: 3848250640567358818}
   - component: {fileID: 6902496479113963631}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Tent
   m_TagString: Untagged
   m_Icon: {fileID: 0}

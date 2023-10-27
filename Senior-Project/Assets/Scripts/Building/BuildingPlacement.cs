@@ -36,6 +36,7 @@ public class BuildingPlacement : MonoBehaviour
         _keycodes.Add(KeyCode.Z); 
         _keycodes.Add(KeyCode.X);
         _keycodes.Add(KeyCode.C);
+        _keycodes.Add(KeyCode.V);
     }
 
     // Update is called once per frame

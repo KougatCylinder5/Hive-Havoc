@@ -13,6 +13,11 @@ public class BuildingClass : MonoBehaviour
     protected int buildingX, buildingY;
     [SerializeField]
     protected int[] buildingCost;
+    protected int health, maxHealth;
+    [SerializeField]
+    protected KeyCode key;
+
+
 
     // Start is called before the first frame update
     void Start()

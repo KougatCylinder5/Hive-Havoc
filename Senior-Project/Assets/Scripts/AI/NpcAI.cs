@@ -71,4 +71,9 @@ public class NpcAI : AIController
             Destroy(gameObject);
         }
     }
+
+    private void OnDestroy()
+    {
+        ResourceStruct.Wood++;
+    }
 }

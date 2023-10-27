@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 645446133575513306}
   - component: {fileID: 4319965187382464538}
   - component: {fileID: 218330120247923336}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,7 +117,7 @@ GameObject:
   - component: {fileID: 7748859134470350762}
   - component: {fileID: 2303550485292428650}
   - component: {fileID: 1077223541278814041}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -222,7 +222,7 @@ GameObject:
   - component: {fileID: 1044625957602283796}
   - component: {fileID: 8434166871474280184}
   - component: {fileID: 3031658800950016058}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -325,7 +325,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8085101555731788861}
   - component: {fileID: 5081146727605784951}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: LookoutTowerGhost
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -364,3 +364,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildingSizeX: 1
   buildingSizeY: 1
+  buildingCost: 
+  key: 99
