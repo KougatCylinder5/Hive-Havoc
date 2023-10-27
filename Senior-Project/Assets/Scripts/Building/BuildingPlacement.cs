@@ -36,11 +36,6 @@ public class BuildingPlacement : MonoBehaviour
         _keycodes.Add(KeyCode.Z); 
         _keycodes.Add(KeyCode.X);
         _keycodes.Add(KeyCode.C);
-        // Wood, Coal, Copper Ore, Copper Ingot, Iron Ore, Iron Ingot, Steel, Stone
-
-        _costs.Add(new int[_resourceCount] {8, 7, 6, 5, 4, 3, 2, 1});
-        _costs.Add(new int[_resourceCount] {1, 1, 1, 1, 1, 1, 1, 1});
-        _costs.Add(new int[_resourceCount] {3, 1, 4, 1, 5, 9, 2, 6});
     }
 
     // Update is called once per frame
@@ -71,7 +66,7 @@ public class BuildingPlacement : MonoBehaviour
             showBuilding(_ghostBuilding, position);
             if(Input.GetMouseButtonDown(0))
             {
-                if (CheckCost(_costs[_pressed], ResourceStruct.Total, out int[] dep) && _ghostBuilding.GetComponent<BuildingClass>().CheckPlacementArea(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.y))) //amognus
+                if (CheckCost(_currentBuilding.GetComponent<BuildingClass>().GetCost(), ResourceStruct.Total, out int[] dep) && _ghostBuilding.GetComponent<BuildingClass>().CheckPlacementArea(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.y))) //amognus
                 {
                     Instantiate(_currentBuilding, _ghostBuilding.transform.position, Quaternion.identity);
                     DepleteResources(dep);
