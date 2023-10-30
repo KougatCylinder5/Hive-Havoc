@@ -556,6 +556,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slotID: 0
+  savePrefab: {fileID: 2748664304341967680}
 --- !u!1 &3707174331052926198
 GameObject:
   m_ObjectHideFlags: 0
