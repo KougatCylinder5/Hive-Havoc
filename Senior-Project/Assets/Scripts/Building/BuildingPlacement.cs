@@ -37,6 +37,8 @@ public class BuildingPlacement : MonoBehaviour
         _keycodes.Add(KeyCode.X);
         _keycodes.Add(KeyCode.C);
         _keycodes.Add(KeyCode.V);
+        _keycodes.Add(KeyCode.B);
+        _keycodes.Add(KeyCode.N);
     }
 
     // Update is called once per frame
@@ -64,10 +66,10 @@ public class BuildingPlacement : MonoBehaviour
                 _currentBuilding = _buildingPrefabs[_pressed * 2];
                 _made = true;
             }
-            showBuilding(_ghostBuilding, position);
+            ShowBuilding(_ghostBuilding, position);
             if(Input.GetMouseButtonDown(0))
             {
-                if (CheckCost(_currentBuilding.GetComponent<BuildingClass>().GetCost(), ResourceStruct.Total, out int[] dep) && _ghostBuilding.GetComponent<BuildingClass>().CheckPlacementArea(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.y))) //amognus
+                if (CheckCost(_currentBuilding.GetComponent<BuildingClass>().GetCost(), ResourceStruct.Total, out int[] dep) && _ghostBuilding.GetComponent<BuildingClass>().CheckPlacementArea(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.y)))
                 {
                     Instantiate(_currentBuilding, _ghostBuilding.transform.position, Quaternion.identity);
                     DepleteResources(dep);
@@ -115,27 +117,21 @@ public class BuildingPlacement : MonoBehaviour
         return flag;
     }
 
-    public void showBuilding(GameObject building, Vector2 position)
+    public void ShowBuilding(GameObject building, Vector2 position)
     {
-        building.transform.position = new Vector3((int)position.x + sizeCheck(building, 1), 0.5f, (int)position.y + sizeCheck(building, 2));
+        float offset = SizeCheck(building);
+        building.transform.position = new Vector3(Mathf.RoundToInt(position.x) + offset, 0.5f, Mathf.RoundToInt(position.y) + offset);
     }
 
-    public float sizeCheck(GameObject building, int axis)
+    public float SizeCheck(GameObject building)
     {
-        if(axis == 1)
+        if(building.GetComponent<BuildingClass>().GetSize() % 2 == 0)
         {
-            if (building.transform.localScale.x % 2 == 0)
-            {
-                return 0.5f;
-            }
+            return 0.5f;
         }
-        if(axis == 2)
+        else
         {
-            if (building.transform.localScale.z % 2 == 0)
-            {
-                return 0.5f;
-            }
+            return 0;
         }
-        return 0;
     }
 }
