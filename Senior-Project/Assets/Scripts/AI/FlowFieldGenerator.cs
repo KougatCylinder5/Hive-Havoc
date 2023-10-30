@@ -5,7 +5,6 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -25,7 +24,7 @@ public class FlowFieldGenerator : MonoBehaviour
     private NativeArray<bool> obstructedTiles;
     private Coroutine gridGenerator;
 
-    [BurstCompile]
+    //[BurstCompile]
     public void Awake()
     {
         Finished = false;

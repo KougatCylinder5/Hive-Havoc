@@ -16,7 +16,7 @@ public class AIController : MonoBehaviour
     public float speed;
 
     [SerializeField]
-    protected float _updateFrequency = 0.1f, _updateTimeRemaining = 0f;
+    protected float _updateFrequency = 0.1f;
 
     [SerializeField]
     protected CharacterController _characterController;
@@ -163,10 +163,4 @@ public class AIController : MonoBehaviour
     //    return canPath;
 
     //}
-
-
-
-
 }
-
-
