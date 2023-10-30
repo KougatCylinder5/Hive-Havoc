@@ -8,13 +8,13 @@ public class PopulateSave : MonoBehaviour
 {
     // Start is called before the first frame update
     public int slotID;
-    private TextMeshProUGUI[] textFeilds;
+    private TextMeshProUGUI[] textFields;
     private TextMeshProUGUI[] nameFeilds;
     private TextMeshProUGUI[] levelFeilds;
     private TextMeshProUGUI[] playtimeFeilds;
     private TextMeshProUGUI[] difficultyFeilds;
 
-    public GameObject prefab;
+    public GameObject savePrefab;
     void Start()
     {
         //refreshWithSave(new Save("Test", 1, 0, "0", 1, "NONE", "Home"));
@@ -31,28 +31,30 @@ public class PopulateSave : MonoBehaviour
     }
 
     public void hide() {
-        //gameObject.SetActive(false);
+        gameObject.transform.localScale = new Vector3(0, 0, 0);
     }
 
     public void show() {
-        gameObject.SetActive(true);
-        GameObject newFrame = Instantiate(prefab);
+        
+        GameObject newFrame = UnityEngine.Object.Instantiate(savePrefab);
         newFrame.transform.parent = GameObject.Find("Profile Menu").transform;
         newFrame.transform.position = gameObject.transform.position;
-        newFrame.transform.localScale = gameObject.transform.localScale;
+        newFrame.transform.localScale = new Vector3(1,1,1);
         newFrame.GetComponent<PopulateSave>().setSlot(slotID);
+        newFrame.GetComponent <PopulateSave>().savePrefab = Resources.Load("Save") as GameObject;
         newFrame.name = "Save";
+        gameObject.SetActive(false);
         Destroy(gameObject);
     }
 
     public void refreshWithSave(Save saveData) {
         Debug.Log("Called Save in ID: " + slotID);
-        textFeilds = GetComponentsInChildren<TextMeshProUGUI>();
+        textFields = GetComponentsInChildren<TextMeshProUGUI>();
 
-        foreach (TextMeshProUGUI textFeild in textFeilds) {
+        foreach (TextMeshProUGUI textFeild in textFields) {
             textFeild.text = textFeild.text.Replace("{name}", saveData.getSaveName());
             textFeild.text = textFeild.text.Replace("{current_level}", saveData.getLevelName());
-            textFeild.text = textFeild.text.Replace("{playtime}", "N/a");
+            textFeild.text = textFeild.text.Replace("{playtime}", saveData.getPlayTime() + "");
             if(textFeild.text.Contains("{difficulty}")) {
                 switch(saveData.getDif()) {
                     case (0):
