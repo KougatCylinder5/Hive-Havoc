@@ -1,48 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 using static PathingManager;
 
 public class BuildingClass : MonoBehaviour
 {
     [SerializeField]
-    protected int buildingSizeX = 2;
-    [SerializeField]
-    protected int buildingSizeY = 2;
-    protected int buildingX, buildingY;
+    protected int buildingSize;
     [SerializeField]
     protected int[] buildingCost;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        buildingX = Mathf.CeilToInt(gameObject.transform.position.x);
-        buildingY = Mathf.CeilToInt(gameObject.transform.position.z);
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public Vector2Int GetBuildingSize()
-    {
-        return new Vector2Int(buildingSizeX, buildingSizeY);
-    }
-
-    public void SetBuildingSize()
-    {
-
-    }
+    protected int health, maxHealth;
+    [SerializeField]
+    protected KeyCode key;
 
     public bool CheckPlacementArea(int x, int y)
     {
-        for(int i = 0; i < buildingSizeX * buildingSizeY; i++)
+        x += Mathf.FloorToInt(buildingSize / 2f);
+        y += Mathf.FloorToInt(buildingSize / 2f);
+        for(int i = 0; i < buildingSize * buildingSize; i++)
         {
-            if (!IsOpen(new(x - i % buildingSizeX, y - i / buildingSizeX)))
+            if (!IsOpen(new(x - i % buildingSize, y - i / buildingSize)))
             {
                 return false;
             }
@@ -53,5 +28,15 @@ public class BuildingClass : MonoBehaviour
     public int[] GetCost()
     {
         return buildingCost;
+    }
+
+    public KeyCode GetKey()
+    {
+        return key;
+    }
+
+    public int GetSize()
+    {
+        return buildingSize;
     }
 }

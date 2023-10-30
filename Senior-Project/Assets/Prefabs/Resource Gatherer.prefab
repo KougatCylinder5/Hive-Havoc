@@ -99,7 +99,7 @@ CharacterController:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 640
+    m_Bits: 648
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -243,4 +243,4 @@ MonoBehaviour:
   _updateFrequency: 0.1
   _characterController: {fileID: 0}
   _origin: {x: 0, y: 0}
-  _pickUpTarget: {x: 30, y: 30}
+  _pickUpTarget: {x: 32, y: 35}
