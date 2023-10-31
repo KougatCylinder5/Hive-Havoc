@@ -65,7 +65,7 @@ public class DBAccess
                 sqliteCommand.CommandText = "BEGIN TRANSACTION;";
                 sqliteCommand.ExecuteNonQuery();
 
-                sqliteCommand.CommandText = "UPDATE saves SET play_time=" + playTimeIsSeconds + " WHERE id IS " + saveID + ";";
+                sqliteCommand.CommandText = "UPDATE saves SET play_time=" + playTimeIsSeconds + ", last_play='" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' WHERE id IS " + saveID + ";";
                 sqliteCommand.ExecuteNonQuery();
             }
 
@@ -129,6 +129,13 @@ public class DBAccess
 
             if(saveID != 0) {
                 diff = saves.GetInt32(1);
+
+                commitTransaction(false);
+                startTransaction(false);
+                sqliteCommand.CommandText = "UPDATE saves SET last_play='" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' WHERE id IS " + saveID + ";";
+                sqliteCommand.ExecuteNonQuery();
+                commitTransaction(false);
+                startTransaction(false);
                 return true;
             }
 
@@ -157,17 +164,6 @@ public class DBAccess
         }
     }
 
-    public static void removeSave(string savename) {
-        if (!transactionActive) {
-            Debug.LogError(noTransactionError);
-        } else {
-            var sqliteCommand = sqliteDB.CreateCommand();
-            sqliteCommand.CommandText = " DELETE FROM saves WHERE name LIKE '" + savename + "';";
-            sqliteCommand.ExecuteNonQuery();
-
-        }
-    }
-
     public static void exitSave() {
         saveID = 0;
     }
@@ -180,7 +176,7 @@ public class DBAccess
             try
             {
                 var sqliteCommand = sqliteDB.CreateCommand();
-                sqliteCommand.CommandText = "INSERT INTO saves ('name', 'dif', 'rank', last_play, play_time, thumbnail, level_name) VALUES ('" + savename + "', '" + diff + "', '0','" + DateTime.Now + "', 0, '', 'Tutorial');";
+                sqliteCommand.CommandText = "INSERT INTO saves ('name', 'dif', 'rank', last_play, play_time, thumbnail, level_name) VALUES ('" + savename + "', '" + diff + "', '0','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', 0, '', 'Tutorial');";
                 Debug.Log(sqliteCommand.CommandText);
                 sqliteCommand.ExecuteNonQuery();
                 return true;
