@@ -4,12 +4,13 @@ using UnityEngine;
 using System.Data;
 using Mono.Data.Sqlite;
 using System;
+using UnityEngine.SceneManagement;
 
 public class DBAccess
 {
     private static int saveID = 0;
     private static int diff = -1;
-    private static string dbConnectionString = "URI=file:" + Application.persistentDataPath + "\\storage.db"; //e
+    private static string dbConnectionString = "URI=file:" + Application.persistentDataPath + "\\storage.db";
     private static bool transactionActive = false;
     private const string noTransactionError = "Transaction has not been started!";
     private static SqliteConnection sqliteDB = new SqliteConnection(dbConnectionString);
@@ -45,6 +46,12 @@ public class DBAccess
                 Debug.LogError(noTransactionError);
             } else {
                 if(saveID > 0) {
+                    sqliteCommand.CommandText = "COMMIT;";
+                    sqliteCommand.ExecuteNonQuery();
+
+                    sqliteCommand.CommandText = "BEGIN TRANSACTION;";
+                    sqliteCommand.ExecuteNonQuery();
+
                     sqliteCommand.CommandText = "SELECT last_play FROM saves WHERE id IS " + saveID + ";";
                     IDataReader asave = sqliteCommand.ExecuteReader();
 
@@ -57,6 +64,8 @@ public class DBAccess
 
                         playTimeIsSeconds = playTime.Seconds;
                     }
+
+                    asave.Close();
                 }
 
                 sqliteCommand.CommandText = "COMMIT;";
@@ -118,17 +127,22 @@ public class DBAccess
             return false;
         } else {
             var sqliteCommand = sqliteDB.CreateCommand();
-            sqliteCommand.CommandText = "SELECT id, dif FROM saves WHERE name LIKE '" + savename + "';";
+            sqliteCommand.CommandText = "SELECT id, dif, level_name FROM saves WHERE name LIKE '" + savename + "';";
             IDataReader saves = sqliteCommand.ExecuteReader();
-
+            string sceneToLoad = "";
             try {
                 while(saves.Read()) {
                     saveID = saves.GetInt32(0);
+                    diff = saves.GetInt32(1);
+                    sceneToLoad = saves.GetString(2);
+                    
                 }
             } catch {}
 
+            saves.Close();
+
             if(saveID != 0) {
-                diff = saves.GetInt32(1);
+                SceneManager.LoadScene(sceneToLoad);
 
                 commitTransaction(false);
                 startTransaction(false);
@@ -160,6 +174,7 @@ public class DBAccess
                     saves.Add(new Save(asave.GetString(0), asave.GetInt32(1), asave.GetInt32(2), asave.GetString(3), asave.GetInt32(4), asave.GetString(5), asave.GetString(6)));
                 }
 
+            asave.Close();
             return saves;
         }
     }
@@ -177,7 +192,6 @@ public class DBAccess
             {
                 var sqliteCommand = sqliteDB.CreateCommand();
                 sqliteCommand.CommandText = "INSERT INTO saves ('name', 'dif', 'rank', last_play, play_time, thumbnail, level_name) VALUES ('" + savename + "', '" + diff + "', '0','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', 0, '', 'Tutorial');";
-                Debug.Log(sqliteCommand.CommandText);
                 sqliteCommand.ExecuteNonQuery();
                 return true;
             }
@@ -222,6 +236,7 @@ public class DBAccess
                 }
             } catch {}
 
+            aunit.Close();
             return units;
         }
     }
@@ -245,6 +260,7 @@ public class DBAccess
                 }
             } catch {}
 
+            lastRow.Close();
             return rowid;
         }
     }
@@ -315,6 +331,7 @@ public class DBAccess
                 }
             } catch {}
 
+            titem.Close();
             return itemid;
         }
     }
@@ -360,6 +377,7 @@ public class DBAccess
                 }
             } catch { }
 
+            titem.Close();
             return itemid;
         }
     }
@@ -382,6 +400,7 @@ public class DBAccess
                 }
             } catch {}
 
+            aplaceable.Close();
             return placeables;
         }
     }
@@ -406,6 +425,7 @@ public class DBAccess
             }
             catch { }
 
+            aplaceable.Close();
             return placeables;
         }
     }
@@ -430,6 +450,7 @@ public class DBAccess
             }
             catch { }
 
+            aplaceable.Close();
             return placeables;
         }
     }
@@ -453,6 +474,7 @@ public class DBAccess
                 }
             } catch {}
 
+            lastRow.Close();
             return rowid;
         }
     }
@@ -503,6 +525,7 @@ public class DBAccess
                 }
             } catch { }
 
+            lastRow.Close();
             return rowid;
         }
     }
@@ -525,6 +548,7 @@ public class DBAccess
             }
             catch { }
 
+            tileType.Close();
             return tileTypeID;
         }
     }
@@ -586,6 +610,7 @@ public class DBAccess
             }
             catch { }
 
+            titem.Close();
             return itemAmount;
         }
     }
@@ -608,6 +633,7 @@ public class DBAccess
                 }
             } catch { }
 
+            aLevel.Close();
             return played;
         }
     }
@@ -642,6 +668,7 @@ public class DBAccess
                 }
             } catch { }
 
+            aTech.Close();
             return played;
         }
     }

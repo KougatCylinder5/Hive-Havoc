@@ -11,6 +11,8 @@ public class SaveManager : MonoBehaviour
     private static int pageNumber = 1;
     private static int saveCount = 0;
     private bool x = true;
+    public AudioClip pageSound;
+    public AudioClip droppedSound;
 
     void Start()
     {
@@ -21,18 +23,35 @@ public class SaveManager : MonoBehaviour
     {
         if(pageNumber < Mathf.Ceil(saveCount / 4.0f)) {
             pageNumber++;
+            try {
+                GameObject.FindWithTag("SFX").GetComponent<AudioSource>().clip = pageSound;
+                GameObject.FindWithTag("SFX").GetComponent<AudioSource>().time = 0;
+                GameObject.FindWithTag("SFX").GetComponent<AudioSource>().Play();
+            } catch { }
+            
         }
         refresh();
-        Debug.Log("Page Number: " + pageNumber);
     }
 
     public void pageDown()
     {   
         if (pageNumber > 1) {
             pageNumber--;
+            try {
+                GameObject.FindWithTag("SFX").GetComponent<AudioSource>().clip = pageSound;
+                GameObject.FindWithTag("SFX").GetComponent<AudioSource>().time = 0;
+                GameObject.FindWithTag("SFX").GetComponent<AudioSource>().Play();
+            } catch { }
         }
         refresh();
-        Debug.Log("Page Number: " + pageNumber);
+    }
+
+    public void dropped() {
+        refresh();
+
+        GameObject.FindWithTag("SFX").GetComponent<AudioSource>().clip = droppedSound;
+        GameObject.FindWithTag("SFX").GetComponent<AudioSource>().time = 0;
+        GameObject.FindWithTag("SFX").GetComponent<AudioSource>().Play();
     }
 
     public void refresh()
@@ -59,26 +78,21 @@ public class SaveManager : MonoBehaviour
                 {
                     case 1:
                         save.refreshWithSave(saveList[topsave - 4]);
-                        Debug.Log("Save name slot 1: " + saveList[topsave - 4].getSaveName());
                         break;
                     case 2:
                         save.refreshWithSave(saveList[topsave - 3]);
-                        Debug.Log("Save name slot 2: " + saveList[topsave - 3].getSaveName());
                         break;
                     case 3:
                         save.refreshWithSave(saveList[topsave - 2]);
-                        Debug.Log("Save name slot 3: " + saveList[topsave - 2].getSaveName());
                         break;
                     case 4:
                         save.refreshWithSave(saveList[topsave -1]);
-                        Debug.Log("Save name slot 4: " + saveList[topsave - 1].getSaveName());
                         break;
                 }
             }
             catch(Exception e)
             {
                 save.hide();
-                Debug.Log("Problem with: " + save.slotID + " Exc: " + e);
             }
         }
             x = true;

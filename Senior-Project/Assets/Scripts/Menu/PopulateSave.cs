@@ -27,8 +27,14 @@ public class PopulateSave : MonoBehaviour
         DBAccess.startTransaction();
         DBAccess.deleteSave(saveName);
         DBAccess.commitTransaction();
+        
+        GetComponentInParent<SaveManager>().dropped();
+    }
 
-        gameObject.GetComponentInParent<SaveManager>().refresh();
+    public void loadSave() {
+        DBAccess.startTransaction();
+        DBAccess.selectSave(saveName);
+        DBAccess.commitTransaction();
     }
 
     public string getSaveName() {
@@ -57,7 +63,6 @@ public class PopulateSave : MonoBehaviour
     }
 
     public void refreshWithSave(Save saveData) {
-        Debug.Log("Called Save in ID: " + slotID);
         textFields = GetComponentsInChildren<TextMeshProUGUI>();
 
         saveName = saveData.getSaveName();
