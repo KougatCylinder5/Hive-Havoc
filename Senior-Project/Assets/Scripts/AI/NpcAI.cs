@@ -31,7 +31,7 @@ public class NpcAI : AIController
 
         Instance.QueuePath(_pathToGen);
         _movingPath = null;
-        InvokeRepeating(nameof(TestIfNear), 10, 1);
+        //InvokeRepeating(nameof(TestIfNear), 10, 1);
     }
 
     new void Update()
@@ -68,12 +68,7 @@ public class NpcAI : AIController
     {
         if ((_origin - _position2D).sqrMagnitude < 0.2f)
         {
-            Destroy(gameObject);
+            //start pathing again
         }
-    }
-
-    private void OnDestroy()
-    {
-        ResourceStruct.Wood++;
     }
 }

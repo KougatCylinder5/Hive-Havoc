@@ -69,7 +69,7 @@ public class BuildingPlacement : MonoBehaviour
             ShowBuilding(_ghostBuilding, position);
             if(Input.GetMouseButtonDown(0))
             {
-                if (CheckCost(_currentBuilding.GetComponent<BuildingClass>().GetCost(), ResourceStruct.Total, out int[] dep) && _ghostBuilding.GetComponent<BuildingClass>().CheckPlacementArea(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.y)))
+                if (CheckCost(_ghostBuilding.GetComponent<GhostBuildingClass>().GetCost(), ResourceStruct.Total, out int[] dep) && _ghostBuilding.GetComponent<GhostBuildingClass>().CheckPlacementArea(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.y)))
                 {
                     Instantiate(_currentBuilding, _ghostBuilding.transform.position, Quaternion.identity);
                     DepleteResources(dep);
@@ -125,7 +125,7 @@ public class BuildingPlacement : MonoBehaviour
 
     public float SizeCheck(GameObject building)
     {
-        if(building.GetComponent<BuildingClass>().GetSize() % 2 == 0)
+        if(building.GetComponent<GhostBuildingClass>().GetSize() % 2 == 0)
         {
             return 0.5f;
         }

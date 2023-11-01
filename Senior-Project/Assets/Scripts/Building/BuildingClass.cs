@@ -1,50 +1,25 @@
 using UnityEngine;
-using static PathingManager;
 
 public class BuildingClass : MonoBehaviour
 {
     [SerializeField]
-    protected int buildingSize;
-    [SerializeField]
-    protected int[] buildingCost;
-    protected int health, maxHealth;
-    [SerializeField]
-    protected KeyCode key;
-    private GameBounds bounds;
+    protected int maxHealth;
+    protected int health;
 
     private void Awake()
     {
-        bounds = GameObject.Find("ScriptManager").GetComponent<GameBounds>();
+        health = maxHealth;
     }
 
-    public bool CheckPlacementArea(int x, int y)
+    private void Update()
     {
-        x += Mathf.FloorToInt(buildingSize / 2f);
-        y += Mathf.FloorToInt(buildingSize / 2f);
-        for(int i = 0; i < buildingSize * buildingSize; i++)
+        if(health <= 0)
         {
-            Vector2 testPos = new(x - i % buildingSize, y - i / buildingSize);
-
-            if (!IsOpen(testPos) || !bounds.IsInBounds(testPos))
-            {
-                return false;
-            }
+            Destroy(gameObject);
         }
-        return true;
-    }
-
-    public int[] GetCost()
-    {
-        return buildingCost;
-    }
-
-    public KeyCode GetKey()
-    {
-        return key;
-    }
-
-    public int GetSize()
-    {
-        return buildingSize;
+        else if(health > maxHealth)
+        {
+            health = maxHealth;
+        }
     }
 }

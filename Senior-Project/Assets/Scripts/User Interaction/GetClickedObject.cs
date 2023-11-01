@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class GetClickedObject : MonoBehaviour
 {
-    public GameObject troop;
-    public GameObject cube;
+    private GameObject troop;
+    private GameObject cube;
+    public GameObject building;
     public LayerMask notTerrain;
 
     // Start is called before the first frame update
@@ -31,21 +32,28 @@ public class GetClickedObject : MonoBehaviour
                 {
                     troop = hitInfo.transform.gameObject;
                 }
+                else if(hitInfo.transform.CompareTag("Building"))
+                {
+                    building = hitInfo.transform.gameObject;
+                }
             }
             else
             {
                 troop = null;
                 cube = null;
+                building = null;
             }
         }
         if(Input.GetMouseButtonDown(1))
         {
             troop = null;
             cube = null;
+            building = null;
         }
     }
 
     public GameObject getTroop(){return troop;}
     public GameObject getCube(){return cube;}
+    public GameObject getBuilding(){return building;}
     public void resetCube(){cube = null;}
 }
