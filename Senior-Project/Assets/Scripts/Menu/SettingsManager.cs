@@ -3,79 +3,60 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Runtime.CompilerServices;
+using UnityEditor;
+using UnityEditor.Search;
+using UnityEngine.UIElements;
 
 public class SettingsManager : MonoBehaviour
 {
+    public TMP_Dropdown resolutionDropdown;
 
-    public Toggle fullscreenTog, VsyncTog;
-    public List<ResItem> resolutions = new List<ResItem>();
-    private int selectedResolution;
-    public TMP_Text resolutionLable;
-    // Start is called before the first frame update
-    void Start()
+    Resolution[] resolutions;
+
+    private void Start()
     {
-        fullscreenTog.isOn = Screen.fullScreen;
+        resolutions = Screen.resolutions;
 
-        if (QualitySettings.vSyncCount == 0)
+        resolutionDropdown.ClearOptions();
+
+        List<string> options = new List<string>();
+
+        //variable for setting the resolution to users defult screen size
+        int currentResolutionIndex = 0;
+
+        //gets all of the possible screen resolutions and formats them
+        for (int i = 0; i < resolutions.Length; i++)
         {
-            VsyncTog.isOn = false;
+            string option = resolutions[i].width + " x " + resolutions[i].height + " " + float.Parse(resolutions[i].refreshRateRatio.ToString()) + "hz";
+            options.Add(option);
+
+            //sees if the screen size is the users screen size
+            if (resolutions[i].width == Screen.currentResolution.width && resolutions[i].height == Screen.currentResolution.height)
+            {
+                currentResolutionIndex = i;
+            }
         }
-        else
-        {
-            VsyncTog.isOn = true;
-        }
+        //adds the options to the dropdown
+        resolutionDropdown.AddOptions(options);
+        //sets the resolution to users defult screen size
+        resolutionDropdown.value = currentResolutionIndex;
+        resolutionDropdown.RefreshShownValue();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void setResolution(int resolutionIndex)
     {
-        
+        Resolution resolution = resolutions[resolutionIndex];
+        Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
     }
 
-    public void ResLeft()
+    public void setQuality(int qualityIndex)
     {
-        selectedResolution--;
-        if(selectedResolution < 0)
-        {
-            selectedResolution = 0;
-        }
-        UpdateResLable();
+        QualitySettings.SetQualityLevel(qualityIndex);
     }
 
-    public void ResRight() 
+    public void setFullScreen(bool isFullscreen)
     {
-        selectedResolution++;
-        if(selectedResolution > resolutions.Count - 1)
-        { 
-            selectedResolution = resolutions.Count - 1;
-        }
-        UpdateResLable();
+        Screen.fullScreen = isFullscreen;
     }
-
-    public void UpdateResLable()
-    {
-        resolutionLable.text = resolutions[selectedResolution].horizontal.ToString() + " x " + resolutions[selectedResolution].vertical.ToString();
-    }
-
-    public void ApplyGraphicsChange()
-    {
-        //Screen.fullScreen = fullscreenTog.isOn;
-        if (VsyncTog.isOn)
-        {
-            QualitySettings.vSyncCount = 1;
-        }
-        else
-        {
-            QualitySettings.vSyncCount = 0;
-        }
-
-        Screen.SetResolution(resolutions[selectedResolution].horizontal, resolutions[selectedResolution].vertical, fullscreenTog.isOn);
-    }
-
-}
-
-[System.Serializable]
-public class ResItem
-{
-    public int horizontal, vertical;
 }
