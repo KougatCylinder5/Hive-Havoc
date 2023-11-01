@@ -20,18 +20,8 @@ public class NpcAI : AIController
     // Start is called before the first frame update
     void Start()
     {
-
-        _origin = _position2D;
-        _returnPath.Push(_origin);
-        _pathToGen = new()
-        {
-            Start = _origin,
-            End = _pickUpTarget
-        };
-
-        Instance.QueuePath(_pathToGen);
-        _movingPath = null;
-        //InvokeRepeating(nameof(TestIfNear), 10, 1);
+        ResetPathing();
+        InvokeRepeating(nameof(TestIfNear), 10, 1);
     }
 
     new void Update()
@@ -55,9 +45,10 @@ public class NpcAI : AIController
             Vector2 direction2D = (_movingPath.cleanedPath.Peek() - _position2D).normalized;
             Vector3 direction = new(direction2D.x, -1f, direction2D.y);
             _characterController.Move(direction * speed * Time.deltaTime);
-            if ((_movingPath.cleanedPath.Peek() - _position2D).sqrMagnitude < 0.2f){
+            if ((_movingPath.cleanedPath.Peek() - _position2D).sqrMagnitude < 0.2f)
+            {
                 _movingPath.cleanedPath.TryDequeue(out Vector2 result);
-                if(result != null) _returnPath.Push(result);
+                if (result != null) _returnPath.Push(result);
             }
         }
 
@@ -68,7 +59,21 @@ public class NpcAI : AIController
     {
         if ((_origin - _position2D).sqrMagnitude < 0.2f)
         {
-            //start pathing again
+            _metDesination = false;
+            ResetPathing();
         }
+    }
+    private void ResetPathing()
+    {
+        _origin = _position2D;
+        _returnPath.Push(_origin);
+        _pathToGen = new()
+        {
+            Start = _origin,
+            End = _pickUpTarget
+        };
+
+        Instance.QueuePath(_pathToGen);
+        _movingPath = null;
     }
 }
