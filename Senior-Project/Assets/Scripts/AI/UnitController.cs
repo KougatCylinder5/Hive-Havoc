@@ -13,6 +13,8 @@ public class UnitController : MonoBehaviour
     private void Start()
     {
         gco = GetComponent<GetClickedObject>();
+
+
     }
     void Update()
     {
@@ -30,7 +32,7 @@ public class UnitController : MonoBehaviour
             {
                 int j = 1;
 
-                Vector2 mousePos = Mouse.MouseToWorldPoint();
+                Vector2 mousePos = Mouse.MouseToWorldPoint(LayerMask.GetMask("Terrain", "Water"));
                 for (int i = 0; i < units.Count; i++)
                 {
                     float genX;
