@@ -20,17 +20,7 @@ public class NpcAI : AIController
     // Start is called before the first frame update
     void Start()
     {
-
-        _origin = _position2D;
-        _returnPath.Push(_origin);
-        _pathToGen = new()
-        {
-            Start = _origin,
-            End = _pickUpTarget
-        };
-
-        Instance.QueuePath(_pathToGen);
-        _movingPath = null;
+        ResetPathing();
         InvokeRepeating(nameof(TestIfNear), 10, 1);
     }
 
@@ -69,7 +59,21 @@ public class NpcAI : AIController
     {
         if ((_origin - _position2D).sqrMagnitude < 0.2f)
         {
-            Destroy(gameObject);
+            _metDesination = false;
+            ResetPathing();
         }
+    }
+    private void ResetPathing()
+    {
+        _origin = _position2D;
+        _returnPath.Push(_origin);
+        _pathToGen = new()
+        {
+            Start = _origin,
+            End = _pickUpTarget
+        };
+
+        Instance.QueuePath(_pathToGen);
+        _movingPath = null;
     }
 }
