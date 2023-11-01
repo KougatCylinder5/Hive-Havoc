@@ -10,6 +10,12 @@ public class BuildingClass : MonoBehaviour
     protected int health, maxHealth;
     [SerializeField]
     protected KeyCode key;
+    private GameBounds bounds;
+
+    private void Awake()
+    {
+        bounds = GameObject.Find("ScriptManager").GetComponent<GameBounds>();
+    }
 
     public bool CheckPlacementArea(int x, int y)
     {
@@ -17,7 +23,9 @@ public class BuildingClass : MonoBehaviour
         y += Mathf.FloorToInt(buildingSize / 2f);
         for(int i = 0; i < buildingSize * buildingSize; i++)
         {
-            if (!IsOpen(new(x - i % buildingSize, y - i / buildingSize)))
+            Vector2 testPos = new(x - i % buildingSize, y - i / buildingSize);
+
+            if (!IsOpen(testPos) || !bounds.IsInBounds(testPos))
             {
                 return false;
             }
