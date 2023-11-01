@@ -6,6 +6,7 @@ using static PathingManager;
 
 
 [RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(Animator))]
 public class AIController : MonoBehaviour
 {
     [SerializeField]
@@ -22,13 +23,18 @@ public class AIController : MonoBehaviour
 
     [SerializeField]
     protected CharacterController _characterController;
+    protected Animator _animator;
 
     public void Awake()
     {
+        _pathInfo = new();
         _characterController = GetComponent<CharacterController>();
         _position = transform.position;
         _position2D = new(_position.x, _position.z);
         _target = _position2D;
+        _animator = GetComponent<Animator>();
+        _animator.SetFloat("Randomness", Random.Range(0, 1f));
+        
     }
     public bool SetDestination(Vector2 target)
     {
@@ -57,6 +63,18 @@ public class AIController : MonoBehaviour
     {
         _position = transform.position;
         _position2D = new(_position.x, _position.z);
+
+        try
+        {
+            if (_pathInfo.cleanedPath.TryPeek(out Vector2 nextNode))
+            {
+                transform.LookAt(PathInfo.ConvertToVector3(nextNode, _position.y));
+            }
+        }
+        catch{ }
+            
+
+        
     }
 
     //[BurstCompile]

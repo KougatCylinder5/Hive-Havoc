@@ -55,9 +55,10 @@ public class NpcAI : AIController
             Vector2 direction2D = (_movingPath.cleanedPath.Peek() - _position2D).normalized;
             Vector3 direction = new(direction2D.x, -1f, direction2D.y);
             _characterController.Move(direction * speed * Time.deltaTime);
-            if ((_movingPath.cleanedPath.Peek() - _position2D).sqrMagnitude < 0.2f){
+            if ((_movingPath.cleanedPath.Peek() - _position2D).sqrMagnitude < 0.2f)
+            {
                 _movingPath.cleanedPath.TryDequeue(out Vector2 result);
-                if(result != null) _returnPath.Push(result);
+                if (result != null) _returnPath.Push(result);
             }
         }
 

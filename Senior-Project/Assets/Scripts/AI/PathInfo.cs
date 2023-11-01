@@ -35,7 +35,7 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
 
             while (copyPath.Count > 0)
             {
-                Vector3 center = ConvertToVector3(curNode, 0.65f);
+                Vector3 center = ConvertToVector3(curNode - (curNode.normalized-Start.normalized/2).normalized, 0.85f);
                 Vector3 halfExtends = Vector3.one / 4f;
                 halfExtends.y = 0;
                 Vector3 direction = ConvertToVector3(copyPath.Peek() - curNode, 0).normalized;
@@ -49,6 +49,7 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
             if (!priorNode.Equals(new Vector2(-1, -1)))
                 cleanedPath.Enqueue(priorNode);
         }
+        
     }
 
     public static Vector3 ConvertToVector3(Vector2 obj, float height)
