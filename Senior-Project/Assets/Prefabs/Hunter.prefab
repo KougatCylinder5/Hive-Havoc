@@ -57,7 +57,7 @@ LineRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 4de3e52578fe4644d87e800e6992ba1b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -165,7 +165,7 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: -0.075, z: 0}
+  m_Center: {x: 0, y: -0.17, z: 0}
 --- !u!114 &69457601702805277
 MonoBehaviour:
   m_ObjectHideFlags: 0

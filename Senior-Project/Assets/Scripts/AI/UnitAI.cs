@@ -16,8 +16,8 @@ public class UnitAI : AIController, IAIBasics
     {
         base.Awake();
         _pathRenderer = GetComponent<LineRenderer>();
-        _pathRenderer.endWidth = 0.3f;
-        _pathRenderer.startWidth = 0.1f;
+        _pathRenderer.endWidth = 0.0f;
+        _pathRenderer.startWidth = 0.3f;
         InvokeRepeating(nameof(UpdatePath), 0, _updateFrequency);
         _lastPosition2D = _position2D;
         StartCoroutine(nameof(DistanceMoved));
