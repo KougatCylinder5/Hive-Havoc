@@ -52,7 +52,7 @@ public class PopulateSave : MonoBehaviour
     public void show() {
         
         GameObject newFrame = UnityEngine.Object.Instantiate(savePrefab);
-        newFrame.transform.parent = GameObject.Find("Profile Menu").transform;
+        newFrame.transform.SetParent(GameObject.Find("Profile Menu").transform);
         newFrame.transform.position = gameObject.transform.position;
         newFrame.transform.localScale = new Vector3(1,1,1);
         newFrame.GetComponent<PopulateSave>().setSlot(slotID);
