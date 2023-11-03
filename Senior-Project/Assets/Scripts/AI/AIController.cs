@@ -2,8 +2,11 @@ using System.Linq;
 using Unity.Burst;
 using UnityEngine;
 
+using static PathingManager;
+
 
 [RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(Animator))]
 public class AIController : MonoBehaviour
 {
     [SerializeField]
@@ -20,17 +23,22 @@ public class AIController : MonoBehaviour
 
     [SerializeField]
     protected CharacterController _characterController;
+    protected Animator _animator;
 
     public void Awake()
     {
+        _pathInfo = new();
         _characterController = GetComponent<CharacterController>();
         _position = transform.position;
         _position2D = new(_position.x, _position.z);
         _target = _position2D;
+        _animator = GetComponent<Animator>();
+        _animator.SetFloat("Randomness", Random.Range(0, 1f));
+        
     }
     public bool SetDestination(Vector2 target)
     {
-        bool pathable = PathingManager.IsOpen(target);
+        bool pathable = IsOpen(target);
 
         if (pathable)
         {
@@ -42,7 +50,7 @@ public class AIController : MonoBehaviour
     public bool SetDestination(Transform target)
     {
         Vector2 target2D = new(target.position.x, target.position.z);
-        bool pathable = PathingManager.IsOpen(target2D);
+        bool pathable = IsOpen(target2D);
 
         if (pathable)
         {
@@ -55,6 +63,18 @@ public class AIController : MonoBehaviour
     {
         _position = transform.position;
         _position2D = new(_position.x, _position.z);
+
+        try
+        {
+            if (_pathInfo.cleanedPath.TryPeek(out Vector2 nextNode))
+            {
+                transform.LookAt(PathInfo.ConvertToVector3(nextNode, _position.y));
+            }
+        }
+        catch{ }
+            
+
+        
     }
 
     //[BurstCompile]
