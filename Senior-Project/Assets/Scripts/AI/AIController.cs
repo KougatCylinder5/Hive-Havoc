@@ -7,7 +7,7 @@ using static PathingManager;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(Animator))]
-public class AIController : MonoBehaviour
+public class AIController : MonoBehaviour, IHealth
 {
     [SerializeField]
     protected Vector2 _target;
@@ -16,7 +16,10 @@ public class AIController : MonoBehaviour
     [SerializeField]
     protected Vector3 _position;
     protected Vector2 _position2D;
-    public float speed;
+    [SerializeField]
+    private float speed;
+
+    public float Speed { get => speed; protected set => speed = value; }
 
     [SerializeField]
     protected float _updateFrequency = 0.1f;
@@ -24,6 +27,34 @@ public class AIController : MonoBehaviour
     [SerializeField]
     protected CharacterController _characterController;
     protected Animator _animator;
+    [SerializeField]
+    protected int _health, _maxHealth;
+    
+    protected int _regeneration;
+    protected float _resistance;
+    private bool _isDead = false;
+    public bool IsDead { get => _isDead; protected set => _isDead = value; }
+    public int Health
+    {
+        get => _health;
+        protected set
+        {
+            if (value <= 0)
+            {
+                _health = 0;
+                IsDead = true;
+            }
+            else
+            {
+                _health = value;
+            }
+        }
+    }
+    public int MaxHealth { get => _maxHealth; protected set => _maxHealth = value; }
+
+    public int HealthRegen { get => _regeneration; protected set => _regeneration = value; }
+
+    public float Resistance { get => _resistance; protected set => _resistance = value; }
 
     public void Awake()
     {
@@ -72,9 +103,27 @@ public class AIController : MonoBehaviour
             }
         }
         catch{ }
-            
+    }
 
-        
+    protected void Die()
+    {
+        if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Death"))
+        {
+            _animator.SetTrigger("Death");
+        }
+        else if (_animator.GetCurrentAnimatorStateInfo(0).IsName("Exit"))
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public void DealDamage(int damage)
+    {
+        Health -= Mathf.RoundToInt(damage * (1 - _resistance));
+    }
+    public void Regenerate()
+    {
+        Health += _regeneration;
     }
 
     //[BurstCompile]

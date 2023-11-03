@@ -12,11 +12,14 @@ public class EnemyAI : AIController, IAIBasics
     
     public new void Awake()
     {
+        Health = 500;
+        MaxHealth = 100;
         base.Awake();
         StartCoroutine(nameof(UpdateDirection));
     }
     public new void Update()
     {
+        if (IsDead) { Die(); return; }
         base.Update();
 
         //if (LookForTarget(out GameObject target, _listenRadius))
@@ -29,8 +32,12 @@ public class EnemyAI : AIController, IAIBasics
         //    _type = PathingType.Flow;
         //    _target = _startPoint;
         //}
-        if (_type == PathingType.Flow) Flow();
-        if (_type == PathingType.AroundObject) ExecutePath();
+        if (FlowFieldGenerator.Finished)
+        {
+            if (_type == PathingType.Flow) Flow();
+            if (_type == PathingType.AroundObject) ExecutePath();
+        }
+            
 
     }
     public void ExecutePath()
@@ -40,7 +47,7 @@ public class EnemyAI : AIController, IAIBasics
     
     public void Flow()
     { 
-        Vector3 movementDirection = new Vector3(_velocity.x * Time.deltaTime, -1f, _velocity.y * Time.deltaTime) * speed;
+        Vector3 movementDirection = new Vector3(_velocity.x, -100f, _velocity.y) * Speed * Time.deltaTime;
         Ray movementRay = new Ray(_position, _velocity);
         //if (!Physics.Raycast(movementRay, movementDirection.magnitude/4, LayerMask.GetMask("EnemyUnit")))
         //{

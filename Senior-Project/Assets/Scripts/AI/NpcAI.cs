@@ -8,6 +8,7 @@ public class NpcAI : AIController
     private Vector2 _origin;
     [SerializeField]
     private Vector2 _pickUpTarget;
+    public Vector2 PickUpTarget { get => _pickUpTarget; set => _pickUpTarget = value; }
     [SerializeField]
     public PathInfo _pathToGen;
     [SerializeField]
@@ -31,7 +32,7 @@ public class NpcAI : AIController
         if ((_position2D - _pickUpTarget).sqrMagnitude < 0.2f && !_metDesination)
         {
             _metDesination = true;
-            foreach (var path in _returnPath)
+            foreach (Vector2 path in _returnPath)
             {
                 _movingPath.cleanedPath.Enqueue(path);
             }
@@ -44,7 +45,7 @@ public class NpcAI : AIController
         {
             Vector2 direction2D = (_movingPath.cleanedPath.Peek() - _position2D).normalized;
             Vector3 direction = new(direction2D.x, -1f, direction2D.y);
-            _characterController.Move(direction * speed * Time.deltaTime);
+            _characterController.Move(direction * Speed * Time.deltaTime);
             if ((_movingPath.cleanedPath.Peek() - _position2D).sqrMagnitude < 0.2f)
             {
                 _movingPath.cleanedPath.TryDequeue(out Vector2 result);
