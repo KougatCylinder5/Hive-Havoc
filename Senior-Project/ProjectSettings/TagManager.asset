@@ -9,6 +9,7 @@ TagManager:
   - CommandCenter
   - ResourceTile
   - Troop
+  - SFX
   layers:
   - Default
   - TransparentFX

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6919328185219433059}
   - component: {fileID: 7441912351940462085}
   - component: {fileID: 4068724956331509757}
-  - component: {fileID: 4512811135325270254}
+  - component: {fileID: 2956886369053743149}
   m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
@@ -77,7 +77,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4512811135325270254
+--- !u!114 &2956886369053743149
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -120,7 +120,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4068724956331509757}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2830694699418704524}
+        m_TargetAssemblyTypeName: PopulateSave, Assembly-CSharp
+        m_MethodName: dropSave
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &930846032225588445
 GameObject:
   m_ObjectHideFlags: 0
@@ -531,13 +543,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 2830694699418704524}
+        m_TargetAssemblyTypeName: PopulateSave, Assembly-CSharp
+        m_MethodName: loadSave
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
