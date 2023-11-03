@@ -181,6 +181,7 @@ public class DBAccess
 
     public static void exitSave() {
         saveID = 0;
+        SceneManager.LoadScene("Menu");
     }
 
     public static bool addSave(string savename, int diff) {
