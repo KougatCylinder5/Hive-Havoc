@@ -655,7 +655,7 @@ public class DBAccess
             Debug.LogError(noTransactionError);
             return new List<int>();
         } else {
-            List<int> played = new List<int>();
+            List<int> tech = new List<int>();
 
             var sqliteCommand = sqliteDB.CreateCommand();
 
@@ -664,12 +664,12 @@ public class DBAccess
 
             try {
                 while (aTech.Read()) {
-                    played.Add(aTech.GetInt32(0));
+                    tech.Add(aTech.GetInt32(0));
                 }
             } catch { }
 
             aTech.Close();
-            return played;
+            return tech;
         }
     }
 
