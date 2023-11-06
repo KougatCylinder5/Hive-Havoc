@@ -71,6 +71,7 @@ public class UnitAI : AIController, IAIBasics, IAttack
 
     public void UpdatePath()
     {
+        Debug.Log(_pathInfo);
 
         float distanceToTarget = Vector2.Distance(_position2D, Target);
         if (distanceToTarget < 0.1f)
@@ -78,7 +79,6 @@ public class UnitAI : AIController, IAIBasics, IAttack
             _pathInfo.cleanedPath.Clear();
             return;
         }
-        Debug.Log(_movedLastFrame.magnitude);
         if (distanceToTarget < 0.5f && _movedLastFrame.magnitude < 0.02f)
         {
             Target = _position2D;

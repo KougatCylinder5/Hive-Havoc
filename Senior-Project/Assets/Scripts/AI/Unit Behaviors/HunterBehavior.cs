@@ -6,7 +6,7 @@ using UnityEngine;
 public class HunterBehavior : UnitAI
 {
 
-    private void Awake()
+    private new void Awake()
     {
         base.Awake();
         DamageAmount = 10;
@@ -27,6 +27,7 @@ public class HunterBehavior : UnitAI
             AttackTarget = enemies[0].gameObject;
             if (AttackTarget != null)
                 Target = new(AttackTarget.transform.position.x, AttackTarget.transform.position.z);
+            
 
         }
         if (AttackTarget != null && Vector3.Distance(_position, AttackTarget.transform.position) > AttackRadius)

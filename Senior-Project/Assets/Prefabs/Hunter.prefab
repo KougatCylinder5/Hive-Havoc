@@ -78,9 +78,7 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Positions:
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 1}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -204,7 +202,10 @@ MonoBehaviour:
   speed: 1
   _updateFrequency: 0.1
   _characterController: {fileID: 0}
+  _health: 0
+  _maxHealth: 0
   _attackTarget: {fileID: 0}
+  _attackRadius: 10
 --- !u!1 &7919134365519950849
 GameObject:
   m_ObjectHideFlags: 0
