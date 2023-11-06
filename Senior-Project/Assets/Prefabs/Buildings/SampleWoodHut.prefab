@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1979884979925260502}
-  - component: {fileID: 5013258685797364899}
+  - component: {fileID: -3807680282025644615}
   m_Layer: 3
   m_Name: SampleWoodHut
   m_TagString: Building
@@ -33,7 +33,7 @@ Transform:
   - {fileID: 8618424043549206540}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5013258685797364899
+--- !u!114 &-3807680282025644615
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,12 +42,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 3353867752437551522}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d56b6532772f4241a208fb741fe352c, type: 3}
+  m_Script: {fileID: 11500000, guid: 9cb41d46c4badb24f99e5749b05de7a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 5
   spawnCount: 1
   unitToSpawn: {fileID: 8130099494824521781, guid: ee67288081637e34286cd2c5d4d3f321, type: 3}
+  woodPerSec: 1
+  coalPerSec: 0
+  copperOrePerSec: 0
+  copperIngotPerSec: 0
+  ironOrePerSec: 0
+  ironIngotPerSec: 0
+  steelPerSec: 0
+  stonePerSec: 0
+  efficientRange: 2
+  normalRange: 4
 --- !u!1 &5245426359995520833
 GameObject:
   m_ObjectHideFlags: 0
