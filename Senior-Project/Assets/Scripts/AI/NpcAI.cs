@@ -35,6 +35,7 @@ public class NpcAI : AIController
             _metDesination = true;
             foreach (var path in _returnPath)
             {
+                ResetPathing();
                 _movingPath.cleanedPath.Enqueue(path);
             }
         }
