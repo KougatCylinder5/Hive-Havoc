@@ -38,7 +38,7 @@ public class PathingManager : MonoBehaviour
 
     public void Awake()
     {
-        GridSize = new(100, 100);
+        GridSize = new(81, 81);
 
         Instance = this;
         _pathsToGenerate = new();
@@ -57,7 +57,6 @@ public class PathingManager : MonoBehaviour
     }
     public void LateUpdate()
     {
-        
 
         List<PathInfo> tempGeneratedPath = ReturnPaths(_pathsToGenerate);
 
@@ -77,7 +76,10 @@ public class PathingManager : MonoBehaviour
     {
         _pathsToGenerate.Enqueue(pathToQueue);
     }
-
+    public PathInfo RetrievePath(PathInfo pathToGet)
+    {
+        return Array.Find(Paths.ToArray(), path => path.Equals(pathToGet));
+    }
     public void DestroyAllPaths()
     {
         Paths.Clear();
@@ -147,7 +149,7 @@ public class PathingManager : MonoBehaviour
         obstructedTiles.Dispose();
     }
 
-    [BurstCompile]
+    //[BurstCompile]
     private struct FindPathJob : IJob
     {
         public float2 exactEndPosition;
@@ -371,5 +373,20 @@ public class PathingManager : MonoBehaviour
     public static int CalculateIndex(int x, int y)
     {
         return x + y * GridSize.x;
+    }
+    public static bool IsOpen(Vector2 point)
+    {
+        return ObstructedTiles[CalculateIndex(Mathf.RoundToInt(point.x), Mathf.RoundToInt(point.y))];
+    }
+
+    public void OnDrawGizmos()
+    {
+        for(int i = 0; i < ObstructedTiles.Count; i++)
+        {
+            if (ObstructedTiles[i])
+            {
+                Gizmos.DrawCube(new Vector3(i % GridSize.x, 0, i / GridSize.x), new Vector3(0.25f, 1.1f, 0.25f));
+            } 
+        }
     }
 }

@@ -9,14 +9,15 @@ using UnityEngine.UIElements;
 public class BuildingPlacement : MonoBehaviour
 {
     [SerializeField]
-    private List<GameObject> buildingPrefabs;
-    private bool inPlaceMode = false;
-    private GameObject currentBuilding;
-    private GameObject ghostBuilding;
+    private List<GameObject> _buildingPrefabs;
+    private bool _inPlaceMode = false;
+    private GameObject _currentBuilding;
+    private GameObject _ghostBuilding;
     private bool _made;
-    private List<KeyCode> keycodes = new();
+    private List<KeyCode> _keycodes = new();
     private int _pressed;
-    private List<int> _costs = new();
+    private List<int[]> _costs = new();
+    private const int _resourceCount = 8;
 
     private enum Buildings
     {
@@ -32,67 +33,105 @@ public class BuildingPlacement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        keycodes.Add(KeyCode.Z); 
-        keycodes.Add(KeyCode.X);
-        keycodes.Add(KeyCode.C);
-        _costs.Add(8);
-        _costs.Add(1);
-        _costs.Add(3);
+        _keycodes.Add(KeyCode.Z); 
+        _keycodes.Add(KeyCode.X);
+        _keycodes.Add(KeyCode.C);
+        _keycodes.Add(KeyCode.V);
+        _keycodes.Add(KeyCode.B);
+        _keycodes.Add(KeyCode.N);
     }
 
     // Update is called once per frame
     void Update()
     {
         Vector2 position = Mouse.MouseToWorldPoint(LayerMask.GetMask("Terrain", "Water"));
-        foreach(KeyCode key in keycodes)
+        foreach(KeyCode key in _keycodes)
         {
             if(Input.GetKeyDown(key))
             {
-                inPlaceMode = true;
-                _pressed = keycodes.IndexOf(key);
+                if(_ghostBuilding != null)
+                    Destroy(_ghostBuilding);
+                _currentBuilding = null;
+                _inPlaceMode = true;
+                _pressed = _keycodes.IndexOf(key);
+                _made = false;
+                break;
             }
         }
-        if(inPlaceMode)
+        if(_inPlaceMode)
         {
             if(!_made)
             {
-                ghostBuilding = Instantiate(buildingPrefabs[_pressed * 2 + 1], new Vector3(position.x, 0.5f, position.y), Quaternion.identity);
-                currentBuilding = buildingPrefabs[_pressed * 2];
+                _ghostBuilding = Instantiate(_buildingPrefabs[_pressed * 2 + 1], new Vector3(position.x, 0.5f, position.y), Quaternion.identity);
+                _currentBuilding = _buildingPrefabs[_pressed * 2];
                 _made = true;
             }
-            showBuilding(ghostBuilding, position);
+            ShowBuilding(_ghostBuilding, position);
             if(Input.GetMouseButtonDown(0))
             {
-                inPlaceMode = false;
+                if (CheckCost(_currentBuilding.GetComponent<BuildingClass>().GetCost(), ResourceStruct.Total, out int[] dep) && _ghostBuilding.GetComponent<BuildingClass>().CheckPlacementArea(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.y)))
+                {
+                    Instantiate(_currentBuilding, _ghostBuilding.transform.position, Quaternion.identity);
+                    DepleteResources(dep);
+                }
+                else
+                {
+                    Debug.Log("Not enough resources...");
+                    _currentBuilding = null;
+                }
+                _inPlaceMode = false;
                 _made = false;
-                Instantiate(currentBuilding, ghostBuilding.transform.position, Quaternion.identity);
-                ResourceStruct.Wood -= _costs[_pressed];
-                Destroy(ghostBuilding);
+                Destroy(_ghostBuilding);
             }
         }
     }
 
-    public void showBuilding(GameObject building, Vector2 position)
+    public void DepleteResources(int[] depleteArray)
     {
-        building.transform.position = new Vector3((int)position.x + sizeCheck(building, 1), 0.5f, (int)position.y + sizeCheck(building, 2));
+        ResourceStruct.Wood = depleteArray[0];
+        ResourceStruct.Coal = depleteArray[1];
+        ResourceStruct.CopperOre = depleteArray[2];
+        ResourceStruct.CopperIngot = depleteArray[3];
+        ResourceStruct.IronOre = depleteArray[4];
+        ResourceStruct.IronIngot = depleteArray[5];
+        ResourceStruct.Steel = depleteArray[6];
+        ResourceStruct.Stone = depleteArray[7];
     }
 
-    public float sizeCheck(GameObject building, int axis)
+    public bool CheckCost(int[] desired, int[] current, out int[] deplete)
     {
-        if(axis == 1)
+        bool flag = true;
+        deplete = new int[_resourceCount];
+        for(int i = 0; i < _resourceCount; i++)
         {
-            if (building.transform.localScale.x % 2 == 0)
+            if(current[i] < desired[i])
             {
-                return 0.5f;
+                flag = false;
+                break;
+            }
+            else
+            {
+                deplete[i] = current[i] - desired[i];
             }
         }
-        if(axis == 2)
+        return flag;
+    }
+
+    public void ShowBuilding(GameObject building, Vector2 position)
+    {
+        float offset = SizeCheck(building);
+        building.transform.position = new Vector3(Mathf.RoundToInt(position.x) + offset, 0.5f, Mathf.RoundToInt(position.y) + offset);
+    }
+
+    public float SizeCheck(GameObject building)
+    {
+        if(building.GetComponent<BuildingClass>().GetSize() % 2 == 0)
         {
-            if (building.transform.localScale.z % 2 == 0)
-            {
-                return 0.5f;
-            }
+            return 0.5f;
         }
-        return 0;
+        else
+        {
+            return 0;
+        }
     }
 }

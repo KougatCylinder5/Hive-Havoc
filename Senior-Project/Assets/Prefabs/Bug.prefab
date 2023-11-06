@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 3483130440133651877}
   - component: {fileID: 810640080948504249}
   - component: {fileID: 6194155668668213725}
-  - component: {fileID: 8348769785200244805}
-  - component: {fileID: 6934275942339447078}
+  - component: {fileID: 9209854419597864166}
   - component: {fileID: 8462047349454952488}
+  - component: {fileID: 2882230252684429992}
   m_Layer: 8
   m_Name: Bug
   m_TagString: Troop
@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 3706112903273544462}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 50, y: 0, z: 50}
+  m_LocalPosition: {x: 39.826733, y: 0.75, z: 47.751755}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -86,7 +86,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &8348769785200244805
+--- !u!114 &9209854419597864166
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -95,43 +95,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 3706112903273544462}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a935722448b7dd047acb3b14a6a71501, type: 3}
+  m_Script: {fileID: 11500000, guid: 46eb37c4e95c31740b6526eb2901ebda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {x: 0, y: 0}
+  _target: {x: 0, y: 0}
+  _position: {x: 0, y: 0, z: 0}
   speed: 2
-  totalDirection: {x: 0, y: 0}
   _updateFrequency: 0.1
-  _updateTimeRemaining: 0
-  _pathingType: 0
-  velocity: {x: 0, y: 0}
-  _characterController: {fileID: 6934275942339447078}
---- !u!143 &6934275942339447078
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3706112903273544462}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Height: 2
-  m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.1
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.5, z: 0}
+  _characterController: {fileID: 2882230252684429992}
+  _type: 0
+  _listenRadius: 10
+  _velocity: {x: 0, y: 0}
 --- !u!120 &8462047349454952488
 LineRenderer:
   serializedVersion: 2
@@ -234,3 +208,29 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!143 &2882230252684429992
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3706112903273544462}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0.5, z: 0}

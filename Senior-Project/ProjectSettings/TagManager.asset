@@ -7,6 +7,9 @@ TagManager:
   - Cube
   - Component
   - CommandCenter
+  - ResourceTile
+  - Troop
+  - SFX
   layers:
   - Default
   - TransparentFX
@@ -17,7 +20,7 @@ TagManager:
   - Terrain
   - PlayerUnit
   - EnemyUnit
-  - 
+  - NPC
   - 
   - 
   - 

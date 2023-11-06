@@ -2,15 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEditor;
 
 public class PopulateSave : MonoBehaviour
 {
     // Start is called before the first frame update
     public int slotID;
-    private TextMeshProUGUI[] textFeilds;
+    private TextMeshProUGUI[] textFields;
+    private string saveName = "";
+
+    public GameObject savePrefab;
     void Start()
     {
-        //refreshWithSave(new Save("Test", 1, 0, "0", 1, "NONE", "Home"));
+ 
     }
 
     // Update is called once per frame
@@ -19,12 +23,54 @@ public class PopulateSave : MonoBehaviour
         
     }
 
+    public void dropSave() {
+        DBAccess.startTransaction();
+        DBAccess.deleteSave(saveName);
+        DBAccess.commitTransaction();
+        
+        GetComponentInParent<SaveManager>().dropped();
+    }
+
+    public void loadSave() {
+        DBAccess.startTransaction();
+        DBAccess.selectSave(saveName);
+        DBAccess.commitTransaction();
+    }
+
+    public string getSaveName() {
+        return saveName;
+    }
+
+    public void setSlot(int newSlotID) {
+        slotID = newSlotID;
+    }
+
+    public void hide() {
+        gameObject.transform.localScale = new Vector3(0, 0, 0);
+    }
+
+    public void show() {
+        
+        GameObject newFrame = UnityEngine.Object.Instantiate(savePrefab);
+        newFrame.transform.SetParent(GameObject.Find("Profile Menu").transform);
+        newFrame.transform.position = gameObject.transform.position;
+        newFrame.transform.localScale = new Vector3(1,1,1);
+        newFrame.GetComponent<PopulateSave>().setSlot(slotID);
+        newFrame.GetComponent <PopulateSave>().savePrefab = Resources.Load("Save") as GameObject;
+        newFrame.name = "Save";
+        gameObject.SetActive(false);
+        Destroy(gameObject);
+    }
+
     public void refreshWithSave(Save saveData) {
-        textFeilds = GetComponentsInChildren<TextMeshProUGUI>();
-        foreach(TextMeshProUGUI textFeild in textFeilds) {
+        textFields = GetComponentsInChildren<TextMeshProUGUI>();
+
+        saveName = saveData.getSaveName();
+
+        foreach (TextMeshProUGUI textFeild in textFields) {
             textFeild.text = textFeild.text.Replace("{name}", saveData.getSaveName());
             textFeild.text = textFeild.text.Replace("{current_level}", saveData.getLevelName());
-            textFeild.text = textFeild.text.Replace("{playtime}", "N/a");
+            textFeild.text = textFeild.text.Replace("{playtime}", saveData.getPlayTime() + "");
             if(textFeild.text.Contains("{difficulty}")) {
                 switch(saveData.getDif()) {
                     case (0):

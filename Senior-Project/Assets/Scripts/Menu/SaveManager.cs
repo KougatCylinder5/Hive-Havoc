@@ -1,12 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering.HighDefinition;
 using UnityEngine.UIElements;
 
 public class SaveManager : MonoBehaviour
 {
     private static int pageNumber = 1;
+    private static int saveCount = 0;
+    private bool x = true;
+    public AudioClip pageSound;
+    public AudioClip droppedSound;
 
     void Start()
     {
@@ -15,24 +21,53 @@ public class SaveManager : MonoBehaviour
 
     public void pageUp()
     {
-        pageNumber++;
+        if(pageNumber < Mathf.Ceil(saveCount / 4.0f)) {
+            pageNumber++;
+            try {
+                GameObject.FindWithTag("SFX").GetComponent<AudioSource>().clip = pageSound;
+                GameObject.FindWithTag("SFX").GetComponent<AudioSource>().time = 0;
+                GameObject.FindWithTag("SFX").GetComponent<AudioSource>().Play();
+            } catch { }
+            
+        }
         refresh();
     }
 
     public void pageDown()
-    {
-        pageNumber--;
+    {   
+        if (pageNumber > 1) {
+            pageNumber--;
+            try {
+                GameObject.FindWithTag("SFX").GetComponent<AudioSource>().clip = pageSound;
+                GameObject.FindWithTag("SFX").GetComponent<AudioSource>().time = 0;
+                GameObject.FindWithTag("SFX").GetComponent<AudioSource>().Play();
+            } catch { }
+        }
         refresh();
+    }
+
+    public void dropped() {
+        refresh();
+
+        GameObject.FindWithTag("SFX").GetComponent<AudioSource>().clip = droppedSound;
+        GameObject.FindWithTag("SFX").GetComponent<AudioSource>().time = 0;
+        GameObject.FindWithTag("SFX").GetComponent<AudioSource>().Play();
     }
 
     public void refresh()
     {
-        DBAccess.startTransaction();
+        DBAccess.startTransaction(false);
         List<Save> saveList = DBAccess.getSaves();
-        DBAccess.commitTransaction();
+        DBAccess.commitTransaction(false);
 
-        Debug.Log(saveList.Count);
+        saveCount = saveList.Count;
 
+        PopulateSave[] oldSaves = gameObject.GetComponentsInChildren<PopulateSave>();
+        foreach (PopulateSave save in oldSaves) {
+            save.show();
+        }
+
+        if(x) {
         PopulateSave[] popSaves = gameObject.GetComponentsInChildren<PopulateSave>();
         int topsave = pageNumber * 4;
         foreach(PopulateSave save in popSaves)
@@ -55,9 +90,12 @@ public class SaveManager : MonoBehaviour
                         break;
                 }
             }
-            catch
+            catch(Exception e)
             {
+                save.hide();
             }
+        }
+            x = true;
         }
 
     }

@@ -1,0 +1,190 @@
+fileFormatVersion: 2
+guid: a59ddc7ec94e36e40816090b5b7b4fb1
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: ball_l
+    100002: ball_r
+    100004: Body1
+    100006: Body26
+    100008: calf_l
+    100010: calf_r
+    100012: calf_twist_01_l
+    100014: calf_twist_01_r
+    100016: clavicle_l
+    100018: clavicle_r
+    100020: foot_l
+    100022: foot_r
+    100024: hand_l
+    100026: hand_r
+    100028: head
+    100030: ik_foot_l
+    100032: ik_foot_r
+    100034: ik_foot_root
+    100036: ik_hand_gun
+    100038: ik_hand_l
+    100040: ik_hand_r
+    100042: ik_hand_root
+    100044: knife_1_4
+    100046: knife_2
+    100048: knife_3
+    100050: lowerarm_l
+    100052: lowerarm_r
+    100054: lowerarm_twist_01_l
+    100056: lowerarm_twist_01_r
+    100058: neck_01
+    100060: pelvis
+    100062: root
+    100064: //RootNode
+    100066: spine_01
+    100068: spine_02
+    100070: spine_03
+    100072: thigh_l
+    100074: thigh_r
+    100076: thigh_twist_01_l
+    100078: thigh_twist_01_r
+    100080: thumb_01_l
+    100082: upperarm_l
+    100084: upperarm_r
+    100086: upperarm_twist_01_l
+    100088: upperarm_twist_01_r
+    400000: ball_l
+    400002: ball_r
+    400004: Body1
+    400006: Body26
+    400008: calf_l
+    400010: calf_r
+    400012: calf_twist_01_l
+    400014: calf_twist_01_r
+    400016: clavicle_l
+    400018: clavicle_r
+    400020: foot_l
+    400022: foot_r
+    400024: hand_l
+    400026: hand_r
+    400028: head
+    400030: ik_foot_l
+    400032: ik_foot_r
+    400034: ik_foot_root
+    400036: ik_hand_gun
+    400038: ik_hand_l
+    400040: ik_hand_r
+    400042: ik_hand_root
+    400044: knife_1_4
+    400046: knife_2
+    400048: knife_3
+    400050: lowerarm_l
+    400052: lowerarm_r
+    400054: lowerarm_twist_01_l
+    400056: lowerarm_twist_01_r
+    400058: neck_01
+    400060: pelvis
+    400062: root
+    400064: //RootNode
+    400066: spine_01
+    400068: spine_02
+    400070: spine_03
+    400072: thigh_l
+    400074: thigh_r
+    400076: thigh_twist_01_l
+    400078: thigh_twist_01_r
+    400080: thumb_01_l
+    400082: upperarm_l
+    400084: upperarm_r
+    400086: upperarm_twist_01_l
+    400088: upperarm_twist_01_r
+    2100000: M_Skirt
+    4300000: Body26
+    9500000: //RootNode
+    13700000: Body26
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_Skirt
+    second: {fileID: 2100000, guid: 0c6d57366443dbd4c9fb3d0efcae0a12, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

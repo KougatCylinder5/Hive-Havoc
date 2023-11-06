@@ -6,21 +6,16 @@ public class GetClickedObject : MonoBehaviour
 {
     public GameObject troop;
     public GameObject cube;
-    public LayerMask notTerrain;
+    public LayerMask playerUnits;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    
 
     // Update is called once per frame
     void Update()
     {
         if(Input.GetMouseButtonDown(0))
         {
-            RaycastHit hitInfo = new RaycastHit();
-            bool hit = Physics.Raycast(ray:Camera.main.ScreenPointToRay(Input.mousePosition),maxDistance: float.MaxValue, hitInfo: out hitInfo,layerMask: notTerrain);
+            bool hit = Physics.Raycast(ray:Camera.main.ScreenPointToRay(Input.mousePosition),maxDistance: float.MaxValue, hitInfo: out RaycastHit hitInfo,layerMask: playerUnits);
             if(hit)
             {
                 if(hitInfo.transform.CompareTag("Cube"))
