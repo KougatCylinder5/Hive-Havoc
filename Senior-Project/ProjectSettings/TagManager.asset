@@ -9,6 +9,7 @@ TagManager:
   - CommandCenter
   - ResourceTile
   - Troop
+  - Building
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - PlayerUnit
   - EnemyUnit
   - NPC
-  - 
+  - Trees
   - 
   - 
   - 

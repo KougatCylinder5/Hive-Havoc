@@ -10,7 +10,7 @@ public class MakeUnitBuilding : BuildingClass
 
     void Awake()
     {
-        //health = maxHealth;
+        health = maxHealth;
         MakeUnits.SpawnUnitsAtPosition(spawnCount, unitToSpawn, transform.position);
     }
 }

@@ -17,7 +17,7 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
 
     public PathInfo()
     {
-        raycastLayers = LayerMask.GetMask(new string[] {"Water", "Building", "Terrain" });
+        raycastLayers = LayerMask.GetMask(new string[] {"Water", "Building", "Terrain", "Trees" });
     }
 
     public void CleanPath()

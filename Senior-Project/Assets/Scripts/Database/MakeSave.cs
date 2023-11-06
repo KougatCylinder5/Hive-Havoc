@@ -17,7 +17,7 @@ public class MakeSave : MonoBehaviour
     public void makeASave()
     {
         DBAccess.startTransaction();
-        DBAccess.addSave(saveName.text, 0);
+        DBAccess.addSave(saveName.text, saveDifficulty.value);
         DBAccess.commitTransaction();
     }
 }

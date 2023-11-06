@@ -20,6 +20,9 @@ public class DBInit : MonoBehaviour
         DBAccess.AddTableIfMissing("resources", "id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(50)");
         DBAccess.AddTableIfMissing("inventory", "save_id INTEGER, resource_id INTEGER, amount INTEGER, max INTEGER, PRIMARY KEY (save_id, resource_id)");
         DBAccess.AddTableIfMissing("tile_data", "id INTEGER PRIMARY KEY AUTOINCREMENT, save_id INTEGER, x_pos INTEGER, y_pos INTEGER, type INTEGER");
+        DBAccess.AddTableIfMissing("played_levels", "save_id INTEGER, level_id INTEGER, PRIMARY KEY (save_id, level_id)");
+        DBAccess.AddTableIfMissing("unlocked_tech", "save_id INTEGER, tech_id INTEGER, PRIMARY KEY (save_id, tech_id)");
+        DBAccess.AddTableIfMissing("level_data", "save_id INTEGER, key TEXT, value TEXT, PRIMARY KEY (save_id, key)");
     }
 
 }

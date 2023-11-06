@@ -6,6 +6,7 @@ public class NpcAI : AIController
 {
     [SerializeField]
     private Vector2 _origin;
+    public Vector2 Origin { get { return _origin; } set { _origin = value; } }
     [SerializeField]
     private Vector2 _pickUpTarget;
     public Vector2 PickUpTarget { get => _pickUpTarget; set => _pickUpTarget = value; }
@@ -15,7 +16,7 @@ public class NpcAI : AIController
     public PathInfo _movingPath;
     public Stack<Vector2> _returnPath = new();
 
-
+    [SerializeField]
     private bool _metDesination = false;
 
     // Start is called before the first frame update
@@ -28,8 +29,8 @@ public class NpcAI : AIController
     new void Update()
     {
         base.Update();
-
-        if ((_position2D - _pickUpTarget).sqrMagnitude < 0.2f && !_metDesination)
+        Debug.Log((_position2D - _pickUpTarget).magnitude < 1f);
+        if ((_position2D - _pickUpTarget).magnitude < 1f && !_metDesination)
         {
             _metDesination = true;
             foreach (Vector2 path in _returnPath)

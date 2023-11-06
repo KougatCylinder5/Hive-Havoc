@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Data;
 using Mono.Data.Sqlite;
-using UnityEngine.UIElements.Experimental;
-using UnityEngine.Rendering.HighDefinition;
-using static UnityEngine.GraphicsBuffer;
+using System;
 
 public class DBAccess
 {
@@ -20,7 +18,7 @@ public class DBAccess
         return dbConnectionString;
     }
 
-    public static void startTransaction() {
+    public static void startTransaction(bool spitLog = true) {
         if (!transactionActive) {
             sqliteDB.Open();
             var sqliteCommand = sqliteDB.CreateCommand();
@@ -30,29 +28,61 @@ public class DBAccess
 
             transactionActive = true;
 
-            Debug.Log("Transaction started at: " + System.DateTime.Now);
+            if(spitLog) {
+                Debug.Log("Transaction started at: " + System.DateTime.Now);
+            }
         } else {
             Debug.LogWarning("Transaction alreaded started!");
         }
     }
 
-    public static void commitTransaction() {
+    public static void commitTransaction(bool spitLog = true) {
         if(transactionActive) {
             var sqliteCommand = sqliteDB.CreateCommand();
+            int playTimeIsSeconds = 0;
+
+            if (!transactionActive) {
+                Debug.LogError(noTransactionError);
+            } else {
+                if(saveID > 0) {
+                    sqliteCommand.CommandText = "SELECT last_play FROM saves WHERE id IS " + saveID + ";";
+                    IDataReader asave = sqliteCommand.ExecuteReader();
+
+
+                    while (asave.Read()) {
+                        DateTime lastPlay = DateTime.Parse(asave.GetString(0));
+                        DateTime now = DateTime.Now;
+
+                        TimeSpan playTime = now.Subtract(lastPlay);
+
+                        playTimeIsSeconds = playTime.Seconds;
+                    }
+                }
+
+                sqliteCommand.CommandText = "COMMIT;";
+                sqliteCommand.ExecuteNonQuery();
+
+                sqliteCommand.CommandText = "BEGIN TRANSACTION;";
+                sqliteCommand.ExecuteNonQuery();
+
+                sqliteCommand.CommandText = "UPDATE saves SET play_time=" + playTimeIsSeconds + " WHERE id IS " + saveID + ";";
+                sqliteCommand.ExecuteNonQuery();
+            }
 
             sqliteCommand.CommandText = "COMMIT;";
             sqliteCommand.ExecuteNonQuery();
 
             sqliteDB.Close();
             transactionActive = false;
-            
-            Debug.Log("Transaction commited at: " + System.DateTime.Now);
+            if (spitLog) {
+                Debug.Log("Transaction commited at: " + System.DateTime.Now);
+            }
         } else {
             Debug.LogError("No transaction to commit!");
         }
     }
 
-    public static void rollbackTransaction() {
+    public static void rollbackTransaction(bool spitLog = true) {
         if(transactionActive) {
             var sqliteCommand = sqliteDB.CreateCommand();
 
@@ -61,8 +91,9 @@ public class DBAccess
 
             sqliteDB.Close();
             transactionActive = false;
-
-            Debug.Log("Transaction rollback at: " + System.DateTime.Now);
+            if (spitLog) {
+                Debug.Log("Transaction rollback at: " + System.DateTime.Now);
+            }
         } else {
             Debug.LogError("No transaction to rollback!");
         }
@@ -120,10 +151,20 @@ public class DBAccess
   
                 while (asave.Read()) {
                     saves.Add(new Save(asave.GetString(0), asave.GetInt32(1), asave.GetInt32(2), asave.GetString(3), asave.GetInt32(4), asave.GetString(5), asave.GetString(6)));
-                    Debug.Log("save: " + asave.GetString(0));
                 }
 
             return saves;
+        }
+    }
+
+    public static void removeSave(string savename) {
+        if (!transactionActive) {
+            Debug.LogError(noTransactionError);
+        } else {
+            var sqliteCommand = sqliteDB.CreateCommand();
+            sqliteCommand.CommandText = " DELETE FROM saves WHERE name LIKE '" + savename + "';";
+            sqliteCommand.ExecuteNonQuery();
+
         }
     }
 
@@ -139,7 +180,8 @@ public class DBAccess
             try
             {
                 var sqliteCommand = sqliteDB.CreateCommand();
-                sqliteCommand.CommandText = "INSERT INTO saves ('name', 'dif', 'rank', last_play, play_time, thumbnail, level_name) VALUES ('" + savename + "', '" + diff + "', '0', 'Never', '0', '', 'Home Base');";
+                sqliteCommand.CommandText = "INSERT INTO saves ('name', 'dif', 'rank', last_play, play_time, thumbnail, level_name) VALUES ('" + savename + "', '" + diff + "', '0','" + DateTime.Now + "', 0, '', 'Tutorial');";
+                Debug.Log(sqliteCommand.CommandText);
                 sqliteCommand.ExecuteNonQuery();
                 return true;
             }
@@ -216,7 +258,7 @@ public class DBAccess
             Debug.LogError(noTransactionError);
         } else {
             var sqliteCommand = sqliteDB.CreateCommand();
-            sqliteCommand.CommandText = " UPDATE unit SET x_pos=" + xPos + ", y_pos=" + yPos + ", target_x=" + xTarget + ", target_y=" + yTarget + ", health=" + health + ", path_mode=" + pathMode + " WHERE id IS " + id + ";";
+            sqliteCommand.CommandText = "UPDATE unit SET x_pos=" + xPos + ", y_pos=" + yPos + ", target_x=" + xTarget + ", target_y=" + yTarget + ", health=" + health + ", path_mode=" + pathMode + " WHERE id IS " + id + ";";
             sqliteCommand.ExecuteNonQuery();
         }
     }
@@ -549,6 +591,74 @@ public class DBAccess
             catch { }
 
             return itemAmount;
+        }
+    }
+
+    public static List<int> getPlayedLevels() {
+        if (!transactionActive) {
+            Debug.LogError(noTransactionError);
+            return new List<int>();
+        } else {
+            List<int> played = new List<int>();
+
+            var sqliteCommand = sqliteDB.CreateCommand();
+
+            sqliteCommand.CommandText = "SELECT level_id FROM played_levels WHERE save_id IS " + saveID + ";";
+            IDataReader aLevel = sqliteCommand.ExecuteReader();
+
+            try {
+                while (aLevel.Read()) {
+                    played.Add(aLevel.GetInt32(0));
+                }
+            } catch { }
+
+            return played;
+        }
+    }
+
+    public void addPlayedLevel(int levelID) {
+        if (!transactionActive) {
+            Debug.LogError(noTransactionError);
+        } else {
+            var sqliteCommand = sqliteDB.CreateCommand();
+            try {
+                sqliteCommand.CommandText = "INSERT INTO played_levels ('level_id', save_id) VALUES ('" + levelID + "', '" + saveID + "');";
+            } catch { }
+            sqliteCommand.ExecuteNonQuery();
+        }
+    }
+
+    public static List<int> getUnlockedTech() {
+        if (!transactionActive) {
+            Debug.LogError(noTransactionError);
+            return new List<int>();
+        } else {
+            List<int> played = new List<int>();
+
+            var sqliteCommand = sqliteDB.CreateCommand();
+
+            sqliteCommand.CommandText = "SELECT tech_id FROM unlocked_tech WHERE save_id IS " + saveID + ";";
+            IDataReader aTech = sqliteCommand.ExecuteReader();
+
+            try {
+                while (aTech.Read()) {
+                    played.Add(aTech.GetInt32(0));
+                }
+            } catch { }
+
+            return played;
+        }
+    }
+
+    public void addUnlockedTech(int techID) {
+        if (!transactionActive) {
+            Debug.LogError(noTransactionError);
+        } else {
+            var sqliteCommand = sqliteDB.CreateCommand();
+            try {
+                sqliteCommand.CommandText = "INSERT INTO unlocked_tech ('tech_id', save_id) VALUES ('" + techID + "', '" + saveID + "');";
+            } catch { }
+            sqliteCommand.ExecuteNonQuery();
         }
     }
 
