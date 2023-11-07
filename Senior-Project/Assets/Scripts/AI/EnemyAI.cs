@@ -12,8 +12,6 @@ public class EnemyAI : AIController, IAIBasics
     
     public new void Awake()
     {
-        Health = 500;
-        MaxHealth = 100;
         base.Awake();
         StartCoroutine(nameof(UpdateDirection));
     }
@@ -46,13 +44,16 @@ public class EnemyAI : AIController, IAIBasics
     }
     
     public void Flow()
-    { 
+    {
+
+        
         Vector3 movementDirection = new Vector3(_velocity.x, -100f, _velocity.y) * Speed * Time.deltaTime;
         Ray movementRay = new Ray(_position, _velocity);
         //if (!Physics.Raycast(movementRay, movementDirection.magnitude/4, LayerMask.GetMask("EnemyUnit")))
         //{
               _characterController.Move(movementDirection);
         //}
+        _animator.SetFloat("Speed", Vector3.Scale(movementDirection, new(1, 0, 1)).magnitude);
     }
     private IEnumerator UpdateDirection()
     {

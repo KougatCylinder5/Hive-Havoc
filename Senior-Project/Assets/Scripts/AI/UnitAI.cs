@@ -54,6 +54,8 @@ public class UnitAI : AIController, IAIBasics, IAttack
         {
             Vector2 direction2D = (_pathInfo.cleanedPath.Peek() - _position2D).normalized;
             Vector3 direction = new(direction2D.x, -1f, direction2D.y);
+
+            _animator.SetFloat("Speed", Vector3.Scale(direction * Speed * Time.deltaTime, new(1, 0, 1)).magnitude);
             _characterController.Move(Mathf.Clamp(Speed,0.25f,Vector3.Distance(_position2D, Target) / Time.deltaTime) * Time.deltaTime * direction);
             if ((_pathInfo.cleanedPath.Peek() - _position2D).sqrMagnitude < 0.02f)
             {
@@ -72,7 +74,6 @@ public class UnitAI : AIController, IAIBasics, IAttack
     public void UpdatePath()
     {
         Debug.Log(_pathInfo);
-
         float distanceToTarget = Vector2.Distance(_position2D, Target);
         if (distanceToTarget < 0.1f)
         {

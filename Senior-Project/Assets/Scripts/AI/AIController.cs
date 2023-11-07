@@ -32,6 +32,7 @@ public class AIController : MonoBehaviour, IHealth
     
     protected int _regeneration;
     protected float _resistance;
+    [SerializeField]
     private bool _isDead = false;
     public bool IsDead { get => _isDead; protected set => _isDead = value; }
     public int Health
@@ -94,7 +95,7 @@ public class AIController : MonoBehaviour, IHealth
     {
         _position = transform.position;
         _position2D = new(_position.x, _position.z);
-
+        
         try
         {
             if (_pathInfo.cleanedPath.TryPeek(out Vector2 nextNode))
@@ -110,13 +111,13 @@ public class AIController : MonoBehaviour, IHealth
         if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Death"))
         {
             _animator.SetTrigger("Death");
-        }
-        else if (_animator.GetCurrentAnimatorStateInfo(0).IsName("Exit"))
-        {
-            Destroy(gameObject);
+            Invoke(nameof(DestroySelf), 0.5f);
         }
     }
-
+    private void DestroySelf()
+    {
+        Destroy(gameObject);
+    }
     public void DealDamage(int damage)
     {
         Health -= Mathf.RoundToInt(damage * (1 - _resistance));
