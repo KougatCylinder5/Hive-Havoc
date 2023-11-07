@@ -3,21 +3,40 @@ using UnityEngine;
 using static PathingManager;
 
 [RequireComponent(typeof(LineRenderer))]
-public class UnitAI : AIController, IAIBasics
+public class UnitAI : AIController, IAIBasics, IAttack
 {
     public Vector2 Target { get => _target; set => _target = value; }
+    
     private PathInfo _lastPathGenerated = null;
 
     private Vector2 _movedLastFrame, _lastPosition2D;
 
     private LineRenderer _pathRenderer;
 
+    private float _attackSpeed;
+    public float AttackSpeed { get => _attackSpeed; protected set => _attackSpeed = value; }
+
+    private float _attackCooldown;
+    public float AttackCooldown { get => _attackCooldown; protected set => _attackCooldown = value; }
+
+    private int _veteranPercent;
+    public int VeteranPercent { get => _veteranPercent; protected set => _veteranPercent = value; }
+
+    private int _damageAmount;
+    public int DamageAmount { get => _damageAmount; protected set => _damageAmount = value; }
+    [SerializeField]
+    private GameObject _attackTarget;
+    public GameObject AttackTarget { get => _attackTarget; protected set => _attackTarget = value; }
+    [SerializeField]
+    private float _attackRadius;
+    public float AttackRadius { get => _attackRadius; protected set => _attackRadius = value; }
+
     public new void Awake()
     {
         base.Awake();
         _pathRenderer = GetComponent<LineRenderer>();
-        _pathRenderer.endWidth = 0.3f;
-        _pathRenderer.startWidth = 0.1f;
+        _pathRenderer.endWidth = 0.0f;
+        _pathRenderer.startWidth = 0.3f;
         InvokeRepeating(nameof(UpdatePath), 0, _updateFrequency);
         _lastPosition2D = _position2D;
         StartCoroutine(nameof(DistanceMoved));
@@ -31,13 +50,13 @@ public class UnitAI : AIController, IAIBasics
             return;
         }
 
-
-
         if (_pathInfo != null && _pathInfo.cleanedPath.Count != 0)
         {
             Vector2 direction2D = (_pathInfo.cleanedPath.Peek() - _position2D).normalized;
             Vector3 direction = new(direction2D.x, -1f, direction2D.y);
-            _characterController.Move(Mathf.Clamp(speed,0.25f,Vector3.Distance(_position2D, Target) / Time.deltaTime) * Time.deltaTime * direction);
+
+            _animator.SetFloat("Speed", Vector3.Scale(direction * Speed * Time.deltaTime, new(1, 0, 1)).magnitude);
+            _characterController.Move(Mathf.Clamp(Speed,0.25f,Vector3.Distance(_position2D, Target) / Time.deltaTime) * Time.deltaTime * direction);
             if ((_pathInfo.cleanedPath.Peek() - _position2D).sqrMagnitude < 0.02f)
             {
                 _pathInfo.cleanedPath.TryDequeue(out Vector2 _);
@@ -47,21 +66,20 @@ public class UnitAI : AIController, IAIBasics
 
     private new void Update()
     {
+        if (IsDead) { Die(); return; }
         base.Update();
         DisplayLine();
-        ExecutePath();
     }
 
     public void UpdatePath()
     {
-
+        Debug.Log(_pathInfo);
         float distanceToTarget = Vector2.Distance(_position2D, Target);
         if (distanceToTarget < 0.1f)
         {
             _pathInfo.cleanedPath.Clear();
             return;
         }
-        Debug.Log(_movedLastFrame.magnitude);
         if (distanceToTarget < 0.5f && _movedLastFrame.magnitude < 0.02f)
         {
             Target = _position2D;
@@ -98,6 +116,11 @@ public class UnitAI : AIController, IAIBasics
             _lastPosition2D = _position2D;
             yield return new WaitForSeconds(_updateFrequency * 2);
         }
+    }
+
+    public void Attack(GameObject target)
+    {
+        throw new System.NotImplementedException();
     }
 }
 

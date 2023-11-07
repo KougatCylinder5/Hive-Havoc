@@ -9,6 +9,7 @@ TagManager:
   - CommandCenter
   - ResourceTile
   - Troop
+  - SFX
   - Building
   layers:
   - Default
