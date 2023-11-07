@@ -717,10 +717,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8283349301414917667}
-  - component: {fileID: 6445592491044548844}
+  - component: {fileID: -1274246841242362862}
   m_Layer: 3
   m_Name: 3x3
-  m_TagString: Untagged
+  m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -749,7 +749,7 @@ Transform:
   - {fileID: 631890660005917040}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6445592491044548844
+--- !u!114 &-1274246841242362862
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -761,9 +761,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c04933be6f0caec4098c2e65de88f3ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingSize: 3
-  buildingCost: 0300000003000000030000000300000003000000030000000300000003000000
-  key: 99
+  maxHealth: 10
 --- !u!1 &5747504123969852282
 GameObject:
   m_ObjectHideFlags: 0

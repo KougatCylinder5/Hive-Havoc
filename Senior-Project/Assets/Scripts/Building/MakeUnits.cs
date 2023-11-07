@@ -2,17 +2,11 @@ using UnityEngine;
 
 public class MakeUnits : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject unit;
-    [SerializeField]
-    private int spawnCount;
-
-    // Start is called before the first frame update
-    void Awake()
+    public static void SpawnUnitsAtPosition(int count, GameObject unit, Vector3 spawnPos)
     {
-        for(int i = 0; i < spawnCount; i++)
+        for(int i = 0; i < count; i++)
         {
-            Instantiate(unit, transform.position, transform.rotation);
+            Instantiate(unit, spawnPos, Quaternion.identity);
         }
     }
 }

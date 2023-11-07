@@ -18,7 +18,7 @@ public class CameraController : MonoBehaviour
     private Vector3 _dragCurrentPosition;
 
     public float speedConstant;
-    public CameraBounds boundChecker;
+    public GameBounds boundChecker;
 
     // Start is called before the first frame update
     void Start()
@@ -33,7 +33,7 @@ public class CameraController : MonoBehaviour
         HandleMovementInput();
         HandleMouseInput();
         SpeedChange(speedConstant);
-        _newPosition = boundChecker.CheckBounds(_newPosition);
+        _newPosition = boundChecker.StayInBounds(_newPosition);
     }
 
     void HandleMovementInput()

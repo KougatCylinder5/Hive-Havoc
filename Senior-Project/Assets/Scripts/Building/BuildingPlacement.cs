@@ -60,6 +60,7 @@ public class BuildingPlacement : MonoBehaviour
         }
         if(_inPlaceMode)
         {
+            ShowGrid(new(26, 0.1f, 26), 24, 24);
             if(!_made)
             {
                 _ghostBuilding = Instantiate(_buildingPrefabs[_pressed * 2 + 1], new Vector3(position.x, 0.5f, position.y), Quaternion.identity);
@@ -69,7 +70,7 @@ public class BuildingPlacement : MonoBehaviour
             ShowBuilding(_ghostBuilding, position);
             if(Input.GetMouseButtonDown(0))
             {
-                if (CheckCost(_currentBuilding.GetComponent<BuildingClass>().GetCost(), ResourceStruct.Total, out int[] dep) && _ghostBuilding.GetComponent<BuildingClass>().CheckPlacementArea(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.y)))
+                if (CheckCost(_ghostBuilding.GetComponent<GhostBuildingClass>().GetCost(), ResourceStruct.Total, out int[] dep) && _ghostBuilding.GetComponent<GhostBuildingClass>().CheckPlacementArea(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.y)))
                 {
                     Instantiate(_currentBuilding, _ghostBuilding.transform.position, Quaternion.identity);
                     DepleteResources(dep);
@@ -125,7 +126,7 @@ public class BuildingPlacement : MonoBehaviour
 
     public float SizeCheck(GameObject building)
     {
-        if(building.GetComponent<BuildingClass>().GetSize() % 2 == 0)
+        if(building.GetComponent<GhostBuildingClass>().GetSize() % 2 == 0)
         {
             return 0.5f;
         }
@@ -133,5 +134,16 @@ public class BuildingPlacement : MonoBehaviour
         {
             return 0;
         }
+    }
+
+    public void ShowGrid(Vector3 nearestOrigin, int width, int length)
+    {
+        LineRenderer lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer.positionCount = 4;
+        lineRenderer.loop = true;
+        lineRenderer.SetPosition(0, nearestOrigin);
+        lineRenderer.SetPosition(1, new(nearestOrigin.x, 0.1f, nearestOrigin.z + width));
+        lineRenderer.SetPosition(2, new(nearestOrigin.x + length, 0.1f, nearestOrigin.z + width));
+        lineRenderer.SetPosition(3, new(nearestOrigin.x + length, 0.1f, nearestOrigin.z));
     }
 }
