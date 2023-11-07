@@ -4,12 +4,13 @@ using UnityEngine;
 using System.Data;
 using Mono.Data.Sqlite;
 using System;
+using UnityEngine.SceneManagement;
 
 public class DBAccess
 {
     private static int saveID = 0;
     private static int diff = -1;
-    private static string dbConnectionString = "URI=file:" + Application.persistentDataPath + "\\storage.db"; //e
+    private static string dbConnectionString = "URI=file:" + Application.persistentDataPath + "\\storage.db";
     private static bool transactionActive = false;
     private const string noTransactionError = "Transaction has not been started!";
     private static SqliteConnection sqliteDB = new SqliteConnection(dbConnectionString);
@@ -45,6 +46,12 @@ public class DBAccess
                 Debug.LogError(noTransactionError);
             } else {
                 if(saveID > 0) {
+                    sqliteCommand.CommandText = "COMMIT;";
+                    sqliteCommand.ExecuteNonQuery();
+
+                    sqliteCommand.CommandText = "BEGIN TRANSACTION;";
+                    sqliteCommand.ExecuteNonQuery();
+
                     sqliteCommand.CommandText = "SELECT last_play FROM saves WHERE id IS " + saveID + ";";
                     IDataReader asave = sqliteCommand.ExecuteReader();
 
@@ -57,6 +64,8 @@ public class DBAccess
 
                         playTimeIsSeconds = playTime.Seconds;
                     }
+
+                    asave.Close();
                 }
 
                 sqliteCommand.CommandText = "COMMIT;";
@@ -65,7 +74,7 @@ public class DBAccess
                 sqliteCommand.CommandText = "BEGIN TRANSACTION;";
                 sqliteCommand.ExecuteNonQuery();
 
-                sqliteCommand.CommandText = "UPDATE saves SET play_time=" + playTimeIsSeconds + " WHERE id IS " + saveID + ";";
+                sqliteCommand.CommandText = "UPDATE saves SET play_time=" + playTimeIsSeconds + ", last_play='" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' WHERE id IS " + saveID + ";";
                 sqliteCommand.ExecuteNonQuery();
             }
 
@@ -118,17 +127,29 @@ public class DBAccess
             return false;
         } else {
             var sqliteCommand = sqliteDB.CreateCommand();
-            sqliteCommand.CommandText = "SELECT id, dif FROM saves WHERE name LIKE '" + savename + "';";
+            sqliteCommand.CommandText = "SELECT id, dif, level_name FROM saves WHERE name LIKE '" + savename + "';";
             IDataReader saves = sqliteCommand.ExecuteReader();
-
+            string sceneToLoad = "";
             try {
                 while(saves.Read()) {
                     saveID = saves.GetInt32(0);
+                    diff = saves.GetInt32(1);
+                    sceneToLoad = saves.GetString(2);
+                    
                 }
             } catch {}
 
+            saves.Close();
+
             if(saveID != 0) {
-                diff = saves.GetInt32(1);
+                SceneManager.LoadScene(sceneToLoad);
+
+                commitTransaction(false);
+                startTransaction(false);
+                sqliteCommand.CommandText = "UPDATE saves SET last_play='" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' WHERE id IS " + saveID + ";";
+                sqliteCommand.ExecuteNonQuery();
+                commitTransaction(false);
+                startTransaction(false);
                 return true;
             }
 
@@ -153,18 +174,8 @@ public class DBAccess
                     saves.Add(new Save(asave.GetString(0), asave.GetInt32(1), asave.GetInt32(2), asave.GetString(3), asave.GetInt32(4), asave.GetString(5), asave.GetString(6)));
                 }
 
+            asave.Close();
             return saves;
-        }
-    }
-
-    public static void removeSave(string savename) {
-        if (!transactionActive) {
-            Debug.LogError(noTransactionError);
-        } else {
-            var sqliteCommand = sqliteDB.CreateCommand();
-            sqliteCommand.CommandText = " DELETE FROM saves WHERE name LIKE '" + savename + "';";
-            sqliteCommand.ExecuteNonQuery();
-
         }
     }
 
@@ -180,8 +191,7 @@ public class DBAccess
             try
             {
                 var sqliteCommand = sqliteDB.CreateCommand();
-                sqliteCommand.CommandText = "INSERT INTO saves ('name', 'dif', 'rank', last_play, play_time, thumbnail, level_name) VALUES ('" + savename + "', '" + diff + "', '0','" + DateTime.Now + "', 0, '', 'Tutorial');";
-                Debug.Log(sqliteCommand.CommandText);
+                sqliteCommand.CommandText = "INSERT INTO saves ('name', 'dif', 'rank', last_play, play_time, thumbnail, level_name) VALUES ('" + savename + "', '" + diff + "', '0','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', 0, '', 'Tutorial');";
                 sqliteCommand.ExecuteNonQuery();
                 return true;
             }
@@ -226,6 +236,7 @@ public class DBAccess
                 }
             } catch {}
 
+            aunit.Close();
             return units;
         }
     }
@@ -249,6 +260,7 @@ public class DBAccess
                 }
             } catch {}
 
+            lastRow.Close();
             return rowid;
         }
     }
@@ -319,6 +331,7 @@ public class DBAccess
                 }
             } catch {}
 
+            titem.Close();
             return itemid;
         }
     }
@@ -364,6 +377,7 @@ public class DBAccess
                 }
             } catch { }
 
+            titem.Close();
             return itemid;
         }
     }
@@ -386,6 +400,7 @@ public class DBAccess
                 }
             } catch {}
 
+            aplaceable.Close();
             return placeables;
         }
     }
@@ -410,6 +425,7 @@ public class DBAccess
             }
             catch { }
 
+            aplaceable.Close();
             return placeables;
         }
     }
@@ -434,6 +450,7 @@ public class DBAccess
             }
             catch { }
 
+            aplaceable.Close();
             return placeables;
         }
     }
@@ -457,6 +474,7 @@ public class DBAccess
                 }
             } catch {}
 
+            lastRow.Close();
             return rowid;
         }
     }
@@ -507,6 +525,7 @@ public class DBAccess
                 }
             } catch { }
 
+            lastRow.Close();
             return rowid;
         }
     }
@@ -529,6 +548,7 @@ public class DBAccess
             }
             catch { }
 
+            tileType.Close();
             return tileTypeID;
         }
     }
@@ -590,6 +610,7 @@ public class DBAccess
             }
             catch { }
 
+            titem.Close();
             return itemAmount;
         }
     }
@@ -612,6 +633,7 @@ public class DBAccess
                 }
             } catch { }
 
+            aLevel.Close();
             return played;
         }
     }
@@ -633,7 +655,7 @@ public class DBAccess
             Debug.LogError(noTransactionError);
             return new List<int>();
         } else {
-            List<int> played = new List<int>();
+            List<int> tech = new List<int>();
 
             var sqliteCommand = sqliteDB.CreateCommand();
 
@@ -642,11 +664,12 @@ public class DBAccess
 
             try {
                 while (aTech.Read()) {
-                    played.Add(aTech.GetInt32(0));
+                    tech.Add(aTech.GetInt32(0));
                 }
             } catch { }
 
-            return played;
+            aTech.Close();
+            return tech;
         }
     }
 
