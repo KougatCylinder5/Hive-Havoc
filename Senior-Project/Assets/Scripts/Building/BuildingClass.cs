@@ -1,42 +1,42 @@
 using UnityEngine;
-using static PathingManager;
 
-public class BuildingClass : MonoBehaviour
+public class BuildingClass : MonoBehaviour, IHealth
 {
     [SerializeField]
-    protected int buildingSize;
-    [SerializeField]
-    protected int[] buildingCost;
-    protected int health, maxHealth;
-    [SerializeField]
-    protected KeyCode key;
+    protected int maxHealth;
+    protected int health;
 
-    public bool CheckPlacementArea(int x, int y)
-    {
-        x += Mathf.FloorToInt(buildingSize / 2f);
-        y += Mathf.FloorToInt(buildingSize / 2f);
-        for(int i = 0; i < buildingSize * buildingSize; i++)
+    protected int _health, _maxHealth, _regeneration;
+    private bool _isDead = false;
+    public bool IsDead { get => _isDead; protected set => _isDead = value; }
+    protected float _resistance;
+
+    public int Health {
+        get => _health;
+        protected set
         {
-            if (!IsOpen(new(x - i % buildingSize, y - i / buildingSize)))
+            if (_health < 0)
             {
-                return false;
+                _health = Mathf.RoundToInt(_maxHealth * 0.3f);
+                IsDead = true;
+            }
+            else
+            {
+                _health = value;
             }
         }
-        return true;
+    }
+    public int MaxHealth { get => _maxHealth; }
+    public int HealthRegen { get => _regeneration; }
+    public float Resistance { get => _resistance; }
+
+    public void DealDamage(int damage)
+    {
+        Health -= Mathf.RoundToInt(damage * (1-_resistance));
     }
 
-    public int[] GetCost()
+    public void Regenerate()
     {
-        return buildingCost;
-    }
-
-    public KeyCode GetKey()
-    {
-        return key;
-    }
-
-    public int GetSize()
-    {
-        return buildingSize;
+        Health += _regeneration;
     }
 }
