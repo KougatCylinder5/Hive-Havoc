@@ -60,6 +60,7 @@ public class BuildingPlacement : MonoBehaviour
         }
         if(_inPlaceMode)
         {
+            ShowGrid(new(26, 0.1f, 26), 24, 24);
             if(!_made)
             {
                 _ghostBuilding = Instantiate(_buildingPrefabs[_pressed * 2 + 1], new Vector3(position.x, 0.5f, position.y), Quaternion.identity);
@@ -133,5 +134,16 @@ public class BuildingPlacement : MonoBehaviour
         {
             return 0;
         }
+    }
+
+    public void ShowGrid(Vector3 nearestOrigin, int width, int length)
+    {
+        LineRenderer lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer.positionCount = 4;
+        lineRenderer.loop = true;
+        lineRenderer.SetPosition(0, nearestOrigin);
+        lineRenderer.SetPosition(1, new(nearestOrigin.x, 0.1f, nearestOrigin.z + width));
+        lineRenderer.SetPosition(2, new(nearestOrigin.x + length, 0.1f, nearestOrigin.z + width));
+        lineRenderer.SetPosition(3, new(nearestOrigin.x + length, 0.1f, nearestOrigin.z));
     }
 }
