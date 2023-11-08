@@ -5,6 +5,7 @@ using System.Data;
 using Mono.Data.Sqlite;
 using System;
 using UnityEngine.SceneManagement;
+using System.Xml.Linq;
 
 public class DBAccess
 {
@@ -184,6 +185,44 @@ public class DBAccess
         SceneManager.LoadScene("Menu");
     }
 
+    public static void clear() {
+        if (!transactionActive) {
+            Debug.LogError(noTransactionError);
+        } else {
+            var sqliteCommand = sqliteDB.CreateCommand();
+
+            sqliteCommand.CommandText = "DELETE FROM placeables WHERE save_id LIKE '" + saveID + "';";
+            try {
+                sqliteCommand.ExecuteNonQuery();
+
+            } catch {
+            }
+
+            sqliteCommand.CommandText = "DELETE FROM tile_data WHERE save_id LIKE '" + saveID + "';";
+            try {
+                sqliteCommand.ExecuteNonQuery();
+
+            } catch {
+            }
+
+            sqliteCommand.CommandText = "DELETE FROM unit WHERE save_id LIKE '" + saveID + "';";
+            try {
+                sqliteCommand.ExecuteNonQuery();
+            } catch {
+            }
+
+            commitTransaction();
+            startTransaction();
+
+            sqliteCommand.CommandText = "UPDATE `sqlite_sequence` SET `seq` = (SELECT MAX(`id`) FROM 'placeables') WHERE `name` = 'placeables';";
+            try {
+                sqliteCommand.ExecuteNonQuery();
+
+            } catch {
+            }
+        }
+    }
+
     public static bool addSave(string savename, int diff) {
         if(!transactionActive) {
             Debug.LogError(noTransactionError);
@@ -198,7 +237,7 @@ public class DBAccess
             }
             catch { }
 
-            return true;
+            return false;
         }
     }
 
@@ -456,14 +495,14 @@ public class DBAccess
         }
     }
 
-    public static int addPlaceable(int tileItemID, float xPos, float yPos, float xTarget, float yTarget, float health, int natural) {
+    public static int addPlaceable(int tileItemID, float xPos, float yPos, float health, int natural) {
         if(!transactionActive) {
             Debug.LogError(noTransactionError);
             return 0;
         } else {
             int rowid = 0;
             var sqliteCommand = sqliteDB.CreateCommand();
-            sqliteCommand.CommandText = "INSERT INTO placeables ('x_pos', 'y_pos', 'health', 'heading', 'save_id', 'tile_item_id', 'natural') VALUES ('" + xPos + "', '" + yPos + "', '" + xTarget + "', '" + yTarget + "', '" + health + "', '" + saveID + "', '" + tileItemID + "', '" + natural + "');";
+            sqliteCommand.CommandText = "INSERT INTO placeables ('x_pos', 'y_pos', 'health', 'save_id', 'tile_item_id', 'natural') VALUES ('" + xPos + "', '" + yPos + "', '" + health + "', '" + saveID + "', '" + tileItemID + "', '" + natural + "');";
             sqliteCommand.ExecuteNonQuery();
 
             sqliteCommand.CommandText = "SELECT last_insert_rowid() FROM placeables;";
