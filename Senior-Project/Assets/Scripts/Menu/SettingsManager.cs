@@ -15,16 +15,6 @@ public class SettingsManager : MonoBehaviour
 
     Resolution[] resolutions;
 
-    public static KeyCode key1 = KeyCode.Alpha1;
-    public static KeyCode key2 = KeyCode.Alpha2;
-    public static KeyCode key3 = KeyCode.Alpha3;
-    public static KeyCode key4 = KeyCode.Alpha4;
-    public static KeyCode key5 = KeyCode.Alpha5;
-    public static KeyCode key6 = KeyCode.Alpha6;
-    public static KeyCode key7 = KeyCode.Alpha7;
-    public static KeyCode key8 = KeyCode.Alpha8;
-    public static KeyCode key9 = KeyCode.Alpha9;
-
     private void Start()
     {
         resolutions = Screen.resolutions;
@@ -55,11 +45,6 @@ public class SettingsManager : MonoBehaviour
         resolutionDropdown.RefreshShownValue();
     }
 
-    private void Update()
-    {
-        printKeys();
-    }
-
     public void setResolution(int resolutionIndex)
     {
         Resolution resolution = resolutions[resolutionIndex];
@@ -76,16 +61,4 @@ public class SettingsManager : MonoBehaviour
         Screen.fullScreen = isFullscreen;
     }
 
-    public void printKeys()
-    {
-        //Looks at each key that could possibly be pressed
-        foreach (KeyCode kcode in Enum.GetValues(typeof(KeyCode)))
-        {
-            //if the key it is looking at is down, print it
-            if (Input.GetKeyDown(kcode))
-            {
-                Debug.Log(kcode);
-            }
-        }
-    }
 }
