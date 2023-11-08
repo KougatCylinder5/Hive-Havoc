@@ -4,18 +4,24 @@ using UnityEngine;
 
 public class GetClickedObject : MonoBehaviour
 {
-    public GameObject troop;
-    public GameObject cube;
-    public LayerMask playerUnits;
+    private GameObject troop;
+    private GameObject cube;
+    public GameObject building;
+    public LayerMask notTerrain;
 
-    
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
 
     // Update is called once per frame
     void Update()
     {
         if(Input.GetMouseButtonDown(0))
         {
-            bool hit = Physics.Raycast(ray:Camera.main.ScreenPointToRay(Input.mousePosition),maxDistance: float.MaxValue, hitInfo: out RaycastHit hitInfo,layerMask: playerUnits);
+            RaycastHit hitInfo = new RaycastHit();
+            bool hit = Physics.Raycast(ray:Camera.main.ScreenPointToRay(Input.mousePosition),maxDistance: float.MaxValue, hitInfo: out hitInfo,layerMask: notTerrain);
             if(hit)
             {
                 if(hitInfo.transform.CompareTag("Cube"))
@@ -26,21 +32,28 @@ public class GetClickedObject : MonoBehaviour
                 {
                     troop = hitInfo.transform.gameObject;
                 }
+                else if(hitInfo.transform.CompareTag("Building"))
+                {
+                    building = hitInfo.transform.gameObject;
+                }
             }
             else
             {
                 troop = null;
                 cube = null;
+                building = null;
             }
         }
         if(Input.GetMouseButtonDown(1))
         {
             troop = null;
             cube = null;
+            building = null;
         }
     }
 
     public GameObject getTroop(){return troop;}
     public GameObject getCube(){return cube;}
+    public GameObject getBuilding(){return building;}
     public void resetCube(){cube = null;}
 }

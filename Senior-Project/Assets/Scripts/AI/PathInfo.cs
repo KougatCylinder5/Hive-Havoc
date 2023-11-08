@@ -17,7 +17,7 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
 
     public PathInfo()
     {
-        raycastLayers = LayerMask.GetMask(new string[] {"Water", "Building", "Terrain" });
+        raycastLayers = LayerMask.GetMask(new string[] {"Water", "Building", "Terrain", "Trees" });
     }
 
     public void CleanPath()
@@ -35,7 +35,7 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
 
             while (copyPath.Count > 0)
             {
-                Vector3 center = ConvertToVector3(curNode - (curNode.normalized-Start.normalized/2).normalized, 0.85f);
+                Vector3 center = ConvertToVector3(curNode, 0.35f);
                 Vector3 halfExtends = Vector3.one / 4f;
                 halfExtends.y = 0;
                 Vector3 direction = ConvertToVector3(copyPath.Peek() - curNode, 0).normalized;
