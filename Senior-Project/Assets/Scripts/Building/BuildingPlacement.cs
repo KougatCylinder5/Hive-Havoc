@@ -63,7 +63,7 @@ public class BuildingPlacement : MonoBehaviour
             ShowGrid(new(26, 0.1f, 26), 24, 24);
             if(!_made)
             {
-                _ghostBuilding = Instantiate(_buildingPrefabs[_pressed * 2 + 1], new Vector3(position.x, 0.5f, position.y), Quaternion.identity);
+                _ghostBuilding = Instantiate(_buildingPrefabs[_pressed * 2 + 1], new Vector3(position.x, 0f, position.y), Quaternion.identity);
                 _currentBuilding = _buildingPrefabs[_pressed * 2];
                 _made = true;
             }
