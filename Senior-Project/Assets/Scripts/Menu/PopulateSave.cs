@@ -9,21 +9,36 @@ public class PopulateSave : MonoBehaviour
     // Start is called before the first frame update
     public int slotID;
     private TextMeshProUGUI[] textFields;
-    private TextMeshProUGUI[] nameFeilds;
-    private TextMeshProUGUI[] levelFeilds;
-    private TextMeshProUGUI[] playtimeFeilds;
-    private TextMeshProUGUI[] difficultyFeilds;
+    private string saveName = "";
 
     public GameObject savePrefab;
     void Start()
     {
-        //refreshWithSave(new Save("Test", 1, 0, "0", 1, "NONE", "Home"));
+ 
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void dropSave() {
+        DBAccess.startTransaction();
+        DBAccess.deleteSave(saveName);
+        DBAccess.commitTransaction();
+        
+        GetComponentInParent<SaveManager>().dropped();
+    }
+
+    public void loadSave() {
+        DBAccess.startTransaction();
+        DBAccess.selectSave(saveName);
+        DBAccess.commitTransaction();
+    }
+
+    public string getSaveName() {
+        return saveName;
     }
 
     public void setSlot(int newSlotID) {
@@ -37,7 +52,7 @@ public class PopulateSave : MonoBehaviour
     public void show() {
         
         GameObject newFrame = UnityEngine.Object.Instantiate(savePrefab);
-        newFrame.transform.parent = GameObject.Find("Profile Menu").transform;
+        newFrame.transform.SetParent(GameObject.Find("Profile Menu").transform);
         newFrame.transform.position = gameObject.transform.position;
         newFrame.transform.localScale = new Vector3(1,1,1);
         newFrame.GetComponent<PopulateSave>().setSlot(slotID);
@@ -48,8 +63,9 @@ public class PopulateSave : MonoBehaviour
     }
 
     public void refreshWithSave(Save saveData) {
-        Debug.Log("Called Save in ID: " + slotID);
         textFields = GetComponentsInChildren<TextMeshProUGUI>();
+
+        saveName = saveData.getSaveName();
 
         foreach (TextMeshProUGUI textFeild in textFields) {
             textFeild.text = textFeild.text.Replace("{name}", saveData.getSaveName());

@@ -7,6 +7,7 @@ public class DBInit : MonoBehaviour
 {
     void Start()
     {
+        
         DBAccess.startTransaction();
         FixMissing();
         DBAccess.commitTransaction();
