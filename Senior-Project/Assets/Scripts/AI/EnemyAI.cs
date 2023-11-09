@@ -66,7 +66,7 @@ public class EnemyAI : AIController, IAIBasics
             try
             {
                 Vector2 totalDirection = FlowTiles[roundedPosition.x, roundedPosition.y].direction;
-                totalDirection += Random.insideUnitCircle.normalized * 5;
+                totalDirection += Random.insideUnitCircle.normalized;
                 for (int i = 0; i < posToObserve.Length; i++)
                 {
                     try

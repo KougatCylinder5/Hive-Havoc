@@ -156,7 +156,7 @@ TerrainCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
+  m_ProvidesContacts: 1
   m_Enabled: 1
   serializedVersion: 2
   m_TerrainData: {fileID: 15600000, guid: 2d491bb12f12f4a449ba62c42c1be3f7, type: 2}
@@ -923,15 +923,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7984406395648739528, guid: 1eb0c6234cbf68249b9562fc85a5df1f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 28.527494
+      value: 26.87
       objectReference: {fileID: 0}
     - target: {fileID: 7984406395648739528, guid: 1eb0c6234cbf68249b9562fc85a5df1f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.07
+      value: 0.872
       objectReference: {fileID: 0}
     - target: {fileID: 7984406395648739528, guid: 1eb0c6234cbf68249b9562fc85a5df1f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 36.281094
+      value: 27.52
       objectReference: {fileID: 0}
     - target: {fileID: 7984406395648739528, guid: 1eb0c6234cbf68249b9562fc85a5df1f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1654,12 +1654,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1453399075}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 26, y: 0, z: 26}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 26, y: 0.5, z: 26}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1857014103}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1453399078
 BoxCollider:
@@ -2098,38 +2098,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1778328309}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1857014102
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1857014103}
-  m_Layer: 0
-  m_Name: Non-Ground Terrain
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1857014103
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1857014102}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1453399076}
-  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1931554861
 GameObject:
@@ -2868,7 +2836,7 @@ SceneRoots:
   - {fileID: 998828190}
   - {fileID: 1931554864}
   - {fileID: 1778328309}
-  - {fileID: 1857014103}
+  - {fileID: 1453399076}
   - {fileID: 1653210220}
   - {fileID: 2117055757}
   - {fileID: 401257671}
