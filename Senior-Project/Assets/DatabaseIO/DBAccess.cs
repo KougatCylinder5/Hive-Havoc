@@ -16,6 +16,8 @@ public class DBAccess
     private const string noTransactionError = "Transaction has not been started!";
     private static SqliteConnection sqliteDB = new SqliteConnection(dbConnectionString);
 
+    public static TreeInstance[] fixItQuick = new TreeInstance[0];
+
     protected static string getConnectionString() {
         return dbConnectionString;
     }
