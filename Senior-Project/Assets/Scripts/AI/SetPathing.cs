@@ -9,14 +9,14 @@ public class SetPathing : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        npcai.PickUpTarget = GenerateTarget();
+        npcai.PickUpTarget = GenerateTarget(GetComponentInParent<ResourceCollectBuilding>());
     }
 
     // Update is called once per frame
-    public Vector2 GenerateTarget()
+    public Vector2 GenerateTarget(ResourceCollectBuilding building)
     {
         Vector3 curTarget = new(10, 1, 10);
-        Collider[] colliders = Physics.OverlapBox(transform.position, ResourceCollectBuilding.GetRange(), transform.rotation, LayerMask.GetMask("Trees"));
+        Collider[] colliders = Physics.OverlapSphere(transform.position, building.GetRange(), LayerMask.GetMask("Trees"));
         for (int i = 0; i < colliders.Length; i++)
         {
             if(Vector3.Distance(transform.position, colliders[i].transform.position) < Vector3.Distance(transform.position, curTarget))
