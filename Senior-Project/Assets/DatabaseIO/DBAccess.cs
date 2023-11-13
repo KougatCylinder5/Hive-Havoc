@@ -145,14 +145,14 @@ public class DBAccess
             saves.Close();
 
             if(saveID != 0) {
-                SceneManager.LoadScene(sceneToLoad);
-
                 commitTransaction(false);
                 startTransaction(false);
                 sqliteCommand.CommandText = "UPDATE saves SET last_play='" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' WHERE id IS " + saveID + ";";
                 sqliteCommand.ExecuteNonQuery();
                 commitTransaction(false);
                 startTransaction(false);
+
+                SceneManager.LoadScene(sceneToLoad);
                 return true;
             }
 

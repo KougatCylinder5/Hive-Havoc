@@ -5,39 +5,55 @@ using UnityEngine;
 public class Saver : MonoBehaviour
 {
     private Terrain ground;
+    public GameObject groundPrefab;
+    public TerrainData groundData;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        ground = GetComponent<Terrain>();
+        //ground = Instantiate(groundPrefab, new Vector3(0,0,0), groundPrefab.transform.rotation).GetComponent<Terrain>();
+        ground = GameObject.Find("Ground").GetComponent<Terrain>();
+        ground.terrainData = Instantiate(groundData);
 
-        if(true) {
+        //ground = GetComponent<Terrain>();
+
+        DBAccess.fixItQuick = ground.terrainData.treeInstances;
+
+        if (false) {
             for(int i = 0; i < ground.terrainData.treeInstanceCount; i++) {
                 ground.terrainData.treeInstances[i].position = new Vector3(0, 0, 0);
                 ground.Flush();
             }
         }
 
-        if (false) {
-            DBAccess.fixItQuick = ground.terrainData.treeInstances;
+        if (true) {
 
-            ground.terrainData.treeInstances = new TreeInstance[0];
-
+            DBAccess.startTransaction();
             List<TreeInstance> newTrees = new List<TreeInstance>();
+            int index = 0;
+ 
             foreach (Placeable tree in DBAccess.getPlaceables()) {
-
+                
                 if (tree.getTileItemID() == 0) {
-                    TreeInstance newPos = new TreeInstance();
+                    TreeInstance newPos = ground.terrainData.treeInstances[index];
                     newPos.position = new Vector3(tree.getXPos(), 0, tree.getYPos());
                     newTrees.Add(newPos);
                 }
+                index++;
             }
 
             ground.terrainData.treeInstances = newTrees.ToArray();
 
             ground.Flush();
+
+            DBAccess.commitTransaction();
         }
     }
 
+    private void Update() {
+        if(Input.GetKeyDown(KeyCode.P)) {
+            Debug.Log("Placeable Count: " + DBAccess.getPlaceables().Count);
+        }
+    }
     public void saveScene(string levelName) {
         DBAccess.startTransaction();
         DBAccess.clear();
@@ -53,4 +69,6 @@ public class Saver : MonoBehaviour
         ground.terrainData.treeInstances = DBAccess.fixItQuick;
         ground.Flush();
     }
+
+
 }
