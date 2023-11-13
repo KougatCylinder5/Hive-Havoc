@@ -163,11 +163,11 @@ public class DBAccess
         }
     }
 
-    public bool isAReload() {
+    public static bool isAReload() {
         return reloadingSave;
     }
 
-    public void clearReload() {
+    public static void clearReload() {
         reloadingSave = false;
     }
 
