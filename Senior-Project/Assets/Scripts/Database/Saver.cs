@@ -41,7 +41,7 @@ public class Saver : MonoBehaviour
 
             DBAccess.commitTransaction();
         } else {
-            saveScene()
+            saveScene();
         }
     }
 

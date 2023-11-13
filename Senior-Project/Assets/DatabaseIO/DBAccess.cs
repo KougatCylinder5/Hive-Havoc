@@ -153,7 +153,7 @@ public class DBAccess
                 commitTransaction(false);
                 startTransaction(false);
 
-                reloadingSave = true
+                reloadingSave = true;
 
                 SceneManager.LoadScene(sceneToLoad);
                 return true;
