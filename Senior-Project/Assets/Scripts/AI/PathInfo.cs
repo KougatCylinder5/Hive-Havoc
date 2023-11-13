@@ -22,7 +22,7 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
 
     public void CleanPath()
     {
-        Queue<Vector2> copyPath = new Queue<Vector2>(path);
+        Queue<Vector2> copyPath = new(path);
         copyPath.Enqueue(End);
 
         Vector2 curNode = Start;
