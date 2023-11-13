@@ -39,11 +39,11 @@ public class PauseMenu : MonoBehaviour {
                 Time.timeScale = 1;
             }
             if (GUILayout.Button("Save and Quit")) {
-                GameObject.Find("Ground").GetComponent<Saver>().saveScene(gameObject.scene.name);
+                GameObject.Find("Saver").GetComponent<Saver>().saveScene();
                 Time.timeScale = 1;
             }
             if (GUILayout.Button("FIX IT!")) {
-                GameObject.Find("Ground").GetComponent<Saver>().quickFix();
+                GameObject.Find("Saver").GetComponent<Saver>().quickFix();
                 Time.timeScale = 1;
             }
 

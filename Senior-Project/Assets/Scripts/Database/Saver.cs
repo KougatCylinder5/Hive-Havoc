@@ -18,14 +18,8 @@ public class Saver : MonoBehaviour
 
         DBAccess.fixItQuick = ground.terrainData.treeInstances;
 
-        if (false) {
-            for(int i = 0; i < ground.terrainData.treeInstanceCount; i++) {
-                ground.terrainData.treeInstances[i].position = new Vector3(0, 0, 0);
-                ground.Flush();
-            }
-        }
-
-        if (true) {
+        if (DBAccess.isAReload()) {
+            DBAccess.clearReload();
 
             DBAccess.startTransaction();
             List<TreeInstance> newTrees = new List<TreeInstance>();
@@ -46,15 +40,12 @@ public class Saver : MonoBehaviour
             ground.Flush();
 
             DBAccess.commitTransaction();
+        } else {
+            saveScene()
         }
     }
 
-    private void Update() {
-        if(Input.GetKeyDown(KeyCode.P)) {
-            Debug.Log("Placeable Count: " + DBAccess.getPlaceables().Count);
-        }
-    }
-    public void saveScene(string levelName) {
+    public void saveScene() {
         DBAccess.startTransaction();
         DBAccess.clear();
 

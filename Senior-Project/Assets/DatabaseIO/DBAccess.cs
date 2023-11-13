@@ -15,6 +15,7 @@ public class DBAccess
     private static bool transactionActive = false;
     private const string noTransactionError = "Transaction has not been started!";
     private static SqliteConnection sqliteDB = new SqliteConnection(dbConnectionString);
+    private static bool reloadingSave = false;
 
     public static TreeInstance[] fixItQuick = new TreeInstance[0];
 
@@ -152,12 +153,22 @@ public class DBAccess
                 commitTransaction(false);
                 startTransaction(false);
 
+                reloadingSave = true
+
                 SceneManager.LoadScene(sceneToLoad);
                 return true;
             }
 
             return false;
         }
+    }
+
+    public bool isAReload() {
+        return reloadingSave;
+    }
+
+    public void clearReload() {
+        reloadingSave = false;
     }
 
     public static List<Save> getSaves() {
