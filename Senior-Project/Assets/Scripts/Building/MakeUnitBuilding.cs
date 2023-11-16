@@ -11,6 +11,6 @@ public class MakeUnitBuilding : BuildingClass
     void Awake()
     {
         health = maxHealth;
-        MakeUnits.SpawnUnitsAtPosition(spawnCount, unitToSpawn, transform.position);
+        MakeUnits.SpawnUnitsAtPosition(spawnCount, unitToSpawn, transform.position, transform);
     }
 }
