@@ -16,18 +16,12 @@ public class ResourceCollectBuilding : MakeUnitBuilding
     private int reset = 1;
     public float efficientRange;
     public float normalRange;
-    private Vector3 efficientVector;
-    private Vector3 normalVector;
-    private static Vector3 returnVector = new(4, 1, 4);
 
     // Start is called before the first frame update
     void Awake()
     {
         health = maxHealth;
-        MakeUnits.SpawnUnitsAtPosition(spawnCount, unitToSpawn, transform.position);
-        efficientVector = new(efficientRange, 1, efficientRange);
-        normalVector = new(normalRange, 1, normalRange);
-        returnVector = normalVector;
+        MakeUnits.SpawnUnitsAtPosition(spawnCount, unitToSpawn, transform.position, transform);
     }
 
     // Update is called once per frame
@@ -55,11 +49,11 @@ public class ResourceCollectBuilding : MakeUnitBuilding
 
     public int CalculateRange()
     {
-        if(Physics.CheckBox(transform.position, efficientVector, transform.rotation, LayerMask.GetMask("Trees")))
+        if(Physics.CheckSphere(transform.position, efficientRange, LayerMask.GetMask("Trees")))
         {
             return 2;
         }
-        else if(Physics.CheckBox(transform.position, normalVector, transform.rotation, LayerMask.GetMask("Trees")))
+        else if(Physics.CheckSphere(transform.position, normalRange, LayerMask.GetMask("Trees")))
         {
             return 1;
         }
@@ -69,8 +63,8 @@ public class ResourceCollectBuilding : MakeUnitBuilding
         }
     }
 
-    public static Vector3 GetRange()
+    public float GetRange()
     {
-        return returnVector;
+        return normalRange;
     }
 }
