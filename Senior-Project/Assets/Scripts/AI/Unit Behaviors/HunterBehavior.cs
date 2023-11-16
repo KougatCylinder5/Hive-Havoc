@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class HunterBehavior : UnitAI
@@ -25,9 +26,6 @@ public class HunterBehavior : UnitAI
         {
             enemies.OrderBy(c => { if(c) return (_position - c.transform.position).sqrMagnitude; return float.PositiveInfinity; }).ToArray();
             AttackTarget = enemies[0].gameObject;
-            if (AttackTarget != null)
-                Target = new(AttackTarget.transform.position.x, AttackTarget.transform.position.z);
-            
 
         }
         if (AttackTarget != null && Vector3.Distance(_position, AttackTarget.transform.position) > AttackRadius)
@@ -60,4 +58,9 @@ public class HunterBehavior : UnitAI
     {
         target.GetComponent<EnemyAI>().DealDamage(DamageAmount);
     }
+
+
+
+
+    
 }

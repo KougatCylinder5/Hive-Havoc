@@ -96,7 +96,6 @@ public class UnitAI : AIController, IAIBasics, IAttack
             _pathInfo = Instance.RetrievePath(_lastPathGenerated);
             _lastPathGenerated = null;
         }
-        Debug.Log(_pathInfo);
     }
 
 
