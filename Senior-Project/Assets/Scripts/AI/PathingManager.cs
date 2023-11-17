@@ -278,7 +278,7 @@ public class PathingManager : MonoBehaviour
             PathNode endNode = pathNodeArray[endNodeIndex];
             if (endNode.cameFromNodeIndex == -1)
             {
-                // Didn't find a path!
+                path.Add(new int2(-1, -1));
             }
             else
             {
