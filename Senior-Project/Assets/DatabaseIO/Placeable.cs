@@ -12,13 +12,12 @@ public class Placeable : MonoBehaviour
     private float heading;
     private int natural;
 
-    public Placeable(int id, int tileItemID, float xPos, float yPos, float health, float heading, int natural) {
+    public Placeable(int id, int tileItemID, float xPos, float yPos, float health, int natural) {
         this.id = id;
         this.tileItemID = tileItemID;
         this.xPos = xPos;
         this.yPos = yPos;
         this.health = health;
-        this.heading = heading;
         this.natural = natural;
     }
 
@@ -42,10 +41,6 @@ public class Placeable : MonoBehaviour
         return health;
     }
 
-    public float getHeading() {
-        return heading;
-    }
-
     public void setXPos(float xPos) {
         this.xPos = xPos;
     }
@@ -56,9 +51,5 @@ public class Placeable : MonoBehaviour
 
     public void setHealth(float health) {
         this.health = health;
-    }
-
-    public void setHeading(float heading) {
-        this.heading = heading;
     }
 }
