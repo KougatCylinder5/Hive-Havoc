@@ -5,7 +5,6 @@ using UnityEngine;
 public class Saver : MonoBehaviour
 {
     private Terrain ground;
-    public GameObject groundPrefab;
     public TerrainData groundData;
     // Start is called before the first frame update
     void Awake()
