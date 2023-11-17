@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Placeable : MonoBehaviour
+public class Placeable
 {
     private int id;
     private int tileItemID;
@@ -12,13 +12,12 @@ public class Placeable : MonoBehaviour
     private float heading;
     private int natural;
 
-    public Placeable(int id, int tileItemID, float xPos, float yPos, float health, float heading, int natural) {
+    public Placeable(int id, int tileItemID, float xPos, float yPos, float health, int natural) {
         this.id = id;
         this.tileItemID = tileItemID;
         this.xPos = xPos;
         this.yPos = yPos;
         this.health = health;
-        this.heading = heading;
         this.natural = natural;
     }
 
@@ -60,5 +59,9 @@ public class Placeable : MonoBehaviour
 
     public void setHeading(float heading) {
         this.heading = heading;
+    }
+    public override string ToString()
+    {
+        return xPos + ", " + yPos;
     }
 }

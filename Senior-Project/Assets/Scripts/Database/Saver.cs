@@ -22,22 +22,22 @@ public class Saver : MonoBehaviour
             DBAccess.clearReload();
 
             DBAccess.startTransaction();
-            List<TreeInstance> newTrees = new List<TreeInstance>();
-            int index = 0;
- 
-            foreach (Placeable tree in DBAccess.getPlaceables()) {
+
+            List<Placeable> naturalObjects = DBAccess.getPlaceables();
+
+            naturalObjects.ForEach(placeable => 
+            {
+                if (placeable.getTileItemID() != (int)PlaceableTypes.Tree)
+                    return;
+
+                PathingManager.SetWalkable(Mathf.RoundToInt(placeable.getXPos()), Mathf.RoundToInt(placeable.getYPos()), false);
+                Debug.Log(placeable);
                 
-                if (tree.getTileItemID() == 0) {
-                    TreeInstance newPos = ground.terrainData.treeInstances[index];
-                    newPos.position = new Vector3(tree.getXPos(), 0, tree.getYPos());
-                    newTrees.Add(newPos);
-                }
-                index++;
-            }
 
-            ground.terrainData.treeInstances = newTrees.ToArray();
-
-            ground.Flush();
+            });
+ 
+            
+            
 
             DBAccess.commitTransaction();
         } else {
@@ -61,5 +61,9 @@ public class Saver : MonoBehaviour
         ground.Flush();
     }
 
+    public enum PlaceableTypes
+    {
+        Tree
+    }
 
 }

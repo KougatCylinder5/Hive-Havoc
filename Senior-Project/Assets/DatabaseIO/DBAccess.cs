@@ -444,12 +444,12 @@ public class DBAccess
 
             var sqliteCommand = sqliteDB.CreateCommand(); 
             
-            sqliteCommand.CommandText = "SELECT id, tile_item_id, x_pos, y_pos, health, heading, natural FROM placeables WHERE save_id IS " + saveID + ";";
+            sqliteCommand.CommandText = "SELECT id, tile_item_id, x_pos, y_pos, health, natural FROM placeables WHERE save_id IS " + saveID + ";";
             IDataReader aplaceable = sqliteCommand.ExecuteReader();
 
             try {
                 while(aplaceable.Read()) {
-                    placeables.Add(new Placeable(aplaceable.GetInt32(0), aplaceable.GetInt32(1), aplaceable.GetFloat(2), aplaceable.GetFloat(3), aplaceable.GetFloat(4), aplaceable.GetFloat(5), aplaceable.GetInt32(6)));
+                    placeables.Add(new Placeable(aplaceable.GetInt32(0), aplaceable.GetInt32(1), aplaceable.GetFloat(2), aplaceable.GetFloat(3), aplaceable.GetFloat(4), aplaceable.GetInt32(5)));
                 }
             } catch {}
 
@@ -468,12 +468,12 @@ public class DBAccess
 
             var sqliteCommand = sqliteDB.CreateCommand();
 
-            sqliteCommand.CommandText = "SELECT id, tile_item_id, x_pos, y_pos, health, heading, natural FROM placeables WHERE save_id IS " + saveID + " AND natural IS 1;";
+            sqliteCommand.CommandText = "SELECT id, tile_item_id, x_pos, y_pos, health, natural FROM placeables WHERE save_id IS " + saveID + " AND natural IS 1;";
             IDataReader aplaceable = sqliteCommand.ExecuteReader();
 
             try {
                 while (aplaceable.Read()) {
-                    placeables.Add(new Placeable(aplaceable.GetInt32(0), aplaceable.GetInt32(1), aplaceable.GetFloat(2), aplaceable.GetFloat(3), aplaceable.GetFloat(4), aplaceable.GetFloat(5), aplaceable.GetInt32(6)));
+                    placeables.Add(new Placeable(aplaceable.GetInt32(0), aplaceable.GetInt32(1), aplaceable.GetFloat(2), aplaceable.GetFloat(3), aplaceable.GetFloat(4), aplaceable.GetInt32(5)));
                 }
             }
             catch { }
@@ -498,7 +498,7 @@ public class DBAccess
             try {
                 while (aplaceable.Read())
                 {
-                    placeables.Add(new Placeable(aplaceable.GetInt32(0), aplaceable.GetInt32(1), aplaceable.GetFloat(2), aplaceable.GetFloat(3), aplaceable.GetFloat(4), aplaceable.GetFloat(5), aplaceable.GetInt32(6)));
+                    placeables.Add(new Placeable(aplaceable.GetInt32(0), aplaceable.GetInt32(1), aplaceable.GetFloat(2), aplaceable.GetFloat(3), aplaceable.GetFloat(4), aplaceable.GetInt32(5)));
                 }
             }
             catch { }
