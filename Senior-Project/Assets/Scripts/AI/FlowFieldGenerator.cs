@@ -183,10 +183,6 @@ public class FlowFieldGenerator : MonoBehaviour
             }
         }
 
-        private int CalculateIndex(int x, int y, int gridWidth)
-        {
-            return x + y * gridWidth;
-        }
         private int CalculateIndex(Vector2Int pos, int gridWidth)
         {
             return pos.x + pos.y * gridWidth;

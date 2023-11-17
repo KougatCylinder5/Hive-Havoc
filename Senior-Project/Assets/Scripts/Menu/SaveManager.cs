@@ -90,8 +90,8 @@ public class SaveManager : MonoBehaviour
                         break;
                 }
             }
-            catch(Exception e)
-            {
+                catch (Exception)
+                {
                 save.hide();
             }
         }

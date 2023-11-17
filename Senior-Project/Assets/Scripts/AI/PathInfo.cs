@@ -22,24 +22,33 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
 
     public void CleanPath()
     {
-        Queue<Vector2> copyPath = new Queue<Vector2>(path);
+        Queue<Vector2> copyPath = new(path);
         copyPath.Enqueue(End);
 
         Vector2 curNode = Start;
 
+        
+
+
         cleanedPath.Clear();
+
+        Vector2 priorNode = curNode;
+        Vector3 center;
+        Vector3 halfExtends;
+        halfExtends.y = 0;
+        Vector3 direction;
 
         if (copyPath.Count > 0)
         {
-            Vector2 priorNode = curNode;
+            Vector2 nextNode = copyPath.Dequeue();
 
             while (copyPath.Count > 0)
             {
-                Vector3 center = ConvertToVector3(curNode, 0.35f);
-                Vector3 halfExtends = Vector3.one / 4f;
+                center = ConvertToVector3(curNode, 0.35f);
+                halfExtends = Vector3.one / 4f;
                 halfExtends.y = 0;
-                Vector3 direction = ConvertToVector3(copyPath.Peek() - curNode, 0).normalized;
-                if (Physics.SphereCast(origin: center, radius: 0.25f, direction: direction, maxDistance: (copyPath.Peek() - curNode).magnitude, layerMask: raycastLayers, hitInfo: out RaycastHit hit)) 
+                direction = ConvertToVector3(nextNode - curNode, 0).normalized;
+                if (Physics.SphereCast(origin: center, radius: 0.25f, direction: direction, maxDistance: (nextNode - curNode).magnitude, layerMask: raycastLayers, hitInfo: out RaycastHit _)) 
                 {
                     cleanedPath.Enqueue(priorNode);
                 }
@@ -48,8 +57,20 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
             }
             if (!priorNode.Equals(new Vector2(-1, -1)))
                 cleanedPath.Enqueue(priorNode);
+
+            center = ConvertToVector3(curNode, 0.35f);
+            halfExtends = Vector3.one / 4f;
+            halfExtends.y = 0;
+            direction = ConvertToVector3(nextNode - End, 0).normalized;
+
+            if (Physics.SphereCast(origin: center, radius: 0.25f, direction: direction, maxDistance: (nextNode - End).magnitude, layerMask: raycastLayers, hitInfo: out RaycastHit _))
+            {
+                //Debug.Log(cleanedPath.Dequeue());
+                
+            }
         }
         
+
     }
 
     public static Vector3 ConvertToVector3(Vector2 obj, float height)
