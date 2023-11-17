@@ -20,6 +20,8 @@ public class MakeSave : MonoBehaviour
         DBAccess.startTransaction();
         DBAccess.addSave(saveName.text, saveDifficulty.value);
         DBAccess.commitTransaction();
-        SceneManager.LoadScene("Tutorial");
+        DBAccess.startTransaction();
+        DBAccess.selectSave(saveName.text);
+        DBAccess.commitTransaction();
     }
 }

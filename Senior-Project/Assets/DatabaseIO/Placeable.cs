@@ -41,10 +41,6 @@ public class Placeable
         return health;
     }
 
-    public float getHeading() {
-        return heading;
-    }
-
     public void setXPos(float xPos) {
         this.xPos = xPos;
     }
@@ -57,9 +53,6 @@ public class Placeable
         this.health = health;
     }
 
-    public void setHeading(float heading) {
-        this.heading = heading;
-    }
     public override string ToString()
     {
         return xPos + ", " + yPos;

@@ -492,7 +492,7 @@ public class DBAccess
 
             var sqliteCommand = sqliteDB.CreateCommand();
 
-            sqliteCommand.CommandText = "SELECT id, tile_item_id, x_pos, y_pos, health, heading, natural FROM placeables WHERE save_id IS " + saveID + " AND natural IS 0;";
+            sqliteCommand.CommandText = "SELECT id, tile_item_id, x_pos, y_pos, health, natural FROM placeables WHERE save_id IS " + saveID + " AND natural IS 0;";
             IDataReader aplaceable = sqliteCommand.ExecuteReader();
 
             try {
