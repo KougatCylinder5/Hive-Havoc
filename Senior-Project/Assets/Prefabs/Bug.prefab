@@ -100,8 +100,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _target: {x: 0, y: 0}
   _position: {x: 0, y: 0, z: 0}
+  speed: 2
   _updateFrequency: 0.1
   _characterController: {fileID: 0}
+  _health: 0
+  _maxHealth: 0
+  _isDead: 0
   _type: 0
   _listenRadius: 10
   _velocity: {x: 0, y: 0}
