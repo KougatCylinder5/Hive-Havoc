@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class MakeSave : MonoBehaviour
 {
@@ -18,6 +19,9 @@ public class MakeSave : MonoBehaviour
     {
         DBAccess.startTransaction();
         DBAccess.addSave(saveName.text, saveDifficulty.value);
+        DBAccess.commitTransaction();
+        DBAccess.startTransaction();
+        DBAccess.selectSave(saveName.text);
         DBAccess.commitTransaction();
     }
 }

@@ -5,6 +5,7 @@ using System.Data;
 using Mono.Data.Sqlite;
 using System;
 using UnityEngine.SceneManagement;
+using System.Xml.Linq;
 
 public class DBAccess
 {
@@ -14,6 +15,9 @@ public class DBAccess
     private static bool transactionActive = false;
     private const string noTransactionError = "Transaction has not been started!";
     private static SqliteConnection sqliteDB = new SqliteConnection(dbConnectionString);
+    private static bool reloadingSave = false;
+
+    public static TreeInstance[] fixItQuick = new TreeInstance[0];
 
     protected static string getConnectionString() {
         return dbConnectionString;
@@ -142,19 +146,29 @@ public class DBAccess
             saves.Close();
 
             if(saveID != 0) {
-                SceneManager.LoadScene(sceneToLoad);
-
                 commitTransaction(false);
                 startTransaction(false);
                 sqliteCommand.CommandText = "UPDATE saves SET last_play='" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' WHERE id IS " + saveID + ";";
                 sqliteCommand.ExecuteNonQuery();
                 commitTransaction(false);
                 startTransaction(false);
+
+                reloadingSave = true;
+
+                SceneManager.LoadScene(sceneToLoad);
                 return true;
             }
 
             return false;
         }
+    }
+
+    public static bool isAReload() {
+        return reloadingSave;
+    }
+
+    public static void clearReload() {
+        reloadingSave = false;
     }
 
     public static List<Save> getSaves() {
@@ -181,6 +195,45 @@ public class DBAccess
 
     public static void exitSave() {
         saveID = 0;
+        SceneManager.LoadScene("Menu");
+    }
+
+    public static void clear() {
+        if (!transactionActive) {
+            Debug.LogError(noTransactionError);
+        } else {
+            var sqliteCommand = sqliteDB.CreateCommand();
+
+            sqliteCommand.CommandText = "DELETE FROM placeables WHERE save_id LIKE '" + saveID + "';";
+            try {
+                sqliteCommand.ExecuteNonQuery();
+
+            } catch {
+            }
+
+            sqliteCommand.CommandText = "DELETE FROM tile_data WHERE save_id LIKE '" + saveID + "';";
+            try {
+                sqliteCommand.ExecuteNonQuery();
+
+            } catch {
+            }
+
+            sqliteCommand.CommandText = "DELETE FROM unit WHERE save_id LIKE '" + saveID + "';";
+            try {
+                sqliteCommand.ExecuteNonQuery();
+            } catch {
+            }
+
+            commitTransaction();
+            startTransaction();
+
+            sqliteCommand.CommandText = "UPDATE `sqlite_sequence` SET `seq` = (SELECT MAX(`id`) FROM 'placeables') WHERE `name` = 'placeables';";
+            try {
+                sqliteCommand.ExecuteNonQuery();
+
+            } catch {
+            }
+        }
     }
 
     public static bool addSave(string savename, int diff) {
@@ -197,7 +250,7 @@ public class DBAccess
             }
             catch { }
 
-            return true;
+            return false;
         }
     }
 
@@ -391,12 +444,12 @@ public class DBAccess
 
             var sqliteCommand = sqliteDB.CreateCommand(); 
             
-            sqliteCommand.CommandText = "SELECT id, tile_item_id, x_pos, y_pos, health, heading, natural FROM placeables WHERE save_id IS " + saveID + ";";
+            sqliteCommand.CommandText = "SELECT id, tile_item_id, x_pos, y_pos, health, natural FROM placeables WHERE save_id IS " + saveID + ";";
             IDataReader aplaceable = sqliteCommand.ExecuteReader();
 
             try {
                 while(aplaceable.Read()) {
-                    placeables.Add(new Placeable(aplaceable.GetInt32(0), aplaceable.GetInt32(1), aplaceable.GetFloat(2), aplaceable.GetFloat(3), aplaceable.GetFloat(4), aplaceable.GetFloat(5), aplaceable.GetInt32(6)));
+                    placeables.Add(new Placeable(aplaceable.GetInt32(0), aplaceable.GetInt32(1), aplaceable.GetFloat(2), aplaceable.GetFloat(3), aplaceable.GetFloat(4), aplaceable.GetInt32(5)));
                 }
             } catch {}
 
@@ -415,12 +468,12 @@ public class DBAccess
 
             var sqliteCommand = sqliteDB.CreateCommand();
 
-            sqliteCommand.CommandText = "SELECT id, tile_item_id, x_pos, y_pos, health, heading, natural FROM placeables WHERE save_id IS " + saveID + " AND natural IS 1;";
+            sqliteCommand.CommandText = "SELECT id, tile_item_id, x_pos, y_pos, health, natural FROM placeables WHERE save_id IS " + saveID + " AND natural IS 1;";
             IDataReader aplaceable = sqliteCommand.ExecuteReader();
 
             try {
                 while (aplaceable.Read()) {
-                    placeables.Add(new Placeable(aplaceable.GetInt32(0), aplaceable.GetInt32(1), aplaceable.GetFloat(2), aplaceable.GetFloat(3), aplaceable.GetFloat(4), aplaceable.GetFloat(5), aplaceable.GetInt32(6)));
+                    placeables.Add(new Placeable(aplaceable.GetInt32(0), aplaceable.GetInt32(1), aplaceable.GetFloat(2), aplaceable.GetFloat(3), aplaceable.GetFloat(4), aplaceable.GetInt32(5)));
                 }
             }
             catch { }
@@ -439,13 +492,13 @@ public class DBAccess
 
             var sqliteCommand = sqliteDB.CreateCommand();
 
-            sqliteCommand.CommandText = "SELECT id, tile_item_id, x_pos, y_pos, health, heading, natural FROM placeables WHERE save_id IS " + saveID + " AND natural IS 0;";
+            sqliteCommand.CommandText = "SELECT id, tile_item_id, x_pos, y_pos, health, natural FROM placeables WHERE save_id IS " + saveID + " AND natural IS 0;";
             IDataReader aplaceable = sqliteCommand.ExecuteReader();
 
             try {
                 while (aplaceable.Read())
                 {
-                    placeables.Add(new Placeable(aplaceable.GetInt32(0), aplaceable.GetInt32(1), aplaceable.GetFloat(2), aplaceable.GetFloat(3), aplaceable.GetFloat(4), aplaceable.GetFloat(5), aplaceable.GetInt32(6)));
+                    placeables.Add(new Placeable(aplaceable.GetInt32(0), aplaceable.GetInt32(1), aplaceable.GetFloat(2), aplaceable.GetFloat(3), aplaceable.GetFloat(4), aplaceable.GetInt32(5)));
                 }
             }
             catch { }
@@ -455,14 +508,14 @@ public class DBAccess
         }
     }
 
-    public static int addPlaceable(int tileItemID, float xPos, float yPos, float xTarget, float yTarget, float health, int natural) {
+    public static int addPlaceable(int tileItemID, float xPos, float yPos, float health, int natural) {
         if(!transactionActive) {
             Debug.LogError(noTransactionError);
             return 0;
         } else {
             int rowid = 0;
             var sqliteCommand = sqliteDB.CreateCommand();
-            sqliteCommand.CommandText = "INSERT INTO placeables ('x_pos', 'y_pos', 'health', 'heading', 'save_id', 'tile_item_id', 'natural') VALUES ('" + xPos + "', '" + yPos + "', '" + xTarget + "', '" + yTarget + "', '" + health + "', '" + saveID + "', '" + tileItemID + "', '" + natural + "');";
+            sqliteCommand.CommandText = "INSERT INTO placeables ('x_pos', 'y_pos', 'health', 'save_id', 'tile_item_id', 'natural') VALUES ('" + xPos + "', '" + yPos + "', '" + health + "', '" + saveID + "', '" + tileItemID + "', '" + natural + "');";
             sqliteCommand.ExecuteNonQuery();
 
             sqliteCommand.CommandText = "SELECT last_insert_rowid() FROM placeables;";

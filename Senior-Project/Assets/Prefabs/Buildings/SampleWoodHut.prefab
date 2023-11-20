@@ -48,16 +48,12 @@ MonoBehaviour:
   maxHealth: 5
   spawnCount: 1
   unitToSpawn: {fileID: 8130099494824521781, guid: ee67288081637e34286cd2c5d4d3f321, type: 3}
-  woodPerSec: 1
-  coalPerSec: 0
-  copperOrePerSec: 0
-  copperIngotPerSec: 0
-  ironOrePerSec: 0
-  ironIngotPerSec: 0
-  steelPerSec: 0
-  stonePerSec: 0
+  resourcePerSec: 1
   efficientRange: 2
   normalRange: 4
+  type: 0
+  terrain: {fileID: 0}
+  distance: 0
 --- !u!1 &5245426359995520833
 GameObject:
   m_ObjectHideFlags: 0
@@ -87,7 +83,7 @@ Transform:
   m_GameObject: {fileID: 5245426359995520833}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

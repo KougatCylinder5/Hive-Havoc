@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class PauseMenu : MonoBehaviour {
 
+    #if UNITY_EDITOR
+        public static bool IsUnityEditor = true;
+    #else
+        public static bool IsUnityEditor = false;
+    #endif
+
     private GUIStyle bgStyle = new GUIStyle();
     private Texture2D bgImg;
     void Start() {
@@ -30,6 +36,28 @@ public class PauseMenu : MonoBehaviour {
     public void OnGUI() {
         if(Time.timeScale == 0) {
             GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "PAUSED", bgStyle);
+
+            GUILayout.BeginArea(new Rect(Screen.width/3, 0, Screen.width/3, Screen.height));
+            GUILayout.FlexibleSpace();
+            GUILayout.BeginVertical();
+            if (GUILayout.Button("Resume")) {
+                Time.timeScale = 1;
+            }
+            if (GUILayout.Button("Save and Quit")) {
+                GameObject.Find("Saver").GetComponent<Saver>().saveScene();
+                Time.timeScale = 1;
+                Application.Quit();
+            }
+            if(IsUnityEditor) {
+                if (GUILayout.Button("FIX IT!")) {
+                    GameObject.Find("Saver").GetComponent<Saver>().quickFix();
+                    Time.timeScale = 1;
+                }
+            }
+
+            GUILayout.EndVertical();
+            GUILayout.FlexibleSpace();
+            GUILayout.EndArea();
         }
     }
 }

@@ -73,7 +73,6 @@ public class UnitAI : AIController, IAIBasics, IAttack
 
     public void UpdatePath()
     {
-        Debug.Log(_pathInfo);
         float distanceToTarget = Vector2.Distance(_position2D, Target);
         if (distanceToTarget < 0.1f)
         {
@@ -96,7 +95,6 @@ public class UnitAI : AIController, IAIBasics, IAttack
             _pathInfo = Instance.RetrievePath(_lastPathGenerated);
             _lastPathGenerated = null;
         }
-        Debug.Log(_pathInfo);
     }
 
 

@@ -1,10 +1,5 @@
-using JetBrains.Annotations;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class BuildingPlacement : MonoBehaviour
 {
@@ -16,19 +11,10 @@ public class BuildingPlacement : MonoBehaviour
     private bool _made;
     private List<KeyCode> _keycodes = new();
     private int _pressed;
-    private List<int[]> _costs = new();
-    private const int _resourceCount = 8;
-
-    private enum Buildings
-    {
-        Base,
-        BaseGhost,
-        Tent,
-        TentGhost,
-        Tower,
-        TowerGhost
-    }
-
+    private const int _resourceCount = 5;
+    public Transform boundNearestOrigin;
+    public int playableAreaSizeX;
+    public int playableAreaSizeZ;
 
     // Start is called before the first frame update
     void Start()
@@ -60,10 +46,10 @@ public class BuildingPlacement : MonoBehaviour
         }
         if(_inPlaceMode)
         {
-            ShowGrid(new(26, 0.1f, 26), 24, 24);
+            ShowGrid(boundNearestOrigin.position, playableAreaSizeX, playableAreaSizeZ);
             if(!_made)
             {
-                _ghostBuilding = Instantiate(_buildingPrefabs[_pressed * 2 + 1], new Vector3(position.x, 0.5f, position.y), Quaternion.identity);
+                _ghostBuilding = Instantiate(_buildingPrefabs[_pressed * 2 + 1], new Vector3(position.x, 0f, position.y), Quaternion.identity);
                 _currentBuilding = _buildingPrefabs[_pressed * 2];
                 _made = true;
             }
@@ -84,6 +70,14 @@ public class BuildingPlacement : MonoBehaviour
                 _made = false;
                 Destroy(_ghostBuilding);
             }
+            if(Input.GetKeyDown(KeyCode.Backspace))
+            {
+                Debug.Log("Placement cancelled...");
+                _currentBuilding = null;
+                _inPlaceMode = false;
+                _made = false;
+                Destroy(_ghostBuilding);
+            }
         }
     }
 
@@ -93,10 +87,7 @@ public class BuildingPlacement : MonoBehaviour
         ResourceStruct.Coal = depleteArray[1];
         ResourceStruct.CopperOre = depleteArray[2];
         ResourceStruct.CopperIngot = depleteArray[3];
-        ResourceStruct.IronOre = depleteArray[4];
-        ResourceStruct.IronIngot = depleteArray[5];
-        ResourceStruct.Steel = depleteArray[6];
-        ResourceStruct.Stone = depleteArray[7];
+        ResourceStruct.Stone = depleteArray[4];
     }
 
     public bool CheckCost(int[] desired, int[] current, out int[] deplete)

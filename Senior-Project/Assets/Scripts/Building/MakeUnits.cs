@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class MakeUnits : MonoBehaviour
 {
-    public static void SpawnUnitsAtPosition(int count, GameObject unit, Vector3 spawnPos)
+    public static void SpawnUnitsAtPosition(int count, GameObject unit, Vector3 spawnPos, Transform parent)
     {
         for(int i = 0; i < count; i++)
         {
-            Instantiate(unit, spawnPos, Quaternion.identity);
+            Instantiate(unit, spawnPos, Quaternion.identity, parent);
         }
     }
 }

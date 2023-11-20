@@ -278,7 +278,7 @@ public class PathingManager : MonoBehaviour
             PathNode endNode = pathNodeArray[endNodeIndex];
             if (endNode.cameFromNodeIndex == -1)
             {
-                // Didn't find a path!
+                path.Add(new int2(-1, -1));
             }
             else
             {
@@ -385,7 +385,7 @@ public class PathingManager : MonoBehaviour
         {
             if (ObstructedTiles[i])
             {
-                Gizmos.DrawCube(new Vector3(i % GridSize.x, 0, i / GridSize.x), new Vector3(0.25f, 1.1f, 0.25f));
+                Gizmos.DrawCube(new Vector3(i % GridSize.x, 0, i / GridSize.x), new Vector3(0.25f, 0.6f, 0.25f));
             } 
         }
     }
