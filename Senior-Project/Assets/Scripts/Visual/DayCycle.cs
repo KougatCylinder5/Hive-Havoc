@@ -14,6 +14,17 @@ public class DayCycle : MonoBehaviour
     void Update()
     {
         gameObject.transform.Rotate(new Vector3(1,0,0) * Time.deltaTime * timeScale);
-        Debug.Log(gameObject.transform.rotation.x);
+        Debug.Log(gameObject.transform.eulerAngles.x);
+
+        if(gameObject.transform.eulerAngles.x > 180) {
+            Debug.Log(GetComponent<Light>().intensity);
+            if(GetComponent<Light>().intensity > 100) {
+                GetComponent<Light>().intensity -= (GetComponent<Light>().intensity * Time.deltaTime * timeScale);
+            }
+        } else {
+            if (GetComponent<Light>().intensity < 81741.55f) {
+                GetComponent<Light>().intensity += (10000 * Time.deltaTime * timeScale);
+            }
+        }
     }
 }
