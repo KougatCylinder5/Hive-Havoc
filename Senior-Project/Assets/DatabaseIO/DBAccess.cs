@@ -153,8 +153,6 @@ public class DBAccess
                 commitTransaction(false);
                 startTransaction(false);
 
-                reloadingSave = true;
-
                 SceneManager.LoadScene(sceneToLoad);
                 return true;
             }
@@ -167,6 +165,9 @@ public class DBAccess
         return reloadingSave;
     }
 
+    public static void doRealod() {
+        reloadingSave = true;
+    }
     public static void clearReload() {
         reloadingSave = false;
     }
@@ -436,7 +437,7 @@ public class DBAccess
     }
 
     public static List<Placeable> getPlaceables() {
-        if(!transactionActive) {
+        if (!transactionActive && saveID == 0) {
             Debug.LogError(noTransactionError);
             return new List<Placeable>();
         } else {

@@ -24,9 +24,7 @@ public class SaveManager : MonoBehaviour
         if(pageNumber < Mathf.Ceil(saveCount / 4.0f)) {
             pageNumber++;
             try {
-                GameObject.FindWithTag("SFX").GetComponent<AudioSource>().clip = pageSound;
-                GameObject.FindWithTag("SFX").GetComponent<AudioSource>().time = 0;
-                GameObject.FindWithTag("SFX").GetComponent<AudioSource>().Play();
+                GameObject.FindWithTag("SFX").GetComponent<AudioSource>().PlayOneShot(pageSound);
             } catch { }
             
         }
@@ -38,9 +36,7 @@ public class SaveManager : MonoBehaviour
         if (pageNumber > 1) {
             pageNumber--;
             try {
-                GameObject.FindWithTag("SFX").GetComponent<AudioSource>().clip = pageSound;
-                GameObject.FindWithTag("SFX").GetComponent<AudioSource>().time = 0;
-                GameObject.FindWithTag("SFX").GetComponent<AudioSource>().Play();
+                GameObject.FindWithTag("SFX").GetComponent<AudioSource>().PlayOneShot(pageSound);
             } catch { }
         }
         refresh();
@@ -49,9 +45,7 @@ public class SaveManager : MonoBehaviour
     public void dropped() {
         refresh();
 
-        GameObject.FindWithTag("SFX").GetComponent<AudioSource>().clip = droppedSound;
-        GameObject.FindWithTag("SFX").GetComponent<AudioSource>().time = 0;
-        GameObject.FindWithTag("SFX").GetComponent<AudioSource>().Play();
+        GameObject.FindWithTag("SFX").GetComponent<AudioSource>().PlayOneShot(droppedSound);
     }
 
     public void refresh()
