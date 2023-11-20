@@ -1,65 +1,82 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ResourceCollectBuilding : MakeUnitBuilding
 {
-    public int woodPerSec;
-    public int coalPerSec;
-    public int copperOrePerSec;
-    public int copperIngotPerSec;
-    public int ironOrePerSec;
-    public int ironIngotPerSec;
-    public int steelPerSec;
-    public int stonePerSec;
-    private float timer = 1;
+    public int resourcePerSec;
     private int reset = 1;
     public float efficientRange;
     public float normalRange;
+    public GatheringType type;
+    public Terrain terrain;
+    public float distance;
+
+    int multiplier;
 
     // Start is called before the first frame update
     void Awake()
     {
-        health = maxHealth;
-        MakeUnits.SpawnUnitsAtPosition(spawnCount, unitToSpawn, transform.position, transform);
+        //MakeUnits.SpawnUnitsAtPosition(spawnCount, unitToSpawn, transform.position, transform);
+        terrain = GameObject.Find("Ground").GetComponent<Terrain>();
+        multiplier = CalculateRange();
+        
+        InvokeRepeating(nameof(AddResources), 0, reset);
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        timer -= Time.deltaTime;
-        if (timer <= 0)
-        {
-            AddResources(CalculateRange());
-            timer = reset;
-        }
+
     }
 
-    public void AddResources(int multiplier)
+    public void AddResources()
     {
-        ResourceStruct.Wood += woodPerSec * multiplier;
-        ResourceStruct.Coal += coalPerSec * multiplier;
-        ResourceStruct.CopperOre += copperOrePerSec * multiplier;
-        ResourceStruct.CopperIngot += copperIngotPerSec * multiplier;
-        ResourceStruct.IronOre += ironOrePerSec * multiplier;
-        ResourceStruct.IronIngot += ironIngotPerSec * multiplier;
-        ResourceStruct.Steel += steelPerSec * multiplier;
-        ResourceStruct.Stone += stonePerSec * multiplier;
+        switch(type)
+        {
+            case 0:
+                ResourceStruct.Wood += resourcePerSec * multiplier;
+                break;
+            case (GatheringType)1:
+                ResourceStruct.Stone += resourcePerSec * multiplier;
+                break;
+            case (GatheringType)2:
+                ResourceStruct.Coal += resourcePerSec * multiplier;
+                break;
+            case (GatheringType)3:
+                ResourceStruct.CopperOre += resourcePerSec * multiplier;
+                break;
+            case (GatheringType)4:
+                ResourceStruct.CopperIngot += resourcePerSec * multiplier;
+                break;
+        }
     }
 
     public int CalculateRange()
     {
-        if(Physics.CheckSphere(transform.position, efficientRange, LayerMask.GetMask("Trees")))
+        TreeInstance nearestTree = terrain.terrainData.treeInstances.OrderBy(tree => 
+        { 
+            return tree.prototypeIndex == (int)type 
+            ? 
+            Vector2.Distance(
+                new(transform.position.x, transform.position.z), 
+                new(tree.position.x * terrain.terrainData.size.x, tree.position.z * terrain.terrainData.size.z)) 
+            : 
+                float.PositiveInfinity;
+        }).ToArray()[0];
+        distance = Vector3.Distance(transform.position, Vector3.Scale(nearestTree.position,terrain.terrainData.size));
+        if(distance <= efficientRange)
         {
             return 2;
         }
-        else if(Physics.CheckSphere(transform.position, normalRange, LayerMask.GetMask("Trees")))
+        else if(distance <= normalRange)
         {
             return 1;
         }
         else
         {
-            return 0;
+            return 0; 
         }
     }
 
@@ -67,4 +84,15 @@ public class ResourceCollectBuilding : MakeUnitBuilding
     {
         return normalRange;
     }
+
+    public enum GatheringType
+    {
+        Wood,
+        Stone,
+        Coal,
+        CopperOre,
+        CopperIngot
+        
+    }
+
 }
