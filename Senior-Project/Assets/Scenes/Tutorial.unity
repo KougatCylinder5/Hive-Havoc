@@ -1449,6 +1449,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1192118950}
   - component: {fileID: 1192118951}
+  - component: {fileID: 1192118952}
   m_Layer: 0
   m_Name: Saver
   m_TagString: Untagged
@@ -1485,6 +1486,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groundPrefab: {fileID: 5344254679698096393, guid: 2fef3af26b26b774e97f40f4a3ea57ff, type: 3}
   groundData: {fileID: 15600000, guid: 2d491bb12f12f4a449ba62c42c1be3f7, type: 2}
+  treeOcculuderPrefab: {fileID: 8650456570569476745, guid: dffa1ccf79fd21c4aad6b961c5dc133b, type: 3}
+--- !u!114 &1192118952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1192118948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c71689abd33656f43944a9c8d2cb7ef2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1235348382
 GameObject:
   m_ObjectHideFlags: 0

@@ -381,7 +381,11 @@ public class PathingManager : MonoBehaviour
     }
     public static void SetWalkable(int x, int y, bool status)
     {
-        ObstructedTiles[CalculateIndex(x, y)] = status;
+        try
+        {
+            ObstructedTiles[CalculateIndex(x, y)] = status;
+        }catch{ }
+        
 
     }
     public void OnDrawGizmos()
