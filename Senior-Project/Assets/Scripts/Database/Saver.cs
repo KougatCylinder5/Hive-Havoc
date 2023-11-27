@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using static DBAccess;
+
 public class Saver : MonoBehaviour
 {
     private Terrain ground;
