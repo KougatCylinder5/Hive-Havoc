@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 262.33694, g: 325.04984, b: 430.2193, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1170,7 +1170,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9be25eb4080f7f48ab4870b77de9df3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundPrefab: {fileID: 5344254679698096393, guid: 2fef3af26b26b774e97f40f4a3ea57ff, type: 3}
   groundData: {fileID: 15600000, guid: 2d491bb12f12f4a449ba62c42c1be3f7, type: 2}
   treeOcculuderPrefab: {fileID: 8650456570569476745, guid: dffa1ccf79fd21c4aad6b961c5dc133b, type: 3}
 --- !u!114 &1192118952
@@ -2107,6 +2106,7 @@ GameObject:
   - component: {fileID: 2049511486}
   - component: {fileID: 2049511485}
   - component: {fileID: 2049511487}
+  - component: {fileID: 2049511488}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -2313,6 +2313,19 @@ MonoBehaviour:
   m_PointlightHDType: 0
   m_SpotLightShape: 0
   m_AreaLightShape: 0
+--- !u!114 &2049511488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2049511484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0101bdabd1dc704d93b3594cb1ca171, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeScale: 1
 --- !u!1 &2088076989
 GameObject:
   m_ObjectHideFlags: 0
@@ -2405,6 +2418,7 @@ SceneRoots:
   - {fileID: 1935933626}
   - {fileID: 2117055757}
   - {fileID: 401257671}
+  - {fileID: 7230549148783607881}
   - {fileID: 861526031}
   - {fileID: 1192118950}
   - {fileID: 983361994}
