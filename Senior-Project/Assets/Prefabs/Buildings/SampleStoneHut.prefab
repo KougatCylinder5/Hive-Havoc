@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1979884979925260502}
   - component: {fileID: -3807680282025644615}
   m_Layer: 3
-  m_Name: SampleWoodHut
+  m_Name: SampleStoneHut
   m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,7 +51,7 @@ MonoBehaviour:
   resourcePerSec: 1
   efficientRange: 2
   normalRange: 4
-  type: 0
+  type: 1
   terrain: {fileID: 0}
   distance: 0
 --- !u!1 &5245426359995520833

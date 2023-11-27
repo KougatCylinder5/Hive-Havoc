@@ -53,7 +53,7 @@ public class EnemyAI : AIController, IAIBasics
         //{
               _characterController.Move(movementDirection);
         //}
-        _animator.SetFloat("Speed", Vector3.Scale(movementDirection, new(1, 0, 1)).magnitude);
+        //_animator.SetFloat("Speed", Vector3.Scale(movementDirection, new(1, 0, 1)).magnitude);
     }
     private IEnumerator UpdateDirection()
     {

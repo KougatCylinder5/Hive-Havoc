@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Placeable : MonoBehaviour
+public class Placeable
 {
     private int id;
     private int tileItemID;
@@ -51,5 +51,10 @@ public class Placeable : MonoBehaviour
 
     public void setHealth(float health) {
         this.health = health;
+    }
+
+    public override string ToString()
+    {
+        return xPos + ", " + yPos;
     }
 }

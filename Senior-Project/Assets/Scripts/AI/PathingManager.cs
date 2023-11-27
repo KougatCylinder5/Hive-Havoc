@@ -18,6 +18,7 @@ using Unity.Jobs;
 using Unity.Burst;
 using System.Linq;
 using System;
+using System.Drawing;
 
 public class PathingManager : MonoBehaviour
 {
@@ -378,7 +379,15 @@ public class PathingManager : MonoBehaviour
     {
         return ObstructedTiles[CalculateIndex(Mathf.RoundToInt(point.x), Mathf.RoundToInt(point.y))];
     }
+    public static void SetWalkable(int x, int y, bool status)
+    {
+        try
+        {
+            ObstructedTiles[CalculateIndex(x, y)] = status;
+        }catch{ }
+        
 
+    }
     public void OnDrawGizmos()
     {
         for(int i = 0; i < ObstructedTiles.Count; i++)

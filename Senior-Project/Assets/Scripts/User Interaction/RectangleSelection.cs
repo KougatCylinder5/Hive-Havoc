@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro.Examples;
 using UnityEngine;
 using UnityEngine.Experimental.GlobalIllumination;
 
