@@ -110,7 +110,7 @@ public class AIController : MonoBehaviour, IHealth
     {
         if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Death"))
         {
-            _animator.SetTrigger("Death");
+            //_animator.SetTrigger("Death");
             Invoke(nameof(DestroySelf), 0.5f);
         }
     }
