@@ -11,6 +11,7 @@ TagManager:
   - Troop
   - SFX
   - Building
+  - Tree Hitbox
   layers:
   - Default
   - TransparentFX
