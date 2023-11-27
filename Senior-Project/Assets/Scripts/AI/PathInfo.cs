@@ -40,10 +40,11 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
 
         if (copyPath.Count > 0)
         {
-            Vector2 nextNode = copyPath.Dequeue();
+            Vector2 nextNode = Vector3.zero;
 
             while (copyPath.Count > 0)
             {
+                nextNode = copyPath.Dequeue();
                 center = ConvertToVector3(curNode, 0.35f);
                 halfExtends = Vector3.one / 4f;
                 halfExtends.y = 0;
@@ -52,7 +53,7 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
                 {
                     cleanedPath.Enqueue(priorNode);
                 }
-                priorNode = copyPath.Dequeue();
+                priorNode = nextNode;
 
             }
             if (!priorNode.Equals(new Vector2(-1, -1)))
