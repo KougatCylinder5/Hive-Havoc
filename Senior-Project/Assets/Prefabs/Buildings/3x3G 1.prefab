@@ -536,7 +536,7 @@ GameObject:
   - component: {fileID: 3941345270006427671}
   - component: {fileID: -7748260900219387024}
   m_Layer: 3
-  m_Name: 3x3G
+  m_Name: 3x3G 1
   m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

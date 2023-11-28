@@ -641,7 +641,7 @@ GameObject:
   - component: {fileID: 1071270949562094294}
   - component: {fileID: 2959628776873555001}
   m_Layer: 3
-  m_Name: 4x4G
+  m_Name: 4x4G 1
   m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

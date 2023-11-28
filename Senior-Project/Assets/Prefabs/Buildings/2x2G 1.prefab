@@ -221,7 +221,7 @@ GameObject:
   - component: {fileID: 6250486061387180023}
   - component: {fileID: 1342069375044739076}
   m_Layer: 3
-  m_Name: 2x2G
+  m_Name: 2x2G 1
   m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
