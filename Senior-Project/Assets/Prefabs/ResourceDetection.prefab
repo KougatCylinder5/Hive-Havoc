@@ -10,9 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8357885930109830333}
   - component: {fileID: 304835804914991519}
-  - component: {fileID: 5589033903902975900}
   m_Layer: 10
-  m_Name: Tree Occluder
+  m_Name: ResourceDetection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -55,15 +54,3 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &5589033903902975900
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8650456570569476745}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d36176f2bf024c541bd11138f73e7648, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

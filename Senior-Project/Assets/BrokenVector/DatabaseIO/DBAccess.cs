@@ -153,7 +153,11 @@ public class DBAccess
                 commitTransaction(false);
                 startTransaction(false);
 
-                SceneManager.LoadScene(sceneToLoad);
+                AsyncOperation tobeimplemented = SceneManager.LoadSceneAsync(sceneToLoad);
+                tobeimplemented.completed += (AsyncOperation) =>
+                {
+
+                };
                 return true;
             }
 

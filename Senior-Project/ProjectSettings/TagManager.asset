@@ -12,6 +12,7 @@ TagManager:
   - SFX
   - Building
   - Tree Hitbox
+  - Stone Hitbox
   layers:
   - Default
   - TransparentFX
