@@ -152,4 +152,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildingSize: 1
   buildingCost: 1e00000000000000000000000a00000000000000
-  key: 110
+  key: 99
