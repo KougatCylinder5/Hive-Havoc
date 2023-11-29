@@ -108,8 +108,8 @@ public class Saver : MonoBehaviour
                     case "Stone Hitbox":
                         type = 1;
                         break;
+
                 }
-                Debug.Log(new Vector2(blocker.transform.position.x / worldSize.x, blocker.transform.position.z / worldSize.z));
                 addPlaceable(type, blocker.transform.position.x / worldSize.x, blocker.transform.position.z / worldSize.z, 1, 1);
             }
             catch(Exception e) { invalidObstructers.Add(blocker); Debug.Log(e); }
@@ -128,7 +128,7 @@ public class Saver : MonoBehaviour
     }
 
     public enum PlaceableTypes
-    {
+    { 
         Tree,
         Stone
     }
