@@ -20,16 +20,16 @@ public class EnemyAI : AIController, IAIBasics
         if (IsDead) { Die(); return; }
         base.Update();
 
-        //if (LookForTarget(out GameObject target, _listenRadius))
-        //{
-        //    SetDestination(target.transform);
-        //    _type = PathingType.AroundObject;
-        //}
-        //else
-        //{
-        //    _type = PathingType.Flow;
-        //    _target = _startPoint;
-        //}
+        if (LookForTarget(out GameObject target, _listenRadius))
+        {
+            SetDestination(target.transform);
+            _type = PathingType.AroundObject;
+        }
+        else
+        {
+            _type = PathingType.Flow;
+            _target = _startPoint;
+        }
         if (FlowFieldGenerator.Finished)
         {
             if (_type == PathingType.Flow) Flow();
