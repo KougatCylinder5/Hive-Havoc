@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2882230252684429992}
   - component: {fileID: 1957301350984137894}
   m_Layer: 8
-  m_Name: Bug
+  m_Name: Crawler
   m_TagString: Troop
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
