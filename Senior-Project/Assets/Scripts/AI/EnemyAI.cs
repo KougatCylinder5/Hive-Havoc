@@ -6,7 +6,7 @@ public class EnemyAI : AIController, IAIBasics
 {
     [SerializeField]
     private PathingType _type;
-    public Vector2 Target { get => _target; set => _target = value; }
+    public new Vector2 Target { get => _target; set => _target = value; }
     public float _listenRadius = 10;
     public Vector2 _velocity = Vector2.zero;
     

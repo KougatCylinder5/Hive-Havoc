@@ -506,6 +506,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1eb0c6234cbf68249b9562fc85a5df1f, type: 3}
+--- !u!1 &401257672 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1810470965265036872, guid: 1eb0c6234cbf68249b9562fc85a5df1f, type: 3}
+  m_PrefabInstance: {fileID: 401257671}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &647842562
 GameObject:
   m_ObjectHideFlags: 0
@@ -1173,7 +1178,8 @@ MonoBehaviour:
   groundData: {fileID: 15600000, guid: 2d491bb12f12f4a449ba62c42c1be3f7, type: 2}
   treeOcculuderPrefab: {fileID: 8650456570569476745, guid: dffa1ccf79fd21c4aad6b961c5dc133b, type: 3}
   worldSize: {x: 0, y: 0, z: 0}
-  resourceObstructers: []
+  startingUnits:
+  - {fileID: 401257672}
 --- !u!114 &1192118952
 MonoBehaviour:
   m_ObjectHideFlags: 0
