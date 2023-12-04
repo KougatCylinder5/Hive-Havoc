@@ -157,6 +157,13 @@ public class EnemyAI : AIController, IAIBasics
         }
     }
 
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if ((LayerMask.GetMask("PlayerUnit","Building") & hit.gameObject.layer) > 0)
+        {
+            Debug.Log(hit.gameObject);
+        }
+    }
     /**
      * <returns>Returns <c>true</c> if an object was detected otherwise <c>false</c></returns>
      * <param name="target">Returns the closest target to the Object that called it</param>

@@ -5,20 +5,28 @@ using System.Data;
 using Mono.Data.Sqlite;
 using System;
 using UnityEngine.SceneManagement;
-using System.Xml.Linq;
 
-public class DBAccess
+public class DBAccess : MonoBehaviour
 {
     private static int saveID = 0;
     private static int diff = -1;
-    private static string dbConnectionString = "URI=file:" + Application.persistentDataPath + "\\storage.db";
+    private static string dbConnectionString;
     private static bool transactionActive = false;
     private const string noTransactionError = "Transaction has not been started!";
-    private static SqliteConnection sqliteDB = new SqliteConnection(dbConnectionString);
+    private static SqliteConnection sqliteDB;
     private static bool reloadingSave = false;
 
     public static TreeInstance[] fixItQuick = new TreeInstance[0];
+    string sceneToLoad = "";
+    static DBAccess Instance;
 
+    public static AsyncOperation loadingScene;
+    private void Awake()
+    {
+        Instance = this;
+        dbConnectionString = "data source=" + Application.persistentDataPath + "\\storage.db;foreign keys=true";
+        sqliteDB = new SqliteConnection(dbConnectionString);
+    }
     protected static string getConnectionString() {
         return dbConnectionString;
     }
@@ -133,12 +141,12 @@ public class DBAccess
             var sqliteCommand = sqliteDB.CreateCommand();
             sqliteCommand.CommandText = "SELECT id, dif, level_name FROM saves WHERE name LIKE '" + savename + "';";
             IDataReader saves = sqliteCommand.ExecuteReader();
-            string sceneToLoad = "";
+            Instance.sceneToLoad = "";
             try {
                 while(saves.Read()) {
                     saveID = saves.GetInt32(0);
                     diff = saves.GetInt32(1);
-                    sceneToLoad = saves.GetString(2);
+                    Instance.sceneToLoad = saves.GetString(2);
                     
                 }
             } catch {}
@@ -152,19 +160,24 @@ public class DBAccess
                 sqliteCommand.ExecuteNonQuery();
                 commitTransaction(false);
                 startTransaction(false);
-
-                AsyncOperation tobeimplemented = SceneManager.LoadSceneAsync(sceneToLoad);
-                tobeimplemented.completed += (AsyncOperation) =>
-                {
-
-                };
+                Instance.StartCoroutine(nameof(LoadScene));
+                
                 return true;
             }
 
             return false;
         }
     }
+    public IEnumerator LoadScene()
+    {
+        loadingScene = SceneManager.LoadSceneAsync(sceneToLoad);
+        loadingScene.allowSceneActivation = false;
 
+        while (!loadingScene.isDone)
+        {
+            yield return null;
+        }
+    }
     public static bool isAReload() {
         return reloadingSave;
     }
