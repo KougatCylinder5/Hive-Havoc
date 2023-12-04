@@ -5,6 +5,7 @@ using System.Data;
 using Mono.Data.Sqlite;
 using System;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class DBAccess : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class DBAccess : MonoBehaviour
     public static TreeInstance[] fixItQuick = new TreeInstance[0];
     string sceneToLoad = "";
     static DBAccess Instance;
+    public TextMeshProUGUI LoadingBar;
 
     public static AsyncOperation loadingScene;
     private void Awake()
@@ -171,10 +173,11 @@ public class DBAccess : MonoBehaviour
     public IEnumerator LoadScene()
     {
         loadingScene = SceneManager.LoadSceneAsync(sceneToLoad);
-        loadingScene.allowSceneActivation = false;
+        //loadingScene.allowSceneActivation = false;
 
         while (!loadingScene.isDone)
         {
+            LoadingBar.text = loadingScene.progress.ToString();
             yield return null;
         }
     }

@@ -51,8 +51,10 @@ public class Saver : MonoBehaviour
         worldSize = groundData.size;
 
         ground.terrainData.treeInstances = new TreeInstance[0];
+        int counter = 0;
         foreach (Placeable placeable in naturalObjects)
         {
+            counter++;
             GameObject occuluder = Instantiate(treeOcculuderPrefab, new Vector3Int(Mathf.RoundToInt(Mathf.Clamp(placeable.getXPos() * worldSize.x, 0, worldSize.x)), 0, Mathf.RoundToInt(Mathf.Clamp(placeable.getYPos() * worldSize.z, 0, worldSize.z))), Quaternion.identity, ground.gameObject.transform);
             int amount = 0;
             resourceObstructers.Add(occuluder);
@@ -86,7 +88,11 @@ public class Saver : MonoBehaviour
                     heightScale = 1
                 });
             }
-            yield return new WaitUntil(delegate { return true; });
+            if (counter > 10)
+            {
+                counter = 0;
+                yield return null;
+            }
         }
         ground.Flush();
         commitTransaction();
@@ -100,7 +106,7 @@ public class Saver : MonoBehaviour
             controller.Health = (int)unit.getHealth();
 
             playerUnits.Add(tempHolder);
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
         commitTransaction();
         clearReload();

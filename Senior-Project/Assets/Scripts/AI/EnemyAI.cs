@@ -32,11 +32,6 @@ public class EnemyAI : AIController, IAIBasics
             SetDestination(target.transform);
             _type = PathingType.AroundObject;
         }
-        else
-        {
-            _type = PathingType.Flow;
-            _target = new(_startPoint.x, _startPoint.z);
-        }
         if (FlowFieldFinished)
         {
             switch (_type)
