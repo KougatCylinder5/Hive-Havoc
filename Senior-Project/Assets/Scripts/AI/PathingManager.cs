@@ -45,12 +45,16 @@ public class PathingManager : MonoBehaviour
         _pathsToGenerate = new();
         Paths = new();
         InvokeRepeating(nameof(DestroyAllPaths), 1, 5);
-        InvokeRepeating(nameof(GeneratePaths), 0, 1);
+        
         for (int i = 0; i < GridSize.x * GridSize.y; i++)
         {
             ObstructedTiles.Add(true);
         }
         
+    }
+    public void FixedUpdate()
+    {
+        GeneratePaths();
     }
     public void Start()
     {
@@ -150,7 +154,7 @@ public class PathingManager : MonoBehaviour
         obstructedTiles.Dispose();
     }
 
-    //[BurstCompile]
+    [BurstCompile]
     private struct FindPathJob : IJob
     {
         public float2 exactEndPosition;

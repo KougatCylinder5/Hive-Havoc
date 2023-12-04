@@ -26,7 +26,7 @@ public class HunterBehavior : UnitAI
         if (Physics.OverlapSphereNonAlloc(_position, AttackRadius, enemies, LayerMask.GetMask("EnemyUnit")) > 0 && !IsIgnoringEnemies)
         {
             oldLookDirection = transform.rotation;
-            enemies = enemies.OrderBy(c => { if(c) return (c.transform.position - _position).magnitude; return float.PositiveInfinity; }).ToArray();
+            enemies = enemies.OrderBy(c => { if(c && !c.GetComponent<EnemyAI>().IsDead) return (c.transform.position - _position).magnitude; return float.PositiveInfinity; }).ToArray();
             AttackTarget = enemies[0].gameObject;
             Vector3 enemyAtHeight = AttackTarget.transform.position;
             enemyAtHeight.y = _position.y;
