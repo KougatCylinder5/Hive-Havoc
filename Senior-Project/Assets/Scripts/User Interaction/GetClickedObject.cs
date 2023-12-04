@@ -1,12 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GetClickedObject : MonoBehaviour
 {
     private GameObject troop;
-    private GameObject cube;
-    public GameObject building;
+    private GameObject building;
     public LayerMask notTerrain;
 
     // Start is called before the first frame update
@@ -24,11 +21,7 @@ public class GetClickedObject : MonoBehaviour
             bool hit = Physics.Raycast(ray:Camera.main.ScreenPointToRay(Input.mousePosition),maxDistance: float.MaxValue, hitInfo: out hitInfo,layerMask: notTerrain);
             if(hit)
             {
-                if(hitInfo.transform.CompareTag("Cube"))
-                {
-                    cube = hitInfo.transform.gameObject;
-                }
-                else if(hitInfo.transform.CompareTag("Troop"))
+                if(hitInfo.transform.CompareTag("Troop"))
                 {
                     troop = hitInfo.transform.gameObject;
                 }
@@ -40,20 +33,16 @@ public class GetClickedObject : MonoBehaviour
             else
             {
                 troop = null;
-                cube = null;
                 building = null;
             }
         }
         if(Input.GetMouseButtonDown(1))
         {
             troop = null;
-            cube = null;
             building = null;
         }
     }
 
     public GameObject getTroop(){return troop;}
-    public GameObject getCube(){return cube;}
     public GameObject getBuilding(){return building;}
-    public void resetCube(){cube = null;}
 }

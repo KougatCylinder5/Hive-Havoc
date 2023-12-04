@@ -19,12 +19,10 @@ public class BuildingPlacement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _keycodes.Add(KeyCode.Z); 
-        _keycodes.Add(KeyCode.X);
-        _keycodes.Add(KeyCode.C);
-        _keycodes.Add(KeyCode.V);
-        _keycodes.Add(KeyCode.B);
-        _keycodes.Add(KeyCode.N);
+        for(int i = 1; i < _buildingPrefabs.Count; i+=2)
+        {
+            _keycodes.Add(_buildingPrefabs[i].GetComponent<GhostBuildingClass>().GetKey());
+        }
     }
 
     // Update is called once per frame

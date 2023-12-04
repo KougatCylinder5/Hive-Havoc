@@ -9,9 +9,15 @@ using static PathingManager;
 [RequireComponent(typeof(Animator))]
 public class AIController : MonoBehaviour, IHealth
 {
+
+    public Vector2 Target { get => _target; protected set => _target = value; }
+
     [SerializeField]
     protected Vector2 _target;
     protected PathInfo _pathInfo;
+
+    public Vector3 Position { get => _position; protected set => _position = value; }
+    public Vector2 Position2D { get => _position2D; protected set => _position2D = value; }
 
     [SerializeField]
     protected Vector3 _position;
@@ -34,11 +40,12 @@ public class AIController : MonoBehaviour, IHealth
     protected float _resistance;
     [SerializeField]
     private bool _isDead = false;
+    protected bool _isIgnoringEnemies = false;
     public bool IsDead { get => _isDead; protected set => _isDead = value; }
     public int Health
     {
         get => _health;
-        protected set
+        set
         {
             if (value <= 0)
             {
@@ -56,6 +63,8 @@ public class AIController : MonoBehaviour, IHealth
     public int HealthRegen { get => _regeneration; protected set => _regeneration = value; }
 
     public float Resistance { get => _resistance; protected set => _resistance = value; }
+
+    public bool IsIgnoringEnemies { get => _isIgnoringEnemies; set => _isIgnoringEnemies = value; }
 
     public void Awake()
     {
@@ -96,14 +105,14 @@ public class AIController : MonoBehaviour, IHealth
         _position = transform.position;
         _position2D = new(_position.x, _position.z);
         
-        try
+        if (_pathInfo.cleanedPath.TryPeek(out Vector2 nextNode))
         {
-            if (_pathInfo.cleanedPath.TryPeek(out Vector2 nextNode))
-            {
-                transform.LookAt(PathInfo.ConvertToVector3(nextNode, _position.y));
-            }
+            transform.LookAt(PathInfo.ConvertToVector3(nextNode, _position.y));
         }
-        catch{ }
+        else
+        {
+            _isIgnoringEnemies = false;
+        }
     }
 
     protected void Die()
@@ -126,111 +135,4 @@ public class AIController : MonoBehaviour, IHealth
     {
         Health += _regeneration;
     }
-
-    //[BurstCompile]
-    //public void FixedUpdate()
-    //{
-    //    
-
-    //    switch (_pathingType)
-    //    {
-    //        case PathingType.AroundObject:
-
-    //            if (_updateFrequency > _updateTimeRemaining && Vector2.Distance(_position2D, _target) > 0.1f)
-    //            {
-    //                _Path = RetrieveNewPath();
-    //                _updateTimeRemaining += Time.fixedDeltaTime;
-    //            }
-    //            else
-    //            {
-    //                _updateTimeRemaining = 0;
-    //            }
-    //            if (_Path != null && _Path.cleanedPath.TryPeek(out Vector2 pathTarget))
-    //            {
-
-    //                Vector2 movementVector = pathTarget - _position2D;
-    //                movementVector.Normalize();
-    //                if (Vector2.Distance(_position2D, pathTarget) > 0.1f)
-    //                {
-    //                    _characterController.Move(new Vector3(movementVector.x, -1f, movementVector.y) * speed * Time.fixedDeltaTime);
-    //                }
-    //                else
-    //                {
-    //                    _Path.cleanedPath.Dequeue();
-    //                }
-    //            }
-
-
-    //            break;
-
-    //        case PathingType.Flow:
-    //            
-
-
-    //    }
-
-
-    //}
-
-
-    //public void LateUpdate()
-    //{
-    //    if (_pathingType == PathingType.AroundObject)
-    //    {
-    //        RequestNewPath();
-    //    }
-    //}
-
-    //private void RequestNewPath()
-    //{
-    //    if ((_updateFrequency < _updateTimeRemaining || IsStale) && Vector3.Distance(_position, new Vector3(_target.x, 1f, _target.y)) > 0.01f)
-    //    {
-    //        _requestedPath = new PathInfo() { Start = new(_position.x, _position.z), End = _target };
-    //        PathingManager.Instance.QueuePath(_requestedPath);
-    //        _updateTimeRemaining = 0;
-    //    }
-    //    else
-    //    {
-    //        _updateTimeRemaining += Time.deltaTime;
-    //    }
-    //}
-
-
-    //private PathInfo RetrieveNewPath()
-    //{
-    //    int pathPos = PathingManager.Instance.Paths.IndexOf(_requestedPath);
-    //    if (pathPos != -1)
-    //    {
-    //        return PathingManager.Instance.Paths.ElementAt(pathPos);
-    //    }
-    //    return _Path;
-
-    //}
-
-    //public bool SetDestination(Vector2 destination)
-    //{
-
-    //    bool canPath = PathingManager.ObstructedTiles[PathingManager.CalculateIndex(Mathf.RoundToInt(destination.x), Mathf.RoundToInt(destination.y))];
-    //    if (canPath)
-    //    {
-    //        this._target = destination;
-    //        _pathingType = PathingType.AroundObject;
-    //    }
-    //    return canPath;
-    //}
-
-    //public bool SetTarget(Transform target)
-    //{
-    //    Vector2 temp = new Vector2(target.position.x, target.position.z);
-
-    //    bool canPath = PathingManager.ObstructedTiles[PathingManager.CalculateIndex(Mathf.RoundToInt(target.position.x), Mathf.RoundToInt(target.position.z))];
-
-    //    if (canPath)
-    //    {
-    //        this._target = temp;
-    //        _pathingType = PathingType.AroundObject;
-    //    }
-    //    return canPath;
-
-    //}
 }

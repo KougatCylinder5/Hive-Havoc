@@ -101,7 +101,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -114,9 +114,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5494705257834813551}
-  - component: {fileID: 6973924422828300512}
+  - component: {fileID: -2418802328419578011}
   m_Layer: 3
-  m_Name: SampleWoodHutGhost
+  m_Name: 1x1G 1
   m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -138,7 +138,7 @@ Transform:
   - {fileID: 2551090878545746880}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6973924422828300512
+--- !u!114 &-2418802328419578011
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -151,5 +151,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingSize: 1
-  buildingCost: 0000000000000000000000000000000003000000
-  key: 120
+  buildingCost: 0100000001000000010000000100000001000000
+  key: 122
