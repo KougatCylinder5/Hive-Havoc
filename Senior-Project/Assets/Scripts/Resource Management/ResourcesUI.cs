@@ -21,11 +21,11 @@ public class ResourcesUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        woodText.text = "Wood: " + ResourceStruct.Wood;
-        coalText.text = "Coal: " + ResourceStruct.Coal;
-        copperOreText.text = "CopperOre: " + ResourceStruct.CopperOre;
-        copperIngotText.text = "CopperIngot: " + ResourceStruct.CopperIngot;
-        stoneText.text = "Stone: " + ResourceStruct.Stone;
+        woodText.text = "" + ResourceStruct.Wood;
+        coalText.text = "" + ResourceStruct.Coal;
+        copperOreText.text = "" + ResourceStruct.CopperOre;
+        copperIngotText.text = "" + ResourceStruct.CopperIngot;
+        stoneText.text = "" + ResourceStruct.Stone;
         if(Input.GetKeyDown(KeyCode.Space))
         {
             ResourceStruct.Wood += value;
