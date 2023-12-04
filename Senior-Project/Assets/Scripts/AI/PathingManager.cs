@@ -44,8 +44,8 @@ public class PathingManager : MonoBehaviour
         Instance = this;
         _pathsToGenerate = new();
         Paths = new();
-        InvokeRepeating(nameof(DestroyAllPaths), 0, 60);
-
+        InvokeRepeating(nameof(DestroyAllPaths), 1, 5);
+        InvokeRepeating(nameof(GeneratePaths), 0, 1);
         for (int i = 0; i < GridSize.x * GridSize.y; i++)
         {
             ObstructedTiles.Add(true);
@@ -56,7 +56,7 @@ public class PathingManager : MonoBehaviour
     {
         obstructedTiles = new(GridSize.x * GridSize.y, Allocator.Persistent);
     }
-    public void LateUpdate()
+    public void GeneratePaths()
     {
 
         List<PathInfo> tempGeneratedPath = ReturnPaths(_pathsToGenerate);

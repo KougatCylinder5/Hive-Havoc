@@ -155,10 +155,9 @@ public class Saver : MonoBehaviour
         commitTransaction();
     }
 
-    public void quickFix()
+    public void OnApplicationQuit()
     {
-        ground.terrainData.treeInstances = fixItQuick;
-        ground.Flush();
+        saveScene();
     }
 
     public enum PlaceableTypes

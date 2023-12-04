@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 3483130440133651877}
   - component: {fileID: 810640080948504249}
   - component: {fileID: 6194155668668213725}
-  - component: {fileID: 9209854419597864166}
   - component: {fileID: 2882230252684429992}
   - component: {fileID: 1957301350984137894}
+  - component: {fileID: -4774269141038947195}
   m_Layer: 8
   m_Name: Crawler
   m_TagString: Troop
@@ -86,29 +86,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &9209854419597864166
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3706112903273544462}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46eb37c4e95c31740b6526eb2901ebda, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _target: {x: 0, y: 0}
-  _position: {x: 0, y: 0, z: 0}
-  speed: 2
-  _updateFrequency: 0.1
-  _characterController: {fileID: 0}
-  _health: 0
-  _maxHealth: 0
-  _isDead: 0
-  _type: 0
-  _listenRadius: 10
-  _velocity: {x: 0, y: 0}
 --- !u!143 &2882230252684429992
 CharacterController:
   m_ObjectHideFlags: 0
@@ -156,3 +133,26 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-4774269141038947195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3706112903273544462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69e2f1686b830e94189f48d5d13a7919, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _target: {x: 0, y: 0}
+  _position: {x: 0, y: 0, z: 0}
+  speed: 2
+  _updateFrequency: 0.1
+  _characterController: {fileID: 2882230252684429992}
+  _health: 20
+  _maxHealth: 0
+  _isDead: 0
+  _type: 0
+  _listenRadius: 10
+  _velocity: {x: 0, y: 0}
