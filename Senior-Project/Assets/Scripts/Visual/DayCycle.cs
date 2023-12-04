@@ -5,9 +5,11 @@ using UnityEngine;
 public class DayCycle : MonoBehaviour
 {
     public float timeScale = 5;
+    Light _sun;
     // Start is called before the first frame update
     void Start()
     {
+        _sun = GetComponent<Light>();
     }
 
     // Update is called once per frame
@@ -16,13 +18,13 @@ public class DayCycle : MonoBehaviour
         gameObject.transform.Rotate(new Vector3(1,0,0) * Time.deltaTime * timeScale);
 
         if(gameObject.transform.eulerAngles.x > 180) {
-            Debug.Log(GetComponent<Light>().intensity);
-            if(GetComponent<Light>().intensity > 100) {
-                GetComponent<Light>().intensity -= (GetComponent<Light>().intensity * Time.deltaTime * timeScale);
+            Debug.Log(_sun.intensity);
+            if(_sun.intensity > 100) {
+                _sun.intensity -= (_sun.intensity * Time.deltaTime * timeScale);
             }
         } else {
-            if (GetComponent<Light>().intensity < 81741.55f) {
-                GetComponent<Light>().intensity += (10000 * Time.deltaTime * timeScale);
+            if (_sun.intensity < 81741.55f) {
+                _sun.intensity += (10000 * Time.deltaTime * timeScale);
             }
         }
     }

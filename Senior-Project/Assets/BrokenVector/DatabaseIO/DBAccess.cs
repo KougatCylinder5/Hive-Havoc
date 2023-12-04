@@ -6,12 +6,13 @@ using Mono.Data.Sqlite;
 using System;
 using UnityEngine.SceneManagement;
 using System.Xml.Linq;
+using UnityEngine.UIElements;
 
 public class DBAccess
 {
     private static int saveID = 0;
     private static int diff = -1;
-    private static string dbConnectionString = "URI=file:" + Application.persistentDataPath + "\\storage.db";
+    private static string dbConnectionString = "data source=" + Application.persistentDataPath + "\\storage.db;foreign keys=true;";
     private static bool transactionActive = false;
     private const string noTransactionError = "Transaction has not been started!";
     private static SqliteConnection sqliteDB = new SqliteConnection(dbConnectionString);
@@ -165,6 +166,32 @@ public class DBAccess
         }
     }
 
+    public static int getSaveId(string savename) {
+        if (!transactionActive) {
+            Debug.LogError(noTransactionError);
+            return 0;
+        } else {
+            var sqliteCommand = sqliteDB.CreateCommand();
+            sqliteCommand.CommandText = "SELECT id FROM saves WHERE name LIKE '" + savename + "';";
+            IDataReader saves = sqliteCommand.ExecuteReader();
+            string sceneToLoad = "";
+            try {
+                while (saves.Read()) {
+                    saveID = saves.GetInt32(0);
+
+                }
+            } catch { }
+
+            saves.Close();
+
+            if (saveID != 0) {
+                return saveID;
+            }
+
+            return 0;
+        }
+    }
+
     public static bool isAReload() {
         return reloadingSave;
     }
@@ -265,8 +292,22 @@ public class DBAccess
         } else {
             var sqliteCommand = sqliteDB.CreateCommand();
 
-            sqliteCommand.CommandText = "DELETE FROM saves WHERE name LIKE '" + savename + "';";
             try {
+                sqliteCommand.CommandText = "DELETE FROM saves WHERE name LIKE '" + savename + "';";
+                sqliteCommand.ExecuteNonQuery();
+                sqliteCommand.CommandText = "DELETE FROM placeables WHERE save_id LIKE '" + getSaveId(savename) + "';";
+                sqliteCommand.ExecuteNonQuery();
+                sqliteCommand.CommandText = "DELETE FROM unit WHERE save_id LIKE '" + getSaveId(savename) + "';";
+                sqliteCommand.ExecuteNonQuery();
+                sqliteCommand.CommandText = "DELETE FROM inventory WHERE save_id LIKE '" + getSaveId(savename) + "';";
+                sqliteCommand.ExecuteNonQuery();
+                sqliteCommand.CommandText = "DELETE FROM tile_data WHERE save_id LIKE '" + getSaveId(savename) + "';";
+                sqliteCommand.ExecuteNonQuery();
+                sqliteCommand.CommandText = "DELETE FROM played_levels WHERE save_id LIKE '" + getSaveId(savename) + "';";
+                sqliteCommand.ExecuteNonQuery();
+                sqliteCommand.CommandText = "DELETE FROM unlocked_tech WHERE save_id LIKE '" + getSaveId(savename) + "';";
+                sqliteCommand.ExecuteNonQuery();
+                sqliteCommand.CommandText = "DELETE FROM level_data WHERE save_id LIKE '" + getSaveId(savename) + "';";
                 sqliteCommand.ExecuteNonQuery();
 
             } catch {
