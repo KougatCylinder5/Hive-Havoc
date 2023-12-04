@@ -16,7 +16,7 @@ public class FlowFieldGenerator : MonoBehaviour
     public List<bool> NaturalObstructedTiles { get; private set; }
     [SerializeField]
     public static Vector3 _startPoint { private set; get; }
-    public static bool Finished { private set; get; }
+    public static bool FlowFieldFinished { private set; get; }
 
     private NativeList<FlowFieldJob.PathNode> positionsToCheck;
     private NativeList<FlowFieldJob.PathNode> closedList;
@@ -24,16 +24,16 @@ public class FlowFieldGenerator : MonoBehaviour
     private NativeArray<bool> obstructedTiles;
     private Coroutine gridGenerator;
 
-    //[BurstCompile]
+    [BurstCompile]
     public void Awake()
     {
-        Finished = false;
+        FlowFieldFinished = false;
         NaturalObstructedTiles = new();
-        for (int i = 0; i < PathingManager.GridSize.x * PathingManager.GridSize.y; i++)
+        for (int i = 0; i < GridSize.x * GridSize.y; i++)
         {
-            NaturalObstructedTiles.Add(PathingManager.ObstructedTiles[i]);
+            NaturalObstructedTiles.Add(ObstructedTiles[i]);
         }
-        FlowTiles = new FlowFieldJob.PathNode[PathingManager.GridSize.x, PathingManager.GridSize.y];
+        FlowTiles = new FlowFieldJob.PathNode[GridSize.x, GridSize.y];
         
     }
     // Start is called before the first frame update
@@ -45,7 +45,7 @@ public class FlowFieldGenerator : MonoBehaviour
         closedList = new(Allocator.Persistent);
         handles = new NativeList<JobHandle>(Allocator.Persistent);
 
-        obstructedTiles = new(PathingManager.GridSize.x * PathingManager.GridSize.y, Allocator.Persistent);
+        obstructedTiles = new(GridSize.x * GridSize.y, Allocator.Persistent);
         for (int j = 0; j < NaturalObstructedTiles.Count; j++)
         {
             obstructedTiles[j] = NaturalObstructedTiles[j];
@@ -65,7 +65,7 @@ public class FlowFieldGenerator : MonoBehaviour
                 newPositionsToCheck = newPositionsToCheck.AsParallelWriter(),
                 obstructedTiles = obstructedTiles.AsReadOnly(),
                 closedList = closedList.AsParallelReader(),
-                gridSize = PathingManager.GridSize
+                gridSize = GridSize
             };
 
             handles.Add(job.Schedule(positionsToCheck.Length, 1));
@@ -90,7 +90,7 @@ public class FlowFieldGenerator : MonoBehaviour
         {
             FlowTiles[node.position.x, node.position.y] = node;
         }
-        Finished = true;
+        FlowFieldFinished = true;
         obstructedTiles.Dispose();
         closedList.Dispose();
         handles.Dispose();
@@ -125,7 +125,7 @@ public class FlowFieldGenerator : MonoBehaviour
                 {
                     position = positionsToCheck[index].position + neighbour,
                     direction = -neighbour * 2,
-                    hCost = Vector2.Distance(startPosition, positionsToCheck[index].position + neighbour),
+                    hCost = Vector2.Distance(startPosition, positionsToCheck[index].position + neighbour)/2,
                     gCost = positionsToCheck[index].gCost + 1,
 
                 };

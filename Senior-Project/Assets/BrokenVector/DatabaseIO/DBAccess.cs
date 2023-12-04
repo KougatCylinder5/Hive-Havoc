@@ -153,7 +153,11 @@ public class DBAccess
                 commitTransaction(false);
                 startTransaction(false);
 
-                SceneManager.LoadScene(sceneToLoad);
+                AsyncOperation tobeimplemented = SceneManager.LoadSceneAsync(sceneToLoad);
+                tobeimplemented.completed += (AsyncOperation) =>
+                {
+
+                };
                 return true;
             }
 
@@ -295,27 +299,27 @@ public class DBAccess
         }
     }
 
-    public static int addUnit(int type, float xPos, float yPos, float xTarget, float yTarget, float health, int pathMode) {
+    public static void/*int*/ addUnit(int type, float xPos, float yPos, float xTarget, float yTarget, float health, int pathMode) {
         if(!transactionActive) {
             Debug.LogError(noTransactionError);
-            return 0;
+            //return 0;
         } else {
-            int rowid = 0;
+            //int rowid = 0;
             var sqliteCommand = sqliteDB.CreateCommand();
             sqliteCommand.CommandText = "INSERT INTO unit ('x_pos', 'y_pos', 'target_x', 'target_y', 'health', 'type', 'path_mode', 'save_id') VALUES ('" + xPos + "', '" + yPos + "', '" + xTarget + "', '" + yTarget + "', '" + health + "', '" + type + "', '" + pathMode + "','" + saveID + "');";
             sqliteCommand.ExecuteNonQuery();
 
-            sqliteCommand.CommandText = "SELECT last_insert_rowid() FROM unit;";
-            IDataReader lastRow = sqliteCommand.ExecuteReader();
+            //sqliteCommand.CommandText = "SELECT last_insert_rowid() FROM unit;";
+            //IDataReader lastRow = sqliteCommand.ExecuteReader();
 
-            try {
-                while(lastRow.Read()) {
-                    rowid = lastRow.GetInt32(0);
-                }
-            } catch {}
+            //try {
+            //    while(lastRow.Read()) {
+            //        rowid = lastRow.GetInt32(0);
+            //    }
+            //} catch {}
 
-            lastRow.Close();
-            return rowid;
+            //lastRow.Close();
+            //return rowid;
         }
     }
 

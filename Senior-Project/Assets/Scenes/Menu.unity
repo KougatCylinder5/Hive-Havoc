@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 262.33694, g: 325.04984, b: 430.2193, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -459,9 +459,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 16901114}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 855e6713a3212f6428d2635cdd4cfc70, type: 3}
   m_Name: Graphics Quality
   m_EditorClassIdentifier: 
+  saveName: {fileID: 1917607798}
+  saveDifficulty: {fileID: 788067884}
 --- !u!1 &19919502
 GameObject:
   m_ObjectHideFlags: 0
@@ -2721,14 +2723,6 @@ PrefabInstance:
       propertyPath: savePrefab
       value: 
       objectReference: {fileID: 2748664304341967680, guid: 62de7871c45eb28468fa7b0072b3d147, type: 3}
-    - target: {fileID: 2956886369053743149, guid: 62de7871c45eb28468fa7b0072b3d147, type: 3}
-      propertyPath: m_TargetGraphic
-      value: 
-      objectReference: {fileID: 1390707822}
-    - target: {fileID: 4512811135325270254, guid: 62de7871c45eb28468fa7b0072b3d147, type: 3}
-      propertyPath: m_TargetGraphic
-      value: 
-      objectReference: {fileID: 1390707822}
     - target: {fileID: 4512811135325270254, guid: 62de7871c45eb28468fa7b0072b3d147, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 2
@@ -2996,7 +2990,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: 57.948524, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -3663,14 +3657,6 @@ PrefabInstance:
       propertyPath: savePrefab
       value: 
       objectReference: {fileID: 2748664304341967680, guid: 62de7871c45eb28468fa7b0072b3d147, type: 3}
-    - target: {fileID: 2956886369053743149, guid: 62de7871c45eb28468fa7b0072b3d147, type: 3}
-      propertyPath: m_TargetGraphic
-      value: 
-      objectReference: {fileID: 583829941}
-    - target: {fileID: 4512811135325270254, guid: 62de7871c45eb28468fa7b0072b3d147, type: 3}
-      propertyPath: m_TargetGraphic
-      value: 
-      objectReference: {fileID: 583829941}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5172,14 +5158,6 @@ PrefabInstance:
       propertyPath: savePrefab
       value: 
       objectReference: {fileID: 2748664304341967680, guid: 62de7871c45eb28468fa7b0072b3d147, type: 3}
-    - target: {fileID: 2956886369053743149, guid: 62de7871c45eb28468fa7b0072b3d147, type: 3}
-      propertyPath: m_TargetGraphic
-      value: 
-      objectReference: {fileID: 222194165}
-    - target: {fileID: 4512811135325270254, guid: 62de7871c45eb28468fa7b0072b3d147, type: 3}
-      propertyPath: m_TargetGraphic
-      value: 
-      objectReference: {fileID: 222194165}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7491,8 +7469,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Back
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
-  m_sharedMaterial: {fileID: 2164040, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -12514,7 +12492,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1539318351
 Transform:
   m_ObjectHideFlags: 0
@@ -14491,7 +14469,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: 57.72831, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0

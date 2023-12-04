@@ -5,7 +5,7 @@ using static PathingManager;
 [RequireComponent(typeof(LineRenderer))]
 public class UnitAI : AIController, IAIBasics, IAttack
 {
-    public Vector2 Target { get => _target; set => _target = value; }
+    public new Vector2 Target { get => _target; set => _target = value; }
     
     private PathInfo _lastPathGenerated = null;
 
@@ -18,6 +18,9 @@ public class UnitAI : AIController, IAIBasics, IAttack
 
     private float _attackCooldown;
     public float AttackCooldown { get => _attackCooldown; protected set => _attackCooldown = value; }
+
+    private float _attackBaseCooldown;
+    public float AttackBaseCooldown { get => _attackBaseCooldown; protected set => _attackBaseCooldown = value; }
 
     private int _veteranPercent;
     public int VeteranPercent { get => _veteranPercent; protected set => _veteranPercent = value; }

@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 using static DBAccess;
+using static UnityEngine.UI.CanvasScaler;
 
 public class Saver : MonoBehaviour
 {
@@ -13,11 +14,17 @@ public class Saver : MonoBehaviour
     public GameObject treeOcculuderPrefab;
 
     public Vector3 worldSize;
-    public List<GameObject> resourceObstructers = new List<GameObject>();
+
+    public GameObject[] startingUnits;
+
+    public static List<GameObject> resourceObstructers = new List<GameObject>();
+    public static List<GameObject> playerUnits = new List<GameObject>();
+
     // Start is called before the first frame update
     void Awake()
     {
-        //ground = Instantiate(groundPrefab, new Vector3(0,0,0), groundPrefab.transform.rotation).GetComponent<Terrain>();
+
+        playerUnits = startingUnits.ToList();
         ground = GameObject.Find("Ground").GetComponent<Terrain>();
 
         ground.terrainData = Instantiate(groundData);
@@ -27,6 +34,10 @@ public class Saver : MonoBehaviour
         if (!isAReload())
         {
             freshLoadScene();
+        }
+        else
+        {
+            foreach (GameObject unit in startingUnits) Destroy(unit);
         }
         startTransaction();
 
@@ -52,10 +63,7 @@ public class Saver : MonoBehaviour
                     occuluder.GetComponent<MeshCollider>().enabled = false;
                     amount = 5;
                     break;
-
             }
-
-
             for (int i = 0; i < amount; i++)
             {
                 Vector3 position = new Vector3(placeable.getXPos(), 0, placeable.getYPos());
@@ -73,12 +81,21 @@ public class Saver : MonoBehaviour
                     heightScale = 1
                 });
             }
-
-
-
-
         });
         ground.Flush();
+        commitTransaction();
+        startTransaction();
+        List<Unit> units = getUnits();
+        Debug.Log(units.Count);
+        foreach (Unit unit in units)
+        {
+            GameObject tempHolder = Instantiate(Resources.Load(Enum.GetName(typeof(UnitTypes), (UnitTypes)unit.getType())) as GameObject, new Vector3(unit.getXPos(), 1, unit.getYPos()), Quaternion.identity);
+            AIController controller = tempHolder.GetComponent<AIController>();
+            controller.SetDestination(new Vector2(unit.getXTarget(), unit.getYTarget()));
+            controller.Health = (int)unit.getHealth();
+            
+            playerUnits.Add(tempHolder);
+        }
         commitTransaction();
         clearReload();
     }
@@ -86,13 +103,17 @@ public class Saver : MonoBehaviour
     {
         startTransaction();
         groundData.treeInstances.ToList().ForEach(resource => { addPlaceable(resource.prototypeIndex, resource.position.x, resource.position.z, 1, 1); });
+        foreach(GameObject unit in playerUnits)
+        {
+            AIController unitController = unit.GetComponent<AIController>();
+            addUnit((int)Enum.Parse<UnitTypes>(unit.name[..unit.name.LastIndexOf('(')]), unitController.Position2D.x, unitController.Position2D.y, unitController.Target.x, unitController.Target.y, unitController.Health, 0);
+        }
         commitTransaction();
     }
     public void saveScene()
     {
         startTransaction();
         clear();
-
         List<GameObject> invalidObstructers = new();
 
         foreach(GameObject blocker in resourceObstructers)
@@ -118,19 +139,37 @@ public class Saver : MonoBehaviour
         {
             resourceObstructers.Remove(invalid);
         }
+
+        for(int i = 0; i < playerUnits.Count; i++)
+        {
+            GameObject unit = playerUnits[i];
+            try
+            {
+                AIController unitController = unit.GetComponent<AIController>();
+                Debug.Log(unit.name[..unit.name.LastIndexOf('(')]);
+                addUnit((int)Enum.Parse<UnitTypes>(unit.name[..unit.name.LastIndexOf('(')]), unitController.Position2D.x, unitController.Position2D.y, unitController.Target.x, unitController.Target.y, unitController.Health, 0);
+            }
+            catch { playerUnits.RemoveAt(i--); }
+        }        
+
         commitTransaction();
     }
 
-    public void quickFix()
+    public void OnApplicationQuit()
     {
-        ground.terrainData.treeInstances = fixItQuick;
-        ground.Flush();
+        saveScene();
     }
 
     public enum PlaceableTypes
     { 
         Tree,
         Stone
+    }
+    //This must match the prefab name
+    public enum UnitTypes
+    {
+        Hunter,
+        Crawler
     }
 
 }
