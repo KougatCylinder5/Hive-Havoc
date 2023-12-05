@@ -25,12 +25,6 @@ public class ResourceCollectBuilding : BuildingClass
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void AddResources()
     {
         switch(type)
@@ -92,7 +86,6 @@ public class ResourceCollectBuilding : BuildingClass
         Coal,
         CopperOre,
         CopperIngot
-        
     }
 
 }
