@@ -6,12 +6,13 @@ using Mono.Data.Sqlite;
 using System;
 using UnityEngine.SceneManagement;
 using System.Xml.Linq;
+using UnityEngine.UIElements;
 
 public class DBAccess
 {
     private static int saveID = 0;
     private static int diff = -1;
-    private static string dbConnectionString = "URI=file:" + Application.persistentDataPath + "\\storage.db";
+    private static string dbConnectionString = "data source=" + Application.persistentDataPath + "\\storage.db;foreign keys=true;";
     private static bool transactionActive = false;
     private const string noTransactionError = "Transaction has not been started!";
     private static SqliteConnection sqliteDB = new SqliteConnection(dbConnectionString);
@@ -165,6 +166,32 @@ public class DBAccess
         }
     }
 
+    public static int getSaveId(string savename) {
+        if (!transactionActive) {
+            Debug.LogError(noTransactionError);
+            return 0;
+        } else {
+            var sqliteCommand = sqliteDB.CreateCommand();
+            sqliteCommand.CommandText = "SELECT id FROM saves WHERE name LIKE '" + savename + "';";
+            IDataReader saves = sqliteCommand.ExecuteReader();
+            string sceneToLoad = "";
+            try {
+                while (saves.Read()) {
+                    saveID = saves.GetInt32(0);
+
+                }
+            } catch { }
+
+            saves.Close();
+
+            if (saveID != 0) {
+                return saveID;
+            }
+
+            return 0;
+        }
+    }
+
     public static bool isAReload() {
         return reloadingSave;
     }
@@ -265,8 +292,22 @@ public class DBAccess
         } else {
             var sqliteCommand = sqliteDB.CreateCommand();
 
-            sqliteCommand.CommandText = "DELETE FROM saves WHERE name LIKE '" + savename + "';";
             try {
+                sqliteCommand.CommandText = "DELETE FROM saves WHERE name LIKE '" + savename + "';";
+                sqliteCommand.ExecuteNonQuery();
+                sqliteCommand.CommandText = "DELETE FROM placeables WHERE save_id LIKE '" + getSaveId(savename) + "';";
+                sqliteCommand.ExecuteNonQuery();
+                sqliteCommand.CommandText = "DELETE FROM unit WHERE save_id LIKE '" + getSaveId(savename) + "';";
+                sqliteCommand.ExecuteNonQuery();
+                sqliteCommand.CommandText = "DELETE FROM inventory WHERE save_id LIKE '" + getSaveId(savename) + "';";
+                sqliteCommand.ExecuteNonQuery();
+                sqliteCommand.CommandText = "DELETE FROM tile_data WHERE save_id LIKE '" + getSaveId(savename) + "';";
+                sqliteCommand.ExecuteNonQuery();
+                sqliteCommand.CommandText = "DELETE FROM played_levels WHERE save_id LIKE '" + getSaveId(savename) + "';";
+                sqliteCommand.ExecuteNonQuery();
+                sqliteCommand.CommandText = "DELETE FROM unlocked_tech WHERE save_id LIKE '" + getSaveId(savename) + "';";
+                sqliteCommand.ExecuteNonQuery();
+                sqliteCommand.CommandText = "DELETE FROM level_data WHERE save_id LIKE '" + getSaveId(savename) + "';";
                 sqliteCommand.ExecuteNonQuery();
 
             } catch {
@@ -299,27 +340,27 @@ public class DBAccess
         }
     }
 
-    public static int addUnit(int type, float xPos, float yPos, float xTarget, float yTarget, float health, int pathMode) {
+    public static void/*int*/ addUnit(int type, float xPos, float yPos, float xTarget, float yTarget, float health, int pathMode) {
         if(!transactionActive) {
             Debug.LogError(noTransactionError);
-            return 0;
+            //return 0;
         } else {
-            int rowid = 0;
+            //int rowid = 0;
             var sqliteCommand = sqliteDB.CreateCommand();
             sqliteCommand.CommandText = "INSERT INTO unit ('x_pos', 'y_pos', 'target_x', 'target_y', 'health', 'type', 'path_mode', 'save_id') VALUES ('" + xPos + "', '" + yPos + "', '" + xTarget + "', '" + yTarget + "', '" + health + "', '" + type + "', '" + pathMode + "','" + saveID + "');";
             sqliteCommand.ExecuteNonQuery();
 
-            sqliteCommand.CommandText = "SELECT last_insert_rowid() FROM unit;";
-            IDataReader lastRow = sqliteCommand.ExecuteReader();
+            //sqliteCommand.CommandText = "SELECT last_insert_rowid() FROM unit;";
+            //IDataReader lastRow = sqliteCommand.ExecuteReader();
 
-            try {
-                while(lastRow.Read()) {
-                    rowid = lastRow.GetInt32(0);
-                }
-            } catch {}
+            //try {
+            //    while(lastRow.Read()) {
+            //        rowid = lastRow.GetInt32(0);
+            //    }
+            //} catch {}
 
-            lastRow.Close();
-            return rowid;
+            //lastRow.Close();
+            //return rowid;
         }
     }
 

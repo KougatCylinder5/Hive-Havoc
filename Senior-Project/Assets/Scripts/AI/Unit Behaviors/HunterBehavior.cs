@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class HunterBehavior : UnitAI
 {
+    public Collider[] enemies = new Collider[100];
+    Quaternion lookDirection = Quaternion.identity;
+    Quaternion oldLookDirection = Quaternion.identity;
 
     private new void Awake()
     {
@@ -12,44 +15,42 @@ public class HunterBehavior : UnitAI
         DamageAmount = 10;
         AttackCooldown = 0;
         AttackSpeed = 1;
+        AttackBaseCooldown = 1.5f;
     }
     // Update is called once per frame
     new void Update()
     {
         base.Update();
 
-        Collider[] enemies = new Collider[10];
 
-
-        if (Physics.OverlapSphereNonAlloc(_position, AttackRadius, enemies, LayerMask.GetMask("EnemyUnit")) > 0)
+        if (Physics.OverlapSphereNonAlloc(_position, AttackRadius, enemies, LayerMask.GetMask("EnemyUnit")) > 0 && !IsIgnoringEnemies)
         {
-            enemies.OrderBy(c => { if(c) return (_position - c.transform.position).sqrMagnitude; return float.PositiveInfinity; }).ToArray();
+            oldLookDirection = transform.rotation;
+            enemies = enemies.OrderBy(c => { if(c && !c.GetComponent<EnemyAI>().IsDead) return (c.transform.position - _position).magnitude; return float.PositiveInfinity; }).ToArray();
             AttackTarget = enemies[0].gameObject;
-
-        }
-        if (AttackTarget != null && Vector3.Distance(_position, AttackTarget.transform.position) > AttackRadius)
-        {
-            ExecutePath();
-        }
-        else if (AttackTarget != null)
-        {
-            if(AttackCooldown > AttackSpeed)
-            {
-                Attack(AttackTarget);
-                AttackCooldown = 0;
-            }
-            else
-            {
-                AttackCooldown += Time.deltaTime;
-            }
+            Vector3 enemyAtHeight = AttackTarget.transform.position;
+            enemyAtHeight.y = _position.y;
+            Quaternion endRotation = Quaternion.LookRotation((enemyAtHeight - _position).normalized);
+            gameObject.transform.rotation = Quaternion.RotateTowards(gameObject.transform.rotation, endRotation, 180 * Time.deltaTime);
             
         }
-        if(AttackTarget == null)
+        else
+        {
+            AttackTarget = null;
+        }
+        if (AttackTarget && !IsIgnoringEnemies && AttackCooldown <= 0)
+        {
+            Attack(AttackTarget);
+            AttackCooldown = AttackBaseCooldown;
+        }
+        else if(IsIgnoringEnemies)
         {
             ExecutePath();
         }
-        
-
+        if (AttackCooldown >= 0)
+        {
+            AttackCooldown -= Time.deltaTime*AttackSpeed;
+        }
     }
 
 

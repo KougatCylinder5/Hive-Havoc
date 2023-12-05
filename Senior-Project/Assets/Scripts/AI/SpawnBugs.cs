@@ -21,9 +21,9 @@ public class SpawnBugs : MonoBehaviour
 
     public void SpawnBug()
     {
-        if (FlowFieldGenerator.Finished)
+        if (FlowFieldGenerator.FlowFieldFinished)
         {
-            Instantiate(bug, transform.position + offset, Quaternion.identity);
+            Saver.playerUnits.Add(Instantiate(bug, transform.position + offset, Quaternion.identity));
         }
         
     }

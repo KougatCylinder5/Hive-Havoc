@@ -115,6 +115,7 @@ sqlite3_free_filename
 sqlite3_free_table
 sqlite3_get_autocommit
 sqlite3_get_auxdata
+sqlite3_get_clientdata
 sqlite3_get_table
 sqlite3_global_recover
 sqlite3_hard_heap_limit64
@@ -196,6 +197,7 @@ sqlite3_rtree_query_callback
 sqlite3_serialize
 sqlite3_set_authorizer
 sqlite3_set_auxdata
+sqlite3_set_clientdata
 sqlite3_set_last_insert_rowid
 sqlite3_shutdown
 sqlite3_sleep
@@ -301,6 +303,7 @@ sqlite3changegroup_delete
 sqlite3changegroup_new
 sqlite3changegroup_output
 sqlite3changegroup_output_strm
+sqlite3changegroup_schema
 sqlite3changeset_apply
 sqlite3changeset_apply_strm
 sqlite3changeset_apply_v2
@@ -321,6 +324,20 @@ sqlite3changeset_start
 sqlite3changeset_start_strm
 sqlite3changeset_start_v2
 sqlite3changeset_start_v2_strm
+sqlite3rbu_bp_progress
+sqlite3rbu_close
+sqlite3rbu_create_vfs
+sqlite3rbu_db
+sqlite3rbu_destroy_vfs
+sqlite3rbu_open
+sqlite3rbu_progress
+sqlite3rbu_rename_handler
+sqlite3rbu_savestate
+sqlite3rbu_state
+sqlite3rbu_step
+sqlite3rbu_temp_size
+sqlite3rbu_temp_size_limit
+sqlite3rbu_vacuum
 sqlite3rebaser_configure
 sqlite3rebaser_create
 sqlite3rebaser_delete
