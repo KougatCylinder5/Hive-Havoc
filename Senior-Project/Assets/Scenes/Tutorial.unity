@@ -1672,6 +1672,7 @@ MonoBehaviour:
   groundData: {fileID: 15600000, guid: 2d491bb12f12f4a449ba62c42c1be3f7, type: 2}
   treeOcculuderPrefab: {fileID: 8650456570569476745, guid: dffa1ccf79fd21c4aad6b961c5dc133b, type: 3}
   worldSize: {x: 0, y: 0, z: 0}
+  startingUnits: []
 --- !u!114 &1192118952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2048,39 +2049,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1453399075}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1524250534 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7703996242665806115, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
-  m_PrefabInstance: {fileID: 628931664}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1524250540
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1524250534}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 875c3fa4861a4194194e670cd39bf465, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  message: Page 2
-  endAction: 2
---- !u!114 &1524250541
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1524250534}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 875c3fa4861a4194194e670cd39bf465, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  message: Page 1
-  endAction: 0
 --- !u!1 &1668834085
 GameObject:
   m_ObjectHideFlags: 0
@@ -2502,14 +2470,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _buildingPrefabs:
-  - {fileID: 3353867752437551522, guid: 33db6be28fdbae048be7e62c99894594, type: 3}
-  - {fileID: 8509959233601206906, guid: 784181bde4b24b4418accbf65c1997d8, type: 3}
-  - {fileID: 1271856107700316496, guid: ccc209ad0a9c8e34aaab79d213487c8a, type: 3}
-  - {fileID: 6056634700612868848, guid: 99d80401ba1298a4bbe1cb3a2e76aec8, type: 3}
-  - {fileID: 5396083687318665769, guid: 467d4f5a40e8b87469732503cbf5be6e, type: 3}
-  - {fileID: 4040153224837091862, guid: 93b85833af7422f4d82fea26405b95fb, type: 3}
-  - {fileID: 4227205643850098374, guid: 628901e812006bd478f4cd4bad8351a6, type: 3}
-  - {fileID: 4227205643850098374, guid: d608e15fc9e52d849bd6a70e6c4d80e7, type: 3}
+  - {fileID: 3356599496919314407, guid: 302f313808009ea4fa5c2c2ca5aaa8e6, type: 3}
+  - {fileID: 3356599496919314407, guid: a17f1d38cf349254584c3bd56cefce26, type: 3}
   - {fileID: 3353867752437551522, guid: d024b6e2c549d1d409f8be490697f740, type: 3}
   - {fileID: 8509959233601206906, guid: fa444c4066298064ca0619e794545778, type: 3}
   - {fileID: 3353867752437551522, guid: 6f821373fb00eaf469ed8bed47622f91, type: 3}
@@ -3104,4 +3066,3 @@ SceneRoots:
   - {fileID: 1192118950}
   - {fileID: 983361994}
   - {fileID: 788697724}
-  - {fileID: 628931664}
