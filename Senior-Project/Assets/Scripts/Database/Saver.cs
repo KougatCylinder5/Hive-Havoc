@@ -41,6 +41,17 @@ public class Saver : MonoBehaviour
         }
         startTransaction();
 
+        
+        Debug.Log("Wood: " + amountInInventory((int)ItemsID.Wood));
+        ResourceStruct.Wood = amountInInventory((int)ItemsID.Wood);
+        ResourceStruct.Coal = amountInInventory((int)ItemsID.Coal);
+        ResourceStruct.CopperOre = amountInInventory((int)ItemsID.CopperOre);
+        ResourceStruct.CopperIngot = amountInInventory((int)ItemsID.CopperIngot);
+        ResourceStruct.Stone = amountInInventory((int)ItemsID.Stone);
+
+        commitTransaction();
+        startTransaction();
+
         List<Placeable> naturalObjects = getPlaceables();
 
         worldSize = groundData.size;
@@ -150,7 +161,15 @@ public class Saver : MonoBehaviour
                 addUnit((int)Enum.Parse<UnitTypes>(unit.name[..unit.name.LastIndexOf('(')]), unitController.Position2D.x, unitController.Position2D.y, unitController.Target.x, unitController.Target.y, unitController.Health, 0);
             }
             catch { playerUnits.RemoveAt(i--); }
-        }        
+        }
+
+        Debug.Log("Counted Wood: " + ResourceStruct.Wood);
+
+        updateInventory((int)ItemsID.Wood, ResourceStruct.Wood);
+        updateInventory((int)ItemsID.Coal, ResourceStruct.Coal);
+        updateInventory((int)ItemsID.CopperOre, ResourceStruct.CopperOre);
+        updateInventory((int)ItemsID.CopperIngot, ResourceStruct.CopperIngot);
+        updateInventory((int)ItemsID.Stone, ResourceStruct.Stone);
 
         commitTransaction();
     }
@@ -170,6 +189,14 @@ public class Saver : MonoBehaviour
     {
         Hunter,
         Crawler
+    }
+
+    private enum ItemsID {
+        Wood,
+        Coal,
+        CopperOre,
+        CopperIngot,
+        Stone
     }
 
 }

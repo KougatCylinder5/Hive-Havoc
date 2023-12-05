@@ -7,6 +7,8 @@ using System;
 using UnityEngine.SceneManagement;
 using System.Xml.Linq;
 using UnityEngine.UIElements;
+using UnityEngine.PlayerLoop;
+using UnityEngine.ProBuilder.Shapes;
 
 public class DBAccess
 {
@@ -174,7 +176,6 @@ public class DBAccess
             var sqliteCommand = sqliteDB.CreateCommand();
             sqliteCommand.CommandText = "SELECT id FROM saves WHERE name LIKE '" + savename + "';";
             IDataReader saves = sqliteCommand.ExecuteReader();
-            string sceneToLoad = "";
             try {
                 while (saves.Read()) {
                     saveID = saves.GetInt32(0);
@@ -293,8 +294,6 @@ public class DBAccess
             var sqliteCommand = sqliteDB.CreateCommand();
 
             try {
-                sqliteCommand.CommandText = "DELETE FROM saves WHERE name LIKE '" + savename + "';";
-                sqliteCommand.ExecuteNonQuery();
                 sqliteCommand.CommandText = "DELETE FROM placeables WHERE save_id LIKE '" + getSaveId(savename) + "';";
                 sqliteCommand.ExecuteNonQuery();
                 sqliteCommand.CommandText = "DELETE FROM unit WHERE save_id LIKE '" + getSaveId(savename) + "';";
@@ -308,6 +307,8 @@ public class DBAccess
                 sqliteCommand.CommandText = "DELETE FROM unlocked_tech WHERE save_id LIKE '" + getSaveId(savename) + "';";
                 sqliteCommand.ExecuteNonQuery();
                 sqliteCommand.CommandText = "DELETE FROM level_data WHERE save_id LIKE '" + getSaveId(savename) + "';";
+                sqliteCommand.ExecuteNonQuery();
+                sqliteCommand.CommandText = "DELETE FROM saves WHERE name LIKE '" + savename + "';";
                 sqliteCommand.ExecuteNonQuery();
 
             } catch {
@@ -669,24 +670,25 @@ public class DBAccess
         }
     }
 
-    public static void addItemToInventory(int id, int value) {
+    public static void updateInventory(int id, int value) {
         if (!transactionActive) {
             Debug.LogError(noTransactionError);
         } else {
             var sqliteCommand = sqliteDB.CreateCommand();
-            try {
-                sqliteCommand.CommandText = "INSERT INTO tile_data ('resource_id', 'amount', save_id) VALUES ('" + id + "', '" + value + "', '" + saveID + "');";
-            } catch { }
+            sqliteCommand.CommandText = "INSERT INTO inventory ('resource_id', 'amount', save_id) VALUES ('" + id + "', '" + value + "', '" + saveID + "')" +
+                "ON CONFLICT(resource_id, save_id) DO UPDATE SET amount = " + value + " WHERE resource_id IS " + id + " AND save_id IS " + saveID + ";";
             sqliteCommand.ExecuteNonQuery();
         }
     }
 
-    public static void updateInventory(int id, int value, int max) {
+    public static void updateInventoryMax(int id, int max) {
         if (!transactionActive) {
             Debug.LogError(noTransactionError);
         } else {
             var sqliteCommand = sqliteDB.CreateCommand();
-            sqliteCommand.CommandText = " UPDATE placeable SET amount=" + value + "max=" + max + " WHERE resource_id IS " + id + " AND save_id IS " + saveID + ";";
+            sqliteCommand.CommandText = "INSERT INTO inventory ('resource_id', 'max', save_id) VALUES ('" + id + "', '" + max + "', '" + saveID + "') " +
+            "ON CONFLICT(resource_id, save_id) DO UPDATE SET max = " + max + " WHERE resource_id IS " + id + " AND save_id IS " + saveID + ";";
+
             sqliteCommand.ExecuteNonQuery();
         }
     }
@@ -699,7 +701,7 @@ public class DBAccess
 
             var sqliteCommand = sqliteDB.CreateCommand();
             int itemAmount = 0;
-            sqliteCommand.CommandText = "SELECT amount, FROM resources WHERE name IS '" + id + "' AND save_id IS '" + saveID + "';";
+            sqliteCommand.CommandText = "SELECT amount FROM inventory WHERE resource_id IS '" + id + "' AND save_id IS '" + saveID + "';";
             IDataReader titem = sqliteCommand.ExecuteReader();
 
             try {

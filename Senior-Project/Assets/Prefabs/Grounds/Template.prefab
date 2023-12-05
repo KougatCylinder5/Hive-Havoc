@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3297612772090995296}
   - component: {fileID: 7867766853836135219}
   m_Layer: 6
-  m_Name: Tutorial_Ground
+  m_Name: Template
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42,7 +42,7 @@ Terrain:
   m_GameObject: {fileID: 5344254679698096393}
   m_Enabled: 1
   serializedVersion: 6
-  m_TerrainData: {fileID: 15600000, guid: 2d491bb12f12f4a449ba62c42c1be3f7, type: 2}
+  m_TerrainData: {fileID: 15600000, guid: 59212dcf3ae440b40bf03680d5052b9d, type: 2}
   m_TreeDistance: 5000
   m_TreeBillboardDistance: 50
   m_TreeCrossFadeLength: 5
@@ -90,5 +90,5 @@ TerrainCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: 2d491bb12f12f4a449ba62c42c1be3f7, type: 2}
+  m_TerrainData: {fileID: 15600000, guid: 59212dcf3ae440b40bf03680d5052b9d, type: 2}
   m_EnableTreeColliders: 1
