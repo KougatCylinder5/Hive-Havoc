@@ -3,14 +3,8 @@ using UnityEngine;
 public class GetClickedObject : MonoBehaviour
 {
     private GameObject troop;
-    private GameObject building;
+    public GameObject building;
     public LayerMask notTerrain;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
@@ -36,7 +30,7 @@ public class GetClickedObject : MonoBehaviour
                 building = null;
             }
         }
-        if(Input.GetMouseButtonDown(1))
+        else if(Input.GetMouseButtonDown(1))
         {
             troop = null;
             building = null;
