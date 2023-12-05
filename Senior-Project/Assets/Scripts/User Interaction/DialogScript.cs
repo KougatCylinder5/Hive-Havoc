@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 
-public class DialogScript
-{
+public class DialogScript : MonoBehaviour {
+    public string message;
+    public int endAction;
+
     private string dialog;
     private int action;
-    public DialogScript(string text, int nextAction) {
-        dialog = text;
-        action = nextAction;
+    void Start() {
+        dialog = message;
+        action = endAction;
 
     }
 

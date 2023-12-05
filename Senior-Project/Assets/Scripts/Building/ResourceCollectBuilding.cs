@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class ResourceCollectBuilding : MakeUnitBuilding
+public class ResourceCollectBuilding : BuildingClass
 {
     public int resourcePerSec;
     private int reset = 1;
@@ -10,7 +10,7 @@ public class ResourceCollectBuilding : MakeUnitBuilding
     public float normalRange;
     public GatheringType type;
     public Terrain terrain;
-    public float distance;
+    private float distance;
 
     int multiplier;
 
