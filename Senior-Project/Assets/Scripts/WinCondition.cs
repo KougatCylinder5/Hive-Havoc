@@ -1,6 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class WinCondition : MonoBehaviour
 {
@@ -27,6 +27,7 @@ public class WinCondition : MonoBehaviour
         if (hasWon)
         {
             Debug.Log("Win!");
+            SceneManager.LoadScene("LevelSelect");
         }
             
     }
