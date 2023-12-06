@@ -1118,7 +1118,7 @@ Transform:
   m_GameObject: {fileID: 729583298}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -12, y: 0, z: 12}
+  m_LocalPosition: {x: -90, y: 0, z: 90}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1607,7 +1607,7 @@ Transform:
   m_GameObject: {fileID: 1063763468}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -12, y: 0, z: -12}
+  m_LocalPosition: {x: -90, y: 0, z: -90}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2368,7 +2368,7 @@ Transform:
   m_GameObject: {fileID: 1778328308}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 38, y: 0, z: 38}
+  m_LocalPosition: {x: 125, y: 0, z: 125}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2403,7 +2403,7 @@ Transform:
   m_GameObject: {fileID: 1812848970}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12, y: 0, z: -12}
+  m_LocalPosition: {x: 90, y: 0, z: -90}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2604,8 +2604,8 @@ MonoBehaviour:
   - {fileID: 3353867752437551522, guid: 2ea27990a0f465043964029bf38ce9ec, type: 3}
   - {fileID: 8509959233601206906, guid: f77ca65b2d78e7c449744d18d56daa16, type: 3}
   boundNearestOrigin: {fileID: 1063763469}
-  playableAreaSizeX: 24
-  playableAreaSizeZ: 24
+  playableAreaSizeX: 180
+  playableAreaSizeZ: 180
 --- !u!4 &1935933626
 Transform:
   m_ObjectHideFlags: 0
@@ -2778,6 +2778,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d49c3f135604bd4cb3c6b23b9016fa7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gb: {fileID: 1935933643}
 --- !u!114 &1935933640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2839,6 +2840,8 @@ MonoBehaviour:
   bound2: {fileID: 1812848970}
   bound3: {fileID: 1063763468}
   bound4: {fileID: 729583298}
+  terrainSizeX: 250
+  terrainSizeY: 250
 --- !u!114 &1935933644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3122,7 +3125,7 @@ Transform:
   m_GameObject: {fileID: 2088076989}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12, y: 0, z: 12}
+  m_LocalPosition: {x: 90, y: 0, z: 90}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
