@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class LevelSelectCamera : MonoBehaviour
 {
-    Camera cam;
+    public GameObject worldMap;
+    public float scrollSpeed = 1;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,7 +17,19 @@ public class LevelSelectCamera : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.W))
         {
-            Debug.Log("Balls");
+            worldMap.transform.position += new Vector3(0, -1 * scrollSpeed, 0);
+        }
+        if (Input.GetKey(KeyCode.A))
+        {
+            worldMap.transform.position += new Vector3(1 * scrollSpeed, 0, 0);
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            worldMap.transform.position += new Vector3(0 , 1 * scrollSpeed, 0);
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            worldMap.transform.position += new Vector3(-1 * scrollSpeed, 0, 0);
         }
     }
 }
