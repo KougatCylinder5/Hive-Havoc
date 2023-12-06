@@ -18,15 +18,14 @@ using Unity.Jobs;
 using Unity.Burst;
 using System.Linq;
 using System;
-using System.Drawing;
 
 public class PathingManager : MonoBehaviour
 {
     [SerializeField]
-    public static Vector2Int GridSize { get; private set; }
+    public static Vector2Int GridSize { get; set; }
     private const int MOVE_STRAIGHT_COST = 10;
     private const int MOVE_DIAGONAL_COST = 14;
-
+    public GameBounds gb;
     public List<PathInfo> Paths { get; private set; }
 
     public static List<bool> ObstructedTiles = new List<bool>();
@@ -39,7 +38,7 @@ public class PathingManager : MonoBehaviour
 
     public void Awake()
     {
-        GridSize = new(81, 81);
+        GridSize = gb.GetTerrainSize();
 
         Instance = this;
         _pathsToGenerate = new();

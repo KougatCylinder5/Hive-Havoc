@@ -3,7 +3,7 @@ using UnityEngine;
 public class GetClickedObject : MonoBehaviour
 {
     private GameObject troop;
-    public GameObject building;
+    private GameObject building;
     public LayerMask notTerrain;
 
     // Update is called once per frame
