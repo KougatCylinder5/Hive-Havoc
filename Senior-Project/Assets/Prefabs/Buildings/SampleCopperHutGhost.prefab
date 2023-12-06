@@ -116,7 +116,7 @@ GameObject:
   - component: {fileID: 5494705257834813551}
   - component: {fileID: 6973924422828300512}
   m_Layer: 3
-  m_Name: SampleWoodHutGhost
+  m_Name: SampleCopperHutGhost
   m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -151,5 +151,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingSize: 1
-  buildingCost: 0000000000000000000000000000000005000000
-  key: 120
+  buildingCost: 1e00000000000000000000000a00000000000000
+  key: 118

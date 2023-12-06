@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class GameBounds : MonoBehaviour
@@ -10,6 +8,8 @@ public class GameBounds : MonoBehaviour
     public GameObject bound3;
     public GameObject bound4;
     private Rect rect;
+    public int terrainSizeX;
+    public int terrainSizeY;
 
     private void Awake()
     {
@@ -35,5 +35,10 @@ public class GameBounds : MonoBehaviour
     public bool IsInBounds(Vector3 position)
     {
         return rect.Contains(position);
+    }
+
+    public Vector2Int GetTerrainSize()
+    {
+        return new(terrainSizeX, terrainSizeY);
     }
 }

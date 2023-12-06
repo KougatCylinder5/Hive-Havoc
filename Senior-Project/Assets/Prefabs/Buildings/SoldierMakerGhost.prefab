@@ -590,7 +590,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5079054777353939013}
-  - component: {fileID: 881785306250355943}
   - component: {fileID: 8478457557496500528}
   m_Layer: 3
   m_Name: SoldierMakerGhost
@@ -632,27 +631,6 @@ Transform:
   - {fileID: 3766292875632268638}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &881785306250355943
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3356599496919314407}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 3, y: 2, z: 3}
-  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!114 &8478457557496500528
 MonoBehaviour:
   m_ObjectHideFlags: 0
