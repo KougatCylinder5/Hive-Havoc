@@ -182,7 +182,9 @@ public class Saver : MonoBehaviour
     public enum PlaceableTypes
     { 
         Tree,
-        Stone
+        Stone,
+        Coal,
+        Copper
     }
     //This must match the prefab name
     public enum UnitTypes
