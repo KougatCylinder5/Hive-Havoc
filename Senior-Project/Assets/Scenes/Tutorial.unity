@@ -2870,7 +2870,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 0.7264151, g: 0.69056237, b: 0.59278214, a: 1}
-  m_Intensity: 81741.555
+  m_Intensity: 5000
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -2947,7 +2947,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a68c43fe1f2a47cfa234b5eeaa98012, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Intensity: 81741.555
+  m_Intensity: 5000
   m_EnableSpotReflector: 1
   m_LuxAtDistance: 1
   m_InnerSpotPercent: 0
@@ -3070,6 +3070,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeScale: 1
+  cycleTime: 600
+  currentTime: 0
 --- !u!1 &2088076989
 GameObject:
   m_ObjectHideFlags: 0

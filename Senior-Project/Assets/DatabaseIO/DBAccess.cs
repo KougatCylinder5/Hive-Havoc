@@ -12,15 +12,13 @@ using UnityEngine.ProBuilder.Shapes;
 
 public class DBAccess
 {
-    private static int saveID = 0;
+    private static int saveID = 1;
     private static int diff = -1;
     private static string dbConnectionString = "data source=" + Application.persistentDataPath + "\\storage.db;foreign keys=true;";
     private static bool transactionActive = false;
     private const string noTransactionError = "Transaction has not been started!";
     private static SqliteConnection sqliteDB = new SqliteConnection(dbConnectionString);
     private static bool reloadingSave = false;
-
-    public static TreeInstance[] fixItQuick = new TreeInstance[0];
 
     protected static string getConnectionString() {
         return dbConnectionString;
@@ -156,11 +154,20 @@ public class DBAccess
                 commitTransaction(false);
                 startTransaction(false);
 
-                AsyncOperation tobeimplemented = SceneManager.LoadSceneAsync(sceneToLoad);
-                tobeimplemented.completed += (AsyncOperation) =>
-                {
+                if(sceneToLoad == "Select Level") {
+                    AsyncOperation tobeimplemented = SceneManager.LoadSceneAsync("LevelSelect");
+                    tobeimplemented.completed += (AsyncOperation) =>
+                    {
 
-                };
+                    };
+                } else {
+                    AsyncOperation tobeimplemented = SceneManager.LoadSceneAsync(sceneToLoad);
+                    tobeimplemented.completed += (AsyncOperation) =>
+                    {
+
+                    };
+                }
+                
                 return true;
             }
 
@@ -739,7 +746,7 @@ public class DBAccess
         }
     }
 
-    public void addPlayedLevel(int levelID) {
+    public static void addPlayedLevel(int levelID) {
         if (!transactionActive) {
             Debug.LogError(noTransactionError);
         } else {

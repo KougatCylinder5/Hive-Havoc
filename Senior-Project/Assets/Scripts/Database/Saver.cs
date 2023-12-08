@@ -4,7 +4,6 @@ using System.Linq;
 using UnityEngine;
 
 using static DBAccess;
-using static UnityEngine.UI.CanvasScaler;
 
 public class Saver : MonoBehaviour
 {
@@ -29,8 +28,6 @@ public class Saver : MonoBehaviour
 
         ground.terrainData = Instantiate(groundData);
 
-        fixItQuick = ground.terrainData.treeInstances;
-
         if (!isAReload())
         {
             freshLoadScene();
@@ -41,8 +38,6 @@ public class Saver : MonoBehaviour
         }
         startTransaction();
 
-        
-        Debug.Log("Wood: " + amountInInventory((int)ItemsID.Wood));
         ResourceStruct.Wood = amountInInventory((int)ItemsID.Wood);
         ResourceStruct.Coal = amountInInventory((int)ItemsID.Coal);
         ResourceStruct.CopperOre = amountInInventory((int)ItemsID.CopperOre);
@@ -162,8 +157,6 @@ public class Saver : MonoBehaviour
             }
             catch { playerUnits.RemoveAt(i--); }
         }
-
-        Debug.Log("Counted Wood: " + ResourceStruct.Wood);
 
         updateInventory((int)ItemsID.Wood, ResourceStruct.Wood);
         updateInventory((int)ItemsID.Coal, ResourceStruct.Coal);

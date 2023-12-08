@@ -2,29 +2,44 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DayCycle : MonoBehaviour
-{
-    public float timeScale = 5;
+public class DayCycle : MonoBehaviour {
+    public float timeScale = 1;
+    public float cycleTime = 600;
+    private float sunrise = 0;
+    private float sunset;
+    private float noon;
+    private float night;
+    public float currentTime = 0;
+
     Light _sun;
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         _sun = GetComponent<Light>();
+        float cycleDurr = cycleTime / 4;
+        noon = cycleDurr;
+        sunset = cycleDurr * 2;
+        night = cycleDurr * 3;
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        gameObject.transform.Rotate(new Vector3(1,0,0) * Time.deltaTime * timeScale);
-
-        if(gameObject.transform.eulerAngles.x > 180) {
-            Debug.Log(_sun.intensity);
-            if(_sun.intensity > 100) {
-                _sun.intensity -= (_sun.intensity * Time.deltaTime * timeScale);
+    void Update() {
+        currentTime += Time.deltaTime;
+        if(currentTime >= cycleTime) {
+            currentTime -= cycleTime;
+            //Auto save the game.
+        } else if(currentTime >= night) {
+            if(_sun.intensity > 200) {
+                _sun.intensity /= 2;
+                gameObject.transform.rotation = Quaternion.Euler(90, -30, 0);
             }
-        } else {
-            if (_sun.intensity < 81741.55f) {
-                _sun.intensity += (10000 * Time.deltaTime * timeScale);
+        } else if(currentTime >= sunset) {
+            gameObject.transform.rotation = Quaternion.Euler(160, -30, 0);
+        } else if(currentTime >= noon) {
+            gameObject.transform.rotation = Quaternion.Euler(90, -30, 0);
+        } else if(currentTime >= sunrise) {
+            if (_sun.intensity < 5000) {
+                _sun.intensity *= 2;
+                gameObject.transform.rotation = Quaternion.Euler(30, -30, 0);
             }
         }
     }
