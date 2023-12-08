@@ -79,7 +79,7 @@ public class DBAccess
                 sqliteCommand.CommandText = "BEGIN TRANSACTION;";
                 sqliteCommand.ExecuteNonQuery();
 
-                sqliteCommand.CommandText = "UPDATE saves SET play_time=" + playTimeIsSeconds + ", last_play='" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' level_name='" + SceneManager.GetActiveScene().name + "' WHERE id IS " + saveID + ";";
+                sqliteCommand.CommandText = "UPDATE saves SET play_time=" + playTimeIsSeconds + ", last_play='" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' WHERE id IS " + saveID + ";";
                 sqliteCommand.ExecuteNonQuery();
             }
 
