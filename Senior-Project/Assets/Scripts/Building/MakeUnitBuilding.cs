@@ -20,9 +20,9 @@ public class MakeUnitBuilding : BuildingClass
     {
         if(Input.GetMouseButtonDown(0))
         {
-            GameObject go = gco.getBuilding().transform.parent.gameObject;
+            GameObject go = gco.getBuilding();
             Debug.Log(go);
-            if (go != null && go.GetComponent<MakeUnitBuilding>() != null)
+            if (go.Equals(gameObject) && go.GetComponent<MakeUnitBuilding>() != null)
             {
                 bool flag = true;
                 for(int i = 0; i < ResourceStruct.Total.Length; i++)

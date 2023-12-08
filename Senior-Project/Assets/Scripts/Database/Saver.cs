@@ -34,8 +34,6 @@ public class Saver : MonoBehaviour
 
         ground.terrainData = Instantiate(groundData);
 
-        fixItQuick = ground.terrainData.treeInstances;
-
         if (!isAReload())
         {
             freshLoadScene();
@@ -44,6 +42,15 @@ public class Saver : MonoBehaviour
         {
             foreach (GameObject unit in startingUnits) Destroy(unit);
         }
+        startTransaction();
+
+        ResourceStruct.Wood = amountInInventory((int)ItemsID.Wood);
+        ResourceStruct.Coal = amountInInventory((int)ItemsID.Coal);
+        ResourceStruct.CopperOre = amountInInventory((int)ItemsID.CopperOre);
+        ResourceStruct.CopperIngot = amountInInventory((int)ItemsID.CopperIngot);
+        ResourceStruct.Stone = amountInInventory((int)ItemsID.Stone);
+
+        commitTransaction();
         startTransaction();
 
         List<Placeable> naturalObjects = getPlaceables();
@@ -150,6 +157,7 @@ public class Saver : MonoBehaviour
                     case "Stone Hitbox":
                         type = 1;
                         break;
+
                 }
                 addPlaceable(type, blocker.transform.position.x / worldSize.x, blocker.transform.position.z / worldSize.z, 1, 1);
             }
@@ -169,8 +177,14 @@ public class Saver : MonoBehaviour
                 
                 addUnit((int)Enum.Parse<UnitTypes>(unit.name[..unit.name.LastIndexOf('(')]), unitController.Position2D.x, unitController.Position2D.y, unitController.Target.x, unitController.Target.y, unitController.Health, 0);
             }
-            catch(Exception e) { playerUnits.RemoveAt(i--); Debug.Log(e); }
-        }        
+            catch { playerUnits.RemoveAt(i--); }
+        }
+
+        updateInventory((int)ItemsID.Wood, ResourceStruct.Wood);
+        updateInventory((int)ItemsID.Coal, ResourceStruct.Coal);
+        updateInventory((int)ItemsID.CopperOre, ResourceStruct.CopperOre);
+        updateInventory((int)ItemsID.CopperIngot, ResourceStruct.CopperIngot);
+        updateInventory((int)ItemsID.Stone, ResourceStruct.Stone);
 
         commitTransaction();
     }
@@ -181,15 +195,25 @@ public class Saver : MonoBehaviour
     }
 
     public enum PlaceableTypes
-    {
+    { 
         Tree,
-        Stone
+        Stone,
+        Coal,
+        Copper
     }
     //This must match the prefab name
     public enum UnitTypes
     {
         Hunter,
         Crawler
+    }
+
+    private enum ItemsID {
+        Wood,
+        Coal,
+        CopperOre,
+        CopperIngot,
+        Stone
     }
 
 }
