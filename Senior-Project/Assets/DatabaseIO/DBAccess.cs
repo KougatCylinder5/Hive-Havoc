@@ -125,6 +125,18 @@ public class DBAccess
         }
     }
 
+    public static void setLevel(string name) {
+        if (!transactionActive) {
+            Debug.LogError(noTransactionError);
+        } else {
+
+            var sqliteCommand = sqliteDB.CreateCommand();
+
+            sqliteCommand.CommandText = "UPDATE saves SET level_name='" + name + "' WHERE id=" + saveID + ";";
+            sqliteCommand.ExecuteNonQuery();
+        }
+    }
+
     //Return true if signin is found.
     public static bool selectSave(string savename) {
         if(!transactionActive) {
@@ -259,6 +271,12 @@ public class DBAccess
             }
 
             sqliteCommand.CommandText = "DELETE FROM unit WHERE save_id LIKE '" + saveID + "';";
+            try {
+                sqliteCommand.ExecuteNonQuery();
+            } catch {
+            }
+
+            sqliteCommand.CommandText = "DELETE FROM inventory WHERE save_id LIKE '" + saveID + "';";
             try {
                 sqliteCommand.ExecuteNonQuery();
             } catch {
