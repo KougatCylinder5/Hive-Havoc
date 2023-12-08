@@ -13,6 +13,8 @@ TagManager:
   - Building
   - Tree Hitbox
   - Stone Hitbox
+  - Coal Hitbox
+  - Copper Hitbox
   layers:
   - Default
   - TransparentFX

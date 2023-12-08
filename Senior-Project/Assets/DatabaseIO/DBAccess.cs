@@ -182,7 +182,7 @@ public class DBAccess : MonoBehaviour
         while (!loadingScene.isDone)
         {
             LoadingBar.text = loadingScene.progress.ToString();
-            yield return null;
+            yield return 0;
         }
     }
     public static int getSaveId(string savename) {
@@ -571,7 +571,21 @@ public class DBAccess : MonoBehaviour
             return placeables;
         }
     }
+    public static void addPlaceables(List<Placeable> placeables)
+    {
+        if (!transactionActive)
+        {
+            Debug.LogError(noTransactionError);
+            return;
+        }
+        var sqliteCommand = sqliteDB.CreateCommand();
+        placeables.ForEach(placeable =>
+        {
+            sqliteCommand.CommandText += "INSERT INTO placeables ('x_pos', 'y_pos', 'health', 'save_id', 'tile_item_id', 'natural') VALUES ('" + placeable.getXPos() + "', '" + placeable.getYPos() + "', '" + placeable.getHealth() + "', '" + saveID + "', '" + placeable.getTileItemID() + "', '" + placeable.getNatural() + "');";
+        });
+        sqliteCommand.ExecuteNonQuery();
 
+    }
     public static int addPlaceable(int tileItemID, float xPos, float yPos, float health, int natural) {
         if(!transactionActive) {
             Debug.LogError(noTransactionError);

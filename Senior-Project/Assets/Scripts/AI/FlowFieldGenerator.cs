@@ -58,7 +58,7 @@ public class FlowFieldGenerator : MonoBehaviour
         while (positionsToCheck.Length > 0)
         {
             if (Saver.LoadDone)
-                yield return new WaitForEndOfFrame();
+                yield return 0;
             NativeList<FlowFieldJob.PathNode> newPositionsToCheck = new(positionsToCheck.Length * 8, Allocator.Persistent);
             FlowFieldJob job = new()
             {
