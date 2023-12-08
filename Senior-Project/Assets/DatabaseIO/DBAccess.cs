@@ -5,21 +5,34 @@ using System.Data;
 using Mono.Data.Sqlite;
 using System;
 using UnityEngine.SceneManagement;
+using TMPro;
 using System.Xml.Linq;
 using UnityEngine.UIElements;
 using UnityEngine.PlayerLoop;
 using UnityEngine.ProBuilder.Shapes;
 
-public class DBAccess
+public class DBAccess : MonoBehaviour
 {
     private static int saveID = 1;
     private static int diff = -1;
-    private static string dbConnectionString = "data source=" + Application.persistentDataPath + "\\storage.db;foreign keys=true;";
+    private static string dbConnectionString;
     private static bool transactionActive = false;
     private const string noTransactionError = "Transaction has not been started!";
-    private static SqliteConnection sqliteDB = new SqliteConnection(dbConnectionString);
+    private static SqliteConnection sqliteDB;
     private static bool reloadingSave = false;
 
+    public static TreeInstance[] fixItQuick = new TreeInstance[0];
+    string sceneToLoad = "";
+    static DBAccess Instance;
+    public TextMeshProUGUI LoadingBar;
+
+    public static AsyncOperation loadingScene;
+    private void Awake()
+    {
+        Instance = this;
+        dbConnectionString = "data source=" + Application.persistentDataPath + "\\storage.db;foreign keys=true";
+        sqliteDB = new SqliteConnection(dbConnectionString);
+    }
     protected static string getConnectionString() {
         return dbConnectionString;
     }
@@ -146,12 +159,12 @@ public class DBAccess
             var sqliteCommand = sqliteDB.CreateCommand();
             sqliteCommand.CommandText = "SELECT id, dif, level_name FROM saves WHERE name LIKE '" + savename + "';";
             IDataReader saves = sqliteCommand.ExecuteReader();
-            string sceneToLoad = "";
+            Instance.sceneToLoad = "";
             try {
                 while(saves.Read()) {
                     saveID = saves.GetInt32(0);
                     diff = saves.GetInt32(1);
-                    sceneToLoad = saves.GetString(2);
+                    Instance.sceneToLoad = saves.GetString(2);
                     
                 }
             } catch {}
@@ -165,20 +178,7 @@ public class DBAccess
                 sqliteCommand.ExecuteNonQuery();
                 commitTransaction(false);
                 startTransaction(false);
-
-                if(sceneToLoad == "Select Level") {
-                    AsyncOperation tobeimplemented = SceneManager.LoadSceneAsync("LevelSelect");
-                    tobeimplemented.completed += (AsyncOperation) =>
-                    {
-
-                    };
-                } else {
-                    AsyncOperation tobeimplemented = SceneManager.LoadSceneAsync(sceneToLoad);
-                    tobeimplemented.completed += (AsyncOperation) =>
-                    {
-
-                    };
-                }
+                Instance.StartCoroutine(nameof(LoadScene));
                 
                 return true;
             }
@@ -186,7 +186,17 @@ public class DBAccess
             return false;
         }
     }
+    public IEnumerator LoadScene()
+    {
+        loadingScene = SceneManager.LoadSceneAsync(sceneToLoad);
+        //loadingScene.allowSceneActivation = false;
 
+        while (!loadingScene.isDone)
+        {
+            LoadingBar.text = loadingScene.progress.ToString();
+            yield return 0;
+        }
+    }
     public static int getSaveId(string savename) {
         if (!transactionActive) {
             Debug.LogError(noTransactionError);
@@ -579,7 +589,21 @@ public class DBAccess
             return placeables;
         }
     }
+    public static void addPlaceables(List<Placeable> placeables)
+    {
+        if (!transactionActive)
+        {
+            Debug.LogError(noTransactionError);
+            return;
+        }
+        var sqliteCommand = sqliteDB.CreateCommand();
+        placeables.ForEach(placeable =>
+        {
+            sqliteCommand.CommandText += "INSERT INTO placeables ('x_pos', 'y_pos', 'health', 'save_id', 'tile_item_id', 'natural') VALUES ('" + placeable.getXPos() + "', '" + placeable.getYPos() + "', '" + placeable.getHealth() + "', '" + saveID + "', '" + placeable.getTileItemID() + "', '" + placeable.getNatural() + "');";
+        });
+        sqliteCommand.ExecuteNonQuery();
 
+    }
     public static int addPlaceable(int tileItemID, float xPos, float yPos, float health, int natural) {
         if(!transactionActive) {
             Debug.LogError(noTransactionError);

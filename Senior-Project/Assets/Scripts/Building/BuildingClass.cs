@@ -19,6 +19,7 @@ public class BuildingClass : MonoBehaviour, IHealth
             {
                 _health = Mathf.RoundToInt(_maxHealth * 0.3f);
                 IsDead = true;
+                Destroy(gameObject);
             }
             else
             {
