@@ -16,6 +16,9 @@ public class EnemyAI : AIController, IAIBasics
     private PathInfo _lastPathGenerated = null;
 
     private Vector2 _movedLastFrame, _lastPosition2D;
+
+    private int _damage;
+
     public new void Awake()
     {
         base.Awake();
@@ -31,11 +34,6 @@ public class EnemyAI : AIController, IAIBasics
         {
             SetDestination(target.transform);
             _type = PathingType.AroundObject;
-        }
-        else
-        {
-            _type = PathingType.Flow;
-            _target = new(_startPoint.x, _startPoint.z);
         }
         if (FlowFieldFinished)
         {
@@ -157,6 +155,15 @@ public class EnemyAI : AIController, IAIBasics
         }
     }
 
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        print((LayerMask.GetMask("PlayerUnit", "Building") & hit.gameObject.layer));
+        print(hit.gameObject);
+        if ((LayerMask.GetMask("PlayerUnit","Building") & hit.gameObject.layer) > 0)
+        {
+            hit.gameObject.GetComponent<IHealth>().DealDamage(_damage);
+        }
+    }
     /**
      * <returns>Returns <c>true</c> if an object was detected otherwise <c>false</c></returns>
      * <param name="target">Returns the closest target to the Object that called it</param>

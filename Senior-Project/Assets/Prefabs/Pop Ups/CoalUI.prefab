@@ -453,6 +453,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6971352642139347493}
+  - component: {fileID: 5272995517295824144}
   m_Layer: 0
   m_Name: CoalUI
   m_TagString: Untagged
@@ -476,3 +477,25 @@ Transform:
   - {fileID: 2743159897208540366}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 315, y: 45, z: 0}
+--- !u!114 &5272995517295824144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6554763409476978407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 175a83a765229fd408f749cfb0ce4abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefix: 'Coal Per Second: '
+  uiType: 0
+  modifyText: {fileID: 2038468460092104805}
+  rate: 0
+  max: 0
+  coolDown: 0
+  activateOn: 0
+  Action:
+    m_PersistentCalls:
+      m_Calls: []
