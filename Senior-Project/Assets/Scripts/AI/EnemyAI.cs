@@ -160,7 +160,6 @@ public class EnemyAI : AIController, IAIBasics
     }
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-
         if((hit.gameObject.layer == 3 ||  hit.gameObject.layer == 7) && _attackCooldown < 0)
         {
             hit.gameObject.GetComponent<IHealth>().DealDamage(_damage);
