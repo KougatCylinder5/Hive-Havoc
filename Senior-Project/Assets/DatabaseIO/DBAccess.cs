@@ -12,7 +12,7 @@ using UnityEngine.ProBuilder.Shapes;
 
 public class DBAccess
 {
-    private static int saveID = 1;
+    private static int saveID = 0;
     private static int diff = -1;
     private static string dbConnectionString = "data source=" + Application.persistentDataPath + "\\storage.db;foreign keys=true;";
     private static bool transactionActive = false;
