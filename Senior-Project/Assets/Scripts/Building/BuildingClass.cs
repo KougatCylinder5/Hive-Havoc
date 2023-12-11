@@ -33,7 +33,6 @@ public class BuildingClass : IHealth
     public override void DealDamage(int damage)
     {
         Health -= Mathf.RoundToInt(damage * (1-_resistance));
-        print("attacked");
     }
 
     public override void Regenerate()

@@ -20,7 +20,6 @@ public class MakeUnitBuilding : BuildingClass
         if(Input.GetMouseButtonDown(0))
         {
             GameObject go = gco.getBuilding();
-            Debug.Log(go);
             if (go.Equals(gameObject) && go.GetComponent<MakeUnitBuilding>() != null)
             {
                 bool flag = true;
