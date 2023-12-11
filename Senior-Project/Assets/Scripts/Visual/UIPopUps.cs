@@ -57,15 +57,16 @@ public class UIPopUps : MonoBehaviour
                 coolDownTime--;
             }
             modifyText.text = prefix + "\n" + rate + "/" + max;
+            if (rate > 0 && coolDownTime == 0) {
+                coolDownTime = coolDown;
+            }
         }
+        
 
     }
 
     public void buttonAction() {
         if(rate < max) {
-            if(rate == 0) {
-                coolDownTime = coolDown;
-            }
             rate++;
         }
     }
