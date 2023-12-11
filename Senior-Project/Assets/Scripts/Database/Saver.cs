@@ -102,17 +102,14 @@ public class Saver : MonoBehaviour
                     break;
                 case (int)PlaceableTypes.Stone:
                     occuluder.tag = "Stone Hitbox";
-                    occuluder.GetComponent<MeshCollider>().enabled = false;
                     amount = 2;
                     break;
                 case (int)PlaceableTypes.Coal:
                     occuluder.tag = "Coal Hitbox";
-                    occuluder.GetComponent<MeshCollider>().enabled = false;
                     amount = 2;
                     break;
                 case (int)PlaceableTypes.Copper:
                     occuluder.tag = "Copper Hitbox";
-                    occuluder.GetComponent<MeshCollider>().enabled = false;
                     amount = 2;
                     break;
 
