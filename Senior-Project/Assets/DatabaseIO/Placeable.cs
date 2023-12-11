@@ -40,6 +40,10 @@ public class Placeable
     public float getHealth() {
         return health;
     }
+    public int getNatural()
+    {
+        return natural;
+    }
 
     public void setXPos(float xPos) {
         this.xPos = xPos;
@@ -51,6 +55,10 @@ public class Placeable
 
     public void setHealth(float health) {
         this.health = health;
+    }
+    public void setNatural(int natural)
+    {
+        this.natural = natural;
     }
 
     public override string ToString()

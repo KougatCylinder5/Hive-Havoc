@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -19,18 +20,50 @@ public class Saver : MonoBehaviour
     public static List<GameObject> resourceObstructers = new List<GameObject>();
     public static List<GameObject> playerUnits = new List<GameObject>();
 
+    public static bool LoadDone { get; private set; }
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
-
+        LoadDone = false;
+        Invoke(nameof(Load), 0.5f);
+    }
+    void Load()
+    {
+        StartCoroutine(nameof(LoadSave));
+    }
+    public IEnumerator LoadSave()
+    {
         playerUnits = startingUnits.ToList();
         ground = GameObject.Find("Ground").GetComponent<Terrain>();
 
         ground.terrainData = Instantiate(groundData);
-
+        int counter = 0;
         if (!isAReload())
         {
-            freshLoadScene();
+            startTransaction();
+            List<Placeable> allResources = new();
+            foreach (TreeInstance resource in groundData.treeInstances.ToList())
+            {
+                allResources.Add(new(0, resource.prototypeIndex, resource.position.x, resource.position.z, 1, 1));
+                //addPlaceable(resource.prototypeIndex, resource.position.x, resource.position.z, 1, 1);
+                if (counter++>20)
+                {
+                    counter = 0;
+                    yield return 0;
+                }
+            }
+            addPlaceables(allResources);
+            foreach (GameObject unit in playerUnits)
+            {
+                AIController unitController = unit.GetComponent<AIController>();
+                addUnit((int)Enum.Parse<UnitTypes>(unit.name[..unit.name.LastIndexOf('(')]), unitController.Position2D.x, unitController.Position2D.y, unitController.Target.x, unitController.Target.y, unitController.Health, 0);
+                if (counter++> 25)
+                {
+                    counter = 0;
+                    yield return 0;
+                }
+            }
+            commitTransaction();
         }
         else
         {
@@ -47,28 +80,42 @@ public class Saver : MonoBehaviour
         commitTransaction();
         startTransaction();
 
-        List<Placeable> naturalObjects = getPlaceables();
+        List<Placeable> naturalObjects = getNaturalPlaceables();
 
         worldSize = groundData.size;
 
         ground.terrainData.treeInstances = new TreeInstance[0];
-
-        naturalObjects.ForEach(placeable =>
+        ground.Flush();
+        counter = 0;
+        foreach (Placeable placeable in naturalObjects)
         {
+            counter++;
             GameObject occuluder = Instantiate(treeOcculuderPrefab, new Vector3Int(Mathf.RoundToInt(Mathf.Clamp(placeable.getXPos() * worldSize.x, 0, worldSize.x)), 0, Mathf.RoundToInt(Mathf.Clamp(placeable.getYPos() * worldSize.z, 0, worldSize.z))), Quaternion.identity, ground.gameObject.transform);
             int amount = 0;
             resourceObstructers.Add(occuluder);
-            switch (placeable.getTileItemID()) {
+            switch (placeable.getTileItemID())
+            {
                 case (int)PlaceableTypes.Tree:
                     PathingManager.SetWalkable(Mathf.RoundToInt(Mathf.Clamp(placeable.getXPos() * worldSize.x, 0, worldSize.x)), Mathf.RoundToInt(Mathf.Clamp(placeable.getYPos() * worldSize.z, 0, worldSize.z)), false);
                     occuluder.tag = "Tree Hitbox";
-                    amount = 3;
+                    amount = 2;
                     break;
                 case (int)PlaceableTypes.Stone:
                     occuluder.tag = "Stone Hitbox";
                     occuluder.GetComponent<MeshCollider>().enabled = false;
-                    amount = 5;
+                    amount = 2;
                     break;
+                case (int)PlaceableTypes.Coal:
+                    occuluder.tag = "Coal Hitbox";
+                    occuluder.GetComponent<MeshCollider>().enabled = false;
+                    amount = 2;
+                    break;
+                case (int)PlaceableTypes.Copper:
+                    occuluder.tag = "Copper Hitbox";
+                    occuluder.GetComponent<MeshCollider>().enabled = false;
+                    amount = 2;
+                    break;
+
             }
             for (int i = 0; i < amount; i++)
             {
@@ -87,34 +134,40 @@ public class Saver : MonoBehaviour
                     heightScale = 1
                 });
             }
-        });
+            if (counter > 15)
+            {
+                counter = 0;
+                yield return 0;
+            }
+        }
         ground.Flush();
         commitTransaction();
         startTransaction();
         List<Unit> units = getUnits();
-        Debug.Log(units.Count);
         foreach (Unit unit in units)
         {
             GameObject tempHolder = Instantiate(Resources.Load(Enum.GetName(typeof(UnitTypes), (UnitTypes)unit.getType())) as GameObject, new Vector3(unit.getXPos(), 1, unit.getYPos()), Quaternion.identity);
             AIController controller = tempHolder.GetComponent<AIController>();
             controller.SetDestination(new Vector2(unit.getXTarget(), unit.getYTarget()));
             controller.Health = (int)unit.getHealth();
-            
+
             playerUnits.Add(tempHolder);
+            yield return 0;
         }
         commitTransaction();
         clearReload();
+        LoadDone = true;
     }
+
+    public IEnumerator EnableScene()
+    {
+        yield return new WaitUntil(delegate { if (loadingScene == null || !LoadDone) { return false; } return loadingScene.isDone; });
+        loadingScene.allowSceneActivation = true;
+    } 
+
     public void freshLoadScene()
     {
-        startTransaction();
-        groundData.treeInstances.ToList().ForEach(resource => { addPlaceable(resource.prototypeIndex, resource.position.x, resource.position.z, 1, 1); });
-        foreach(GameObject unit in playerUnits)
-        {
-            AIController unitController = unit.GetComponent<AIController>();
-            addUnit((int)Enum.Parse<UnitTypes>(unit.name[..unit.name.LastIndexOf('(')]), unitController.Position2D.x, unitController.Position2D.y, unitController.Target.x, unitController.Target.y, unitController.Health, 0);
-        }
-        commitTransaction();
+        
     }
     public void saveScene()
     {
@@ -135,6 +188,12 @@ public class Saver : MonoBehaviour
                     case "Stone Hitbox":
                         type = 1;
                         break;
+                    case "Coal Hitbox":
+                        type = 2;
+                        break;
+                    case "Copper Hitbox":
+                        type = 3;
+                        break;
 
                 }
                 addPlaceable(type, blocker.transform.position.x / worldSize.x, blocker.transform.position.z / worldSize.z, 1, 1);
@@ -152,7 +211,7 @@ public class Saver : MonoBehaviour
             try
             {
                 AIController unitController = unit.GetComponent<AIController>();
-                Debug.Log(unit.name[..unit.name.LastIndexOf('(')]);
+                
                 addUnit((int)Enum.Parse<UnitTypes>(unit.name[..unit.name.LastIndexOf('(')]), unitController.Position2D.x, unitController.Position2D.y, unitController.Target.x, unitController.Target.y, unitController.Health, 0);
             }
             catch { playerUnits.RemoveAt(i--); }

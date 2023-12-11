@@ -52,7 +52,10 @@ public class HunterBehavior : UnitAI
             AttackCooldown -= Time.deltaTime*AttackSpeed;
         }
     }
-
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        
+    }
 
     private new void Attack(GameObject target)
     {
