@@ -1,3 +1,4 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,7 +18,9 @@ public class EnemyAI : AIController, IAIBasics
 
     private Vector2 _movedLastFrame, _lastPosition2D;
 
-    private int _damage;
+    private int _damage = 5;
+    [SerializeField]
+    private float _attackTime,_attackCooldown;
 
     public new void Awake()
     {
@@ -47,6 +50,7 @@ public class EnemyAI : AIController, IAIBasics
                     break;
                 default: break;
             }
+            _attackCooldown -= Time.deltaTime;
         }
         
 
@@ -154,14 +158,13 @@ public class EnemyAI : AIController, IAIBasics
             yield return new WaitForSecondsRealtime(_updateFrequency);
         }
     }
-
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        print((LayerMask.GetMask("PlayerUnit", "Building") & hit.gameObject.layer));
-        print(hit.gameObject);
-        if ((LayerMask.GetMask("PlayerUnit","Building") & hit.gameObject.layer) > 0)
+
+        if((hit.gameObject.layer == 3 ||  hit.gameObject.layer == 7) && _attackCooldown < 0)
         {
             hit.gameObject.GetComponent<IHealth>().DealDamage(_damage);
+            _attackCooldown = _attackTime;
         }
     }
     /**
@@ -181,7 +184,6 @@ public class EnemyAI : AIController, IAIBasics
             direction.z = 0.5f;
             target = possibleTargets[0].transform.gameObject;
 
-            Debug.Log(target);
             //bool canSee = Physics.Raycast(_position, direction, radius);
             //target = canSee ? target : null;
 

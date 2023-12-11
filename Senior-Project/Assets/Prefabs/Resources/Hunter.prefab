@@ -202,8 +202,8 @@ MonoBehaviour:
   speed: 1
   _updateFrequency: 0.1
   _characterController: {fileID: 0}
-  _health: 0
-  _maxHealth: 10
+  _health: 50
+  _maxHealth: 50
   _isDead: 0
   _attackTarget: {fileID: 0}
   _attackRadius: 10

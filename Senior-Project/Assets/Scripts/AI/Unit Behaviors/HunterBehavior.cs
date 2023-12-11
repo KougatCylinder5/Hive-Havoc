@@ -59,7 +59,7 @@ public class HunterBehavior : UnitAI
 
     private new void Attack(GameObject target)
     {
-        target.GetComponent<EnemyAI>().DealDamage(DamageAmount);
+        //target.GetComponent<EnemyAI>().DealDamage(DamageAmount);
     }
 
 

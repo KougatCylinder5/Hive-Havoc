@@ -12,7 +12,6 @@ public class MakeUnitBuilding : BuildingClass
 
     void Awake()
     {
-        health = maxHealth;
         gco = GameObject.Find("ScriptManager").GetComponent<GetClickedObject>();
     }
 
