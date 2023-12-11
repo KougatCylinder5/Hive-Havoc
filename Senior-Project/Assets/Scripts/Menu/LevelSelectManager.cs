@@ -68,9 +68,11 @@ public class LevelSelectManager : MonoBehaviour
     }
 
     public void play(int level) {
+        try {
         startTransaction(false);
         addPlayedLevel(level);
         commitTransaction(false);
+        } catch { }
         Start();
     }
 }

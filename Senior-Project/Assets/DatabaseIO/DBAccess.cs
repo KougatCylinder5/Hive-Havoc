@@ -13,7 +13,7 @@ using UnityEngine.ProBuilder.Shapes;
 
 public class DBAccess : MonoBehaviour
 {
-    private static int saveID = 1;
+    private static int saveID = 0;
     private static int diff = -1;
     private static string dbConnectionString;
     private static bool transactionActive = false;
@@ -134,6 +134,18 @@ public class DBAccess : MonoBehaviour
             var sqliteCommand = sqliteDB.CreateCommand();
 
             sqliteCommand.CommandText = "CREATE TABLE IF NOT EXISTS " + name + " (" + columns + ");";
+            sqliteCommand.ExecuteNonQuery();
+        }
+    }
+
+    public static void setLevel(string name) {
+        if (!transactionActive) {
+            Debug.LogError(noTransactionError);
+        } else {
+
+            var sqliteCommand = sqliteDB.CreateCommand();
+
+            sqliteCommand.CommandText = "UPDATE saves SET level_name='" + name + "' WHERE id=" + saveID + ";";
             sqliteCommand.ExecuteNonQuery();
         }
     }
@@ -269,6 +281,12 @@ public class DBAccess : MonoBehaviour
             }
 
             sqliteCommand.CommandText = "DELETE FROM unit WHERE save_id LIKE '" + saveID + "';";
+            try {
+                sqliteCommand.ExecuteNonQuery();
+            } catch {
+            }
+
+            sqliteCommand.CommandText = "DELETE FROM inventory WHERE save_id LIKE '" + saveID + "';";
             try {
                 sqliteCommand.ExecuteNonQuery();
             } catch {
