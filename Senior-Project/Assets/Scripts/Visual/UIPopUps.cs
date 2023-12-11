@@ -61,13 +61,19 @@ public class UIPopUps : MonoBehaviour
                 coolDownTime = coolDown;
             }
         }
-        
-
     }
 
     public void buttonAction() {
         if(rate < max) {
             rate++;
         }
+    }
+
+    public void show() {
+        gameObject.transform.localPosition = new Vector3 (0, 30, 0);
+    }
+
+    public void hide() {
+        gameObject.transform.localPosition = new Vector3(0, -1000, 0);
     }
 }
