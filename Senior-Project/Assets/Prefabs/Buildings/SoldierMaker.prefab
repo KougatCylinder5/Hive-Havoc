@@ -683,6 +683,7 @@ GameObject:
   - component: {fileID: 5079054777353939013}
   - component: {fileID: 7702710328791423948}
   - component: {fileID: 881785306250355943}
+  - component: {fileID: 857258276336788670}
   m_Layer: 3
   m_Name: SoldierMaker
   m_TagString: Building
@@ -761,6 +762,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3, y: 2, z: 3}
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &857258276336788670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3356599496919314407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d36176f2bf024c541bd11138f73e7648, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3478141070724920615
 GameObject:
   m_ObjectHideFlags: 0

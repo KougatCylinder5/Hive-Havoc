@@ -1105,6 +1105,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4499838192742644687, guid: 1eb0c6234cbf68249b9562fc85a5df1f, type: 3}
+      propertyPath: _isDead
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7984406395648739528, guid: 1eb0c6234cbf68249b9562fc85a5df1f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 26.87
@@ -4312,6 +4316,8 @@ MonoBehaviour:
   - {fileID: 8509959233601206906, guid: f9a6a619f0cabc34faf9d1766e77212f, type: 3}
   - {fileID: 3353867752437551522, guid: 2ea27990a0f465043964029bf38ce9ec, type: 3}
   - {fileID: 8509959233601206906, guid: f77ca65b2d78e7c449744d18d56daa16, type: 3}
+  - {fileID: 3356599496919314407, guid: 28e04c7e020f81049aaf0ba80fe96079, type: 3}
+  - {fileID: 3356599496919314407, guid: 9f372f708f94b1c4591d6966df16d078, type: 3}
   boundNearestOrigin: {fileID: 1063763469}
   playableAreaSizeX: 24
   playableAreaSizeZ: 24
