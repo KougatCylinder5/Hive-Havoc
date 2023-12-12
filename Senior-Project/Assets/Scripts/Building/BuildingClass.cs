@@ -1,17 +1,16 @@
 using UnityEngine;
 
-public class BuildingClass : MonoBehaviour, IHealth
+public class BuildingClass : IHealth
 {
+    
     [SerializeField]
-    protected int maxHealth;
-    protected int health;
-
     protected int _health, _maxHealth, _regeneration;
+    [SerializeField]
     private bool _isDead = false;
-    public bool IsDead { get => _isDead; protected set => _isDead = value; }
+    public override bool IsDead { get => _isDead; protected set => _isDead = value; }
     protected float _resistance;
 
-    public int Health {
+    public override int Health {
         get => _health;
         protected set
         {
@@ -19,6 +18,7 @@ public class BuildingClass : MonoBehaviour, IHealth
             {
                 _health = Mathf.RoundToInt(_maxHealth * 0.3f);
                 IsDead = true;
+                Destroy(gameObject);
             }
             else
             {
@@ -26,17 +26,21 @@ public class BuildingClass : MonoBehaviour, IHealth
             }
         }
     }
-    public int MaxHealth { get => _maxHealth; }
-    public int HealthRegen { get => _regeneration; }
-    public float Resistance { get => _resistance; }
+    public override int MaxHealth { get => _maxHealth; protected set => _maxHealth = value; }
+    public override int HealthRegen { get => _regeneration; protected set => _regeneration = value; }
+    public override float Resistance { get => _resistance; protected set => _resistance = value; }
 
-    public void DealDamage(int damage)
+    public override void DealDamage(int damage)
     {
         Health -= Mathf.RoundToInt(damage * (1-_resistance));
     }
 
-    public void Regenerate()
+    public override void Regenerate()
     {
         Health += _regeneration;
+    }
+    public override void SetHealth(int health)
+    {
+        Health = health;
     }
 }

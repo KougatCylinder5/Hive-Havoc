@@ -1,3 +1,4 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +17,11 @@ public class EnemyAI : AIController, IAIBasics
     private PathInfo _lastPathGenerated = null;
 
     private Vector2 _movedLastFrame, _lastPosition2D;
+
+    private int _damage = 5;
+    [SerializeField]
+    private float _attackTime,_attackCooldown;
+
     public new void Awake()
     {
         base.Awake();
@@ -32,11 +38,6 @@ public class EnemyAI : AIController, IAIBasics
             SetDestination(target.transform);
             _type = PathingType.AroundObject;
         }
-        else
-        {
-            _type = PathingType.Flow;
-            _target = new(_startPoint.x, _startPoint.z);
-        }
         if (FlowFieldFinished)
         {
             switch (_type)
@@ -49,6 +50,7 @@ public class EnemyAI : AIController, IAIBasics
                     break;
                 default: break;
             }
+            _attackCooldown -= Time.deltaTime;
         }
         
 
@@ -156,7 +158,14 @@ public class EnemyAI : AIController, IAIBasics
             yield return new WaitForSecondsRealtime(_updateFrequency);
         }
     }
-
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if((hit.gameObject.layer == 3 ||  hit.gameObject.layer == 7) && _attackCooldown < 0)
+        {
+            hit.gameObject.GetComponent<IHealth>().DealDamage(_damage);
+            _attackCooldown = _attackTime;
+        }
+    }
     /**
      * <returns>Returns <c>true</c> if an object was detected otherwise <c>false</c></returns>
      * <param name="target">Returns the closest target to the Object that called it</param>
@@ -174,7 +183,6 @@ public class EnemyAI : AIController, IAIBasics
             direction.z = 0.5f;
             target = possibleTargets[0].transform.gameObject;
 
-            Debug.Log(target);
             //bool canSee = Physics.Raycast(_position, direction, radius);
             //target = canSee ? target : null;
 

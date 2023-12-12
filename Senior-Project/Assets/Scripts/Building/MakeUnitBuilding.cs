@@ -26,7 +26,6 @@ public class MakeUnitBuilding : BuildingClass
         if(Input.GetMouseButtonDown(0))
         {
             GameObject go = gco.getBuilding();
-            Debug.Log(go);
             if (go.Equals(gameObject) && go.GetComponent<MakeUnitBuilding>() != null)
             {
                 bool flag = true;
@@ -76,7 +75,7 @@ public class MakeUnitBuilding : BuildingClass
             x = (Random.value - 0.5f) * buildingSize;
         }
         Vector3 randVec = new(x, transform.position.y, z);
-        MakeUnits.SpawnUnitsAtPosition(spawnCount, unitToSpawn, transform.position + randVec, transform);
+        Saver.playerUnits.AddRange(MakeUnits.SpawnUnitsAtPosition(spawnCount, unitToSpawn, transform.position + randVec, transform));
     }
 
     private void OnDrawGizmos()
