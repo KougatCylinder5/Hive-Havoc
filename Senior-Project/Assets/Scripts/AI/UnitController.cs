@@ -48,7 +48,6 @@ public class UnitController : MonoBehaviour
                     }
                     while (!unit.SetDestination(mousePos + new Vector2(genX, genY)));
                 }
-                Debug.Log(mousePos);
             }
         }
         if(Input.GetMouseButtonDown(1))
