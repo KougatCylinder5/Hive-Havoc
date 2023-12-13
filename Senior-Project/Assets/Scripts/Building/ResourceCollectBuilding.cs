@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -17,28 +16,25 @@ public class ResourceCollectBuilding : BuildingClass
     // Start is called before the first frame update
     void Awake()
     {
-        //MakeUnits.SpawnUnitsAtPosition(spawnCount, unitToSpawn, transform.position, transform);
         terrain = GameObject.Find("Ground").GetComponent<Terrain>();
         multiplier = CalculateRange();
-        
         InvokeRepeating(nameof(AddResources), 0, reset);
-        
     }
 
     public void AddResources()
     {
         switch(type)
         {
-            case 0:
+            case GatheringType.Wood:
                 ResourceStruct.Wood += resourcePerSec * multiplier;
                 break;
-            case (GatheringType)1:
+            case GatheringType.Stone:
                 ResourceStruct.Stone += resourcePerSec * multiplier;
                 break;
-            case (GatheringType)2:
+            case GatheringType.Coal:
                 ResourceStruct.Coal += resourcePerSec * multiplier;
                 break;
-            case (GatheringType)3:
+            case GatheringType.CopperOre:
                 ResourceStruct.CopperOre += resourcePerSec * multiplier;
                 break;
             case (GatheringType)4:
@@ -79,13 +75,13 @@ public class ResourceCollectBuilding : BuildingClass
         return normalRange;
     }
 
-    public enum GatheringType
+    public enum GatheringType //has to match treeprototypeindex in terrains
     {
-        Wood,
-        Stone,
-        Coal,
-        CopperOre,
-        CopperIngot
+        Wood = 0,
+        Stone = 1,
+        Coal = 3,
+        CopperOre = 2,
+        CopperIngot = 4
     }
 
 }

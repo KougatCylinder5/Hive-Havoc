@@ -1,11 +1,9 @@
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class MakeUnitBuilding : BuildingClass
 {
     public int spawnCount;
-    public GameObject unitToSpawn;
+    public GameObject[] unitToSpawn;
     public int buildingSize;
     private GetClickedObject gco;
     public int[] costOfUnit;
@@ -15,7 +13,7 @@ public class MakeUnitBuilding : BuildingClass
     void Awake()
     {
         gco = GameObject.Find("ScriptManager").GetComponent<GetClickedObject>();
-        if(Physics.CheckBox(transform.position, new(buildingSize/2, 2, buildingSize/2), transform.rotation, water))
+        if(Physics.CheckBox(transform.position, new(buildingSize, 2, buildingSize), transform.rotation, water))
         {
             canMakeUnits = true;
         }
@@ -23,7 +21,7 @@ public class MakeUnitBuilding : BuildingClass
 
     void Update()
     {
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(0) && canMakeUnits)
         {
             GameObject go = gco.getBuilding();
             if (go.Equals(gameObject) && go.GetComponent<MakeUnitBuilding>() != null)
@@ -44,13 +42,13 @@ public class MakeUnitBuilding : BuildingClass
                     ResourceStruct.CopperOre -= costOfUnit[2];
                     ResourceStruct.CopperIngot -= costOfUnit[3];
                     ResourceStruct.Stone -= costOfUnit[4];
-                    SpawnUnits();
+                    SpawnUnits(0);
                 }
             }
         }
     }
 
-    public void SpawnUnits()
+    public void SpawnUnits(int unit)
     {
         bool onXSide = Random.value > 0.5f;
         float isPositive = Random.value - 0.5f;
@@ -75,12 +73,12 @@ public class MakeUnitBuilding : BuildingClass
             x = (Random.value - 0.5f) * buildingSize;
         }
         Vector3 randVec = new(x, transform.position.y, z);
-        Saver.playerUnits.AddRange(MakeUnits.SpawnUnitsAtPosition(spawnCount, unitToSpawn, transform.position + randVec, transform));
+        Saver.playerUnits.AddRange(MakeUnits.SpawnUnitsAtPosition(spawnCount, unitToSpawn[unit], transform.position + randVec, transform));
     }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawCube(transform.position, new(buildingSize, 2, buildingSize));
+        Gizmos.DrawCube(transform.position, new(buildingSize*2, 2, buildingSize*2));
     }
 }
