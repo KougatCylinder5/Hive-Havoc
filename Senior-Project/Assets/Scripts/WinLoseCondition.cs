@@ -2,14 +2,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class WinCondition : MonoBehaviour
+public class WinLoseCondition : MonoBehaviour
 {
     public List<GameObject> nests;
+    public GameObject commandCenter;
 
     // Start is called before the first frame update
     void Awake()
     {
         InvokeRepeating(nameof(CheckWin), 0, 1);
+        InvokeRepeating(nameof(CheckLose), 0, 1);
     }
 
     void CheckWin()
@@ -27,8 +29,20 @@ public class WinCondition : MonoBehaviour
         if (hasWon)
         {
             Debug.Log("Win!");
-            SceneManager.LoadScene("LevelSelect");
         }
             
+    }
+
+    void CheckLose()
+    {
+        bool hasLost = false;
+        if (commandCenter != null)
+        {
+            hasLost = true;
+        }
+        if(hasLost)
+        {
+            Debug.Log("Lose...");
+        }
     }
 }

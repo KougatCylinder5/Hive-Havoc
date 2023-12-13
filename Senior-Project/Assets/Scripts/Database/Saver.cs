@@ -149,10 +149,14 @@ public class Saver : MonoBehaviour
             GameObject tempHolder = Instantiate(Resources.Load(Enum.GetName(typeof(UnitTypes), (UnitTypes)unit.getType())) as GameObject, new Vector3(unit.getXPos(), 1, unit.getYPos()), Quaternion.identity);
             AIController controller = tempHolder.GetComponent<AIController>();
             controller.SetDestination(new Vector2(unit.getXTarget(), unit.getYTarget()));
-            controller.Health = (int)unit.getHealth();
+            controller.SetHealth((int)unit.getHealth());
 
             playerUnits.Add(tempHolder);
-            yield return 0;
+            if (counter > 15)
+            {
+                counter = 0;
+                yield return 0;
+            }
         }
         commitTransaction();
         clearReload();

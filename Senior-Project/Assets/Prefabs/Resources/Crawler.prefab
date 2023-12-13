@@ -156,3 +156,5 @@ MonoBehaviour:
   _type: 0
   _listenRadius: 10
   _velocity: {x: 0, y: 0}
+  _attackTime: 1
+  _attackCooldown: 0

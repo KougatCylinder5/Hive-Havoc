@@ -9,11 +9,16 @@ public class MakeUnitBuilding : BuildingClass
     public int buildingSize;
     private GetClickedObject gco;
     public int[] costOfUnit;
+    private bool canMakeUnits = false;
+    public LayerMask water;
 
     void Awake()
     {
-        health = maxHealth;
         gco = GameObject.Find("ScriptManager").GetComponent<GetClickedObject>();
+        if(Physics.CheckBox(transform.position, new(buildingSize/2, 2, buildingSize/2), transform.rotation, water))
+        {
+            canMakeUnits = true;
+        }
     }
 
     void Update()
@@ -21,7 +26,6 @@ public class MakeUnitBuilding : BuildingClass
         if(Input.GetMouseButtonDown(0))
         {
             GameObject go = gco.getBuilding();
-            Debug.Log(go);
             if (go.Equals(gameObject) && go.GetComponent<MakeUnitBuilding>() != null)
             {
                 bool flag = true;
@@ -72,5 +76,11 @@ public class MakeUnitBuilding : BuildingClass
         }
         Vector3 randVec = new(x, transform.position.y, z);
         Saver.playerUnits.AddRange(MakeUnits.SpawnUnitsAtPosition(spawnCount, unitToSpawn, transform.position + randVec, transform));
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawCube(transform.position, new(buildingSize, 2, buildingSize));
     }
 }
