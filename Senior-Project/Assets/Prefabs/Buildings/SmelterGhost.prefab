@@ -6293,8 +6293,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingSize: 2
-  buildingCost: 0100000000000000000000000000000000000000
-  key: 108
+  buildingCost: 0200000002000000020000000200000002000000
+  key: 110
 --- !u!65 &881785306250355943
 BoxCollider:
   m_ObjectHideFlags: 0

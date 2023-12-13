@@ -5714,6 +5714,7 @@ GameObject:
   - component: {fileID: 5079054777353939013}
   - component: {fileID: 881785306250355943}
   - component: {fileID: -491236128916340667}
+  - component: {fileID: 670361009279997022}
   m_Layer: 3
   m_Name: Smelter
   m_TagString: Building
@@ -5782,6 +5783,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d36176f2bf024c541bd11138f73e7648, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &670361009279997022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3356599496919314407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5107868078de6e84492fcc1d84575353, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _health: 0
+  _maxHealth: 0
+  _regeneration: 0
+  _isDead: 0
+  costPerConversion: 0000000000000000050000000100000000000000
+  convertType: 0300000002000000
+  makePerConversion: 2
+  makeType: 4
 --- !u!1 &3540043321726072969
 GameObject:
   m_ObjectHideFlags: 0
