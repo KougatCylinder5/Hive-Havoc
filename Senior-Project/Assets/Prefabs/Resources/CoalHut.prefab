@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: -3807680282025644615}
   - component: {fileID: 7222480808983168050}
   m_Layer: 3
-  m_Name: SampleCopperHut
+  m_Name: CoalHut
   m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -50,7 +50,7 @@ MonoBehaviour:
   resourcePerSec: 1
   efficientRange: 2
   normalRange: 4
-  type: 3
+  type: 2
   terrain: {fileID: 0}
 --- !u!65 &7222480808983168050
 BoxCollider:

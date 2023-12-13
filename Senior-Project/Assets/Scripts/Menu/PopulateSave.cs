@@ -33,7 +33,7 @@ public class PopulateSave : MonoBehaviour
 
     public void loadSave() {
         DBAccess.startTransaction();
-        DBAccess.doRealod();
+        DBAccess.doReload();
         DBAccess.selectSave(saveName);
         DBAccess.commitTransaction();
     }

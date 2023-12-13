@@ -67,7 +67,7 @@ public class UnitAI : AIController, IAIBasics, IAttack
         }
     }
 
-    private new void Update()
+    public new void Update()
     {
         if (IsDead) { Die(); return; }
         base.Update();
@@ -105,7 +105,12 @@ public class UnitAI : AIController, IAIBasics, IAttack
     {
         _pathRenderer.positionCount = 2;
         _pathRenderer.SetPosition(0, _position);
-        _pathRenderer.SetPosition(1, PathInfo.ConvertToVector3(_target, _position.y));
+        if(_pathInfo.cleanedPath.TryPeek(out Vector2 nextPoint))
+        {
+            _pathRenderer.SetPosition(1, PathInfo.ConvertToVector3(nextPoint, _position.y));
+        }
+        
+        
         _pathRenderer.Simplify(0.5f);
     }
 

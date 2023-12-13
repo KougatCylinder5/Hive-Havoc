@@ -30,6 +30,8 @@ public class EnemyAI : AIController, IAIBasics
     }
     public new void Update()
     {
+        if (!Saver.LoadDone)
+            return;
         if (IsDead) { Die(); return; }
         base.Update();
 
@@ -37,6 +39,10 @@ public class EnemyAI : AIController, IAIBasics
         {
             SetDestination(target.transform);
             _type = PathingType.AroundObject;
+        }
+        else
+        {
+            _type = PathingType.Flow;
         }
         if (FlowFieldFinished)
         {
@@ -77,6 +83,8 @@ public class EnemyAI : AIController, IAIBasics
     }
     public void UpdatePath()
     {
+        if (!Saver.LoadDone)
+            return;
         if (Target == Vector2.zero)
             return;
         float distanceToTarget = Vector2.Distance(_position2D, Target);
@@ -104,8 +112,6 @@ public class EnemyAI : AIController, IAIBasics
     }
     public void Flow()
     {
-
-        
         Vector3 movementDirection = new Vector3(_velocity.x, -100f, _velocity.y) * Speed * Time.deltaTime;
         Ray movementRay = new Ray(_position, _velocity);
         //if (!Physics.Raycast(movementRay, movementDirection.magnitude/4, LayerMask.GetMask("EnemyUnit")))
@@ -177,7 +183,7 @@ public class EnemyAI : AIController, IAIBasics
 
         Collider[] possibleTargets = new Collider[100];
 
-        if (Physics.OverlapSphereNonAlloc(position: _position, radius: radius,results: possibleTargets, layerMask: LayerMask.GetMask("PlayerUnit")) > 0)
+        if (Physics.OverlapSphereNonAlloc(position: _position, radius: radius,results: possibleTargets, layerMask: LayerMask.GetMask("PlayerUnit", "PlayerBuilding")) > 0)
         {
             Vector3 direction = _position - possibleTargets[0].transform.position;
             direction.z = 0.5f;

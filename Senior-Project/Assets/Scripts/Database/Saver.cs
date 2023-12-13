@@ -2,9 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 using static DBAccess;
+using static UnityEngine.UI.CanvasScaler;
 
 public class Saver : MonoBehaviour
 {
@@ -16,9 +18,11 @@ public class Saver : MonoBehaviour
     public Vector3 worldSize;
 
     public GameObject[] startingUnits;
+    public GameObject[] startingBuildings;
 
     public static List<GameObject> resourceObstructers = new List<GameObject>();
-    public static List<GameObject> playerUnits = new List<GameObject>();
+    public static List<GameObject> allUnits = new List<GameObject>();
+    public static List<GameObject> allBuildings = new List<GameObject>();
 
     public static bool LoadDone { get; private set; }
     // Start is called before the first frame update
@@ -33,7 +37,8 @@ public class Saver : MonoBehaviour
     }
     public IEnumerator LoadSave()
     {
-        playerUnits = startingUnits.ToList();
+        allUnits = startingUnits.ToList();
+        allBuildings = startingBuildings.ToList();
         ground = GameObject.Find("Ground").GetComponent<Terrain>();
 
         ground.terrainData = Instantiate(groundData);
@@ -45,19 +50,29 @@ public class Saver : MonoBehaviour
             foreach (TreeInstance resource in groundData.treeInstances.ToList())
             {
                 allResources.Add(new(0, resource.prototypeIndex, resource.position.x, resource.position.z, 1, 1));
-                //addPlaceable(resource.prototypeIndex, resource.position.x, resource.position.z, 1, 1);
-                if (counter++>20)
+                if (counter++ > 20)
                 {
                     counter = 0;
                     yield return 0;
                 }
             }
             addPlaceables(allResources);
-            foreach (GameObject unit in playerUnits)
+            List<Placeable> allBuildingsPlaceable = new();
+            foreach (GameObject b in allBuildings)
+            {
+                allBuildingsPlaceable.Add(new(0, (int)Enum.Parse<PlaceableTypes>(b.name[..b.name.IndexOf('(')]), b.transform.position.x, b.transform.position.z, b.GetComponent<IHealth>().Health, 0));
+                if (counter++ > 20)
+                {
+                    counter = 0;
+                    yield return 0;
+                }
+            }
+            addPlaceables(allBuildingsPlaceable);
+            foreach (GameObject unit in allUnits)
             {
                 AIController unitController = unit.GetComponent<AIController>();
-                addUnit((int)Enum.Parse<UnitTypes>(unit.name[..unit.name.LastIndexOf('(')]), unitController.Position2D.x, unitController.Position2D.y, unitController.Target.x, unitController.Target.y, unitController.Health, 0);
-                if (counter++> 25)
+                addUnit((int)Enum.Parse<UnitTypes>(unit.name[..unit.name.IndexOf('(')]), unitController.Position2D.x, unitController.Position2D.y, unitController.Target.x, unitController.Target.y, unitController.Health, 0);
+                if (counter++ > 25)
                 {
                     counter = 0;
                     yield return 0;
@@ -65,10 +80,8 @@ public class Saver : MonoBehaviour
             }
             commitTransaction();
         }
-        else
-        {
-            foreach (GameObject unit in startingUnits) Destroy(unit);
-        }
+        foreach (GameObject unit in startingUnits) Destroy(unit);
+        foreach (GameObject building in startingBuildings) Destroy(building);
         startTransaction();
 
         ResourceStruct.Wood = amountInInventory((int)ItemsID.Wood);
@@ -101,14 +114,17 @@ public class Saver : MonoBehaviour
                     amount = 2;
                     break;
                 case (int)PlaceableTypes.Stone:
+                    PathingManager.SetWalkable(Mathf.RoundToInt(Mathf.Clamp(placeable.getXPos() * worldSize.x, 0, worldSize.x)), Mathf.RoundToInt(Mathf.Clamp(placeable.getYPos() * worldSize.z, 0, worldSize.z)), false);
                     occuluder.tag = "Stone Hitbox";
                     amount = 2;
                     break;
                 case (int)PlaceableTypes.Coal:
+                    PathingManager.SetWalkable(Mathf.RoundToInt(Mathf.Clamp(placeable.getXPos() * worldSize.x, 0, worldSize.x)), Mathf.RoundToInt(Mathf.Clamp(placeable.getYPos() * worldSize.z, 0, worldSize.z)), false);
                     occuluder.tag = "Coal Hitbox";
                     amount = 2;
                     break;
                 case (int)PlaceableTypes.Copper:
+                    PathingManager.SetWalkable(Mathf.RoundToInt(Mathf.Clamp(placeable.getXPos() * worldSize.x, 0, worldSize.x)), Mathf.RoundToInt(Mathf.Clamp(placeable.getYPos() * worldSize.z, 0, worldSize.z)), false);
                     occuluder.tag = "Copper Hitbox";
                     amount = 2;
                     break;
@@ -143,38 +159,44 @@ public class Saver : MonoBehaviour
         List<Unit> units = getUnits();
         foreach (Unit unit in units)
         {
-            GameObject tempHolder = Instantiate(Resources.Load(Enum.GetName(typeof(UnitTypes), (UnitTypes)unit.getType())) as GameObject, new Vector3(unit.getXPos(), 1, unit.getYPos()), Quaternion.identity);
+            GameObject tempHolder = Instantiate(Resources.Load(Enum.GetName(typeof(UnitTypes), (UnitTypes)unit.getType())) as GameObject, new Vector3(unit.getXPos(), 0.5f, unit.getYPos()), Quaternion.identity);
             AIController controller = tempHolder.GetComponent<AIController>();
             controller.SetDestination(new Vector2(unit.getXTarget(), unit.getYTarget()));
             controller.SetHealth((int)unit.getHealth());
 
-            playerUnits.Add(tempHolder);
+            allUnits.Add(tempHolder);
             if (counter > 15)
             {
                 counter = 0;
                 yield return 0;
             }
         }
+        List<Placeable> buildings = getPlaceables();
+        foreach (Placeable building in buildings)
+        {
+            if (building.getTileItemID() <= 3)
+                continue;
+            print((PlaceableTypes)building.getTileItemID());
+            GameObject tempHolder = Instantiate(Resources.Load(Enum.GetName(typeof(PlaceableTypes), (PlaceableTypes)building.getTileItemID())) as GameObject, new Vector3(building.getXPos(), 0.5f, building.getYPos()), Quaternion.identity);
+            allBuildings.Add(tempHolder);
+            tempHolder.GetComponent<IHealth>().SetHealth((int)building.getHealth());
+            if (counter > 15)
+            {
+                counter = 0;
+                yield return 0;
+            }
+        }
+
         commitTransaction();
         clearReload();
         LoadDone = true;
     }
 
-    public IEnumerator EnableScene()
-    {
-        yield return new WaitUntil(delegate { if (loadingScene == null || !LoadDone) { return false; } return loadingScene.isDone; });
-        loadingScene.allowSceneActivation = true;
-    } 
-
-    public void freshLoadScene()
-    {
-        
-    }
     public void saveScene()
     {
         startTransaction();
         clear();
-        List<GameObject> invalidObstructers = new();
+        List<GameObject> invalidThings = new();
 
         foreach(GameObject blocker in resourceObstructers)
         {
@@ -199,24 +221,44 @@ public class Saver : MonoBehaviour
                 }
                 addPlaceable(type, blocker.transform.position.x / worldSize.x, blocker.transform.position.z / worldSize.z, 1, 1);
             }
-            catch(Exception e) { invalidObstructers.Add(blocker); Debug.Log(e); }
+            catch(Exception e) { invalidThings.Add(blocker); Debug.Log(e); }
         }
-        foreach(GameObject invalid in invalidObstructers)
+        foreach(GameObject invalid in invalidThings)
         {
             resourceObstructers.Remove(invalid);
         }
-
-        for(int i = 0; i < playerUnits.Count; i++)
+        invalidThings.Clear();
+        foreach(GameObject unit in allUnits)
         {
-            GameObject unit = playerUnits[i];
             try
             {
                 AIController unitController = unit.GetComponent<AIController>();
-                
-                addUnit((int)Enum.Parse<UnitTypes>(unit.name[..unit.name.LastIndexOf('(')]), unitController.Position2D.x, unitController.Position2D.y, unitController.Target.x, unitController.Target.y, unitController.Health, 0);
+                addUnit((int)Enum.Parse<UnitTypes>(unit.name[..unit.name.IndexOf('(')]), unitController.Position2D.x, unitController.Position2D.y, unitController.Target.x, unitController.Target.y, unitController.Health, 0);
             }
-            catch { playerUnits.RemoveAt(i--); }
+            catch { invalidThings.Add(unit); }
         }
+        foreach (GameObject invalid in invalidThings)
+        {
+            allUnits.Remove(invalid);
+        }
+        foreach(GameObject building in allBuildings)
+        {
+            try
+            {
+                BuildingClass buildingClass = building.GetComponent<BuildingClass>();
+                addPlaceable((int)Enum.Parse<PlaceableTypes>(building.name[..building.name.IndexOf('(')]), building.transform.position.x, building.transform.position.z, buildingClass.Health, 0);
+                if (Enum.Parse<PlaceableTypes>(building.name[..building.name.IndexOf('(')]) == PlaceableTypes.Nest)
+                {
+                    WinCondition.nests.Add(building);
+                }
+            }
+            catch { invalidThings.Add(building); }
+        }
+        foreach (GameObject invalid in invalidThings)
+        {
+            allBuildings.Remove(invalid);
+        }
+
 
         updateInventory((int)ItemsID.Wood, ResourceStruct.Wood);
         updateInventory((int)ItemsID.Coal, ResourceStruct.Coal);
@@ -237,7 +279,21 @@ public class Saver : MonoBehaviour
         Tree,
         Stone,
         Coal,
-        Copper
+        Copper,
+        Tent,
+        WoodHouse,
+        StoneHouse,
+        CoalHut,
+        WoodHut,
+        CopperHut,
+        WoodWall,
+        StoneWall,
+        SoldierMaker,
+        Ballista,
+        Nest,
+        CommandCenter
+
+
     }
     //This must match the prefab name
     public enum UnitTypes

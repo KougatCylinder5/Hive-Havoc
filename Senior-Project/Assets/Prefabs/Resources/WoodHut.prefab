@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: -3807680282025644615}
   - component: {fileID: -2727549608366953936}
   m_Layer: 3
-  m_Name: SampleWoodHut
+  m_Name: WoodHut
   m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
