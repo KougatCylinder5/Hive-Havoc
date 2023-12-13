@@ -9,11 +9,22 @@ public class DialogManager : MonoBehaviour
     public List<DialogScript> dialogScript = new List<DialogScript>();
     private int index = -1;
     private int newDialogIndex = 0;
+    private int awaitTask = 0;
 
     void Start()
     {
         if (dialogScript.Count > 0) {
             next();
+        }
+    }
+
+    private void Update() {
+        if(awaitTask == 1) {
+            if(GameObject.Find("SoldierMaker(Clone)")) {
+                awaitTask = 0;
+                index++;
+                next();
+            }
         }
     }
 
@@ -30,11 +41,17 @@ public class DialogManager : MonoBehaviour
         newDialogIndex = 0;
         index++;
         GetComponentInChildren<TextMeshProUGUI>().text = "";
+        GetComponent<Canvas>().enabled = true;
     }
 
     public void nextStep() {
         if(dialogScript[index].getAction() == 0) {
             next();
+        } else if (dialogScript[index].getAction() == 1) {
+            GetComponent<Canvas>().enabled = false;
+            awaitTask = 1;
+        } else if (dialogScript[index].getAction() == 2) {
+            GetComponent<Canvas>().enabled = false;
         } else {
             Destroy(gameObject);
         }

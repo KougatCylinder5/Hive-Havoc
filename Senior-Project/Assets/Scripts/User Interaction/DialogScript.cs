@@ -5,13 +5,13 @@ using UnityEngine.Rendering.HighDefinition;
 
 public class DialogScript : MonoBehaviour {
     public string message;
-    public int endAction;
+    public Actions endAction;
 
     private string dialog;
     private int action;
     void Start() {
         dialog = message;
-        action = endAction;
+        action = (int)endAction;
 
     }
 
@@ -23,8 +23,8 @@ public class DialogScript : MonoBehaviour {
         return action; 
     }
 
-    public enum actions {
-        pass, wait, end
+    public enum Actions {
+        pass, factoryplace, wait, end
     }
 
 }
