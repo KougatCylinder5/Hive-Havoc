@@ -742,6 +742,9 @@ MonoBehaviour:
   unitToSpawn: {fileID: 1810470965265036872, guid: 1eb0c6234cbf68249b9562fc85a5df1f, type: 3}
   buildingSize: 3
   costOfUnit: 0000000000000000000000000100000000000000
+  water:
+    serializedVersion: 2
+    m_Bits: 16
 --- !u!65 &881785306250355943
 BoxCollider:
   m_ObjectHideFlags: 0

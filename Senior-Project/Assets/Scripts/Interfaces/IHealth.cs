@@ -1,10 +1,13 @@
-public interface IHealth
+using UnityEngine;
+
+public abstract class IHealth : MonoBehaviour
 {
-    abstract void DealDamage(int damage);
-    abstract void Regenerate();
-    abstract int Health { get; }
-    abstract int MaxHealth { get; }
-    abstract int HealthRegen { get; }
-    abstract float Resistance { get; }
-    abstract bool IsDead { get; }
+    public abstract void SetHealth(int health);
+    public abstract void DealDamage(int damage);
+    public abstract void Regenerate();
+    public abstract int Health { get; protected set; }
+    public abstract int MaxHealth { get; protected set; }
+    public abstract int HealthRegen { get; protected set; }
+    public abstract float Resistance { get; protected set; }
+    public abstract bool IsDead { get; protected set; }
 }

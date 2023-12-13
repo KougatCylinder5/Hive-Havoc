@@ -7,7 +7,7 @@ using static PathingManager;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(Animator))]
-public class AIController : MonoBehaviour, IHealth
+public class AIController : IHealth
 {
 
     public Vector2 Target { get => _target; protected set => _target = value; }
@@ -41,11 +41,11 @@ public class AIController : MonoBehaviour, IHealth
     [SerializeField]
     private bool _isDead = false;
     protected bool _isIgnoringEnemies = false;
-    public bool IsDead { get => _isDead; protected set => _isDead = value; }
-    public int Health
+    public override bool IsDead { get => _isDead; protected set => _isDead = value; }
+    public override int Health
     {
         get => _health;
-        set
+        protected set
         {
             if (value <= 0)
             {
@@ -58,11 +58,11 @@ public class AIController : MonoBehaviour, IHealth
             }
         }
     }
-    public int MaxHealth { get => _maxHealth; protected set => _maxHealth = value; }
+    public override int MaxHealth { get => _maxHealth; protected set => _maxHealth = value; }
 
-    public int HealthRegen { get => _regeneration; protected set => _regeneration = value; }
+    public override int HealthRegen { get => _regeneration; protected set => _regeneration = value; }
 
-    public float Resistance { get => _resistance; protected set => _resistance = value; }
+    public override float Resistance { get => _resistance; protected set => _resistance = value; }
 
     public bool IsIgnoringEnemies { get => _isIgnoringEnemies; set => _isIgnoringEnemies = value; }
 
@@ -117,22 +117,26 @@ public class AIController : MonoBehaviour, IHealth
 
     protected void Die()
     {
-        if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Death"))
-        {
+        //if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Death"))
+        //{
             //_animator.SetTrigger("Death");
             Invoke(nameof(DestroySelf), 0.5f);
-        }
+        //}
     }
     private void DestroySelf()
     {
         Destroy(gameObject);
     }
-    public void DealDamage(int damage)
+    public override void DealDamage(int damage)
     {
         Health -= Mathf.RoundToInt(damage * (1 - _resistance));
     }
-    public void Regenerate()
+    public override void Regenerate()
     {
         Health += _regeneration;
+    }
+    public override void SetHealth(int health)
+    {
+        Health = health;
     }
 }
