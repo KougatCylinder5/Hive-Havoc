@@ -739,7 +739,7 @@ GameObject:
   - component: {fileID: 6971352642139347493}
   - component: {fileID: 2849780753777051027}
   m_Layer: 0
-  m_Name: SoldierMakerUI
+  m_Name: CartMakerUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

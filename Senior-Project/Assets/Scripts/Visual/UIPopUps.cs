@@ -70,7 +70,8 @@ public class UIPopUps : MonoBehaviour
     }
 
     public void show() {
-        gameObject.transform.localPosition = new Vector3 (0, 30, 0);
+        gameObject.transform.localPosition = new Vector3 (0, 3, 0);
+        Debug.Log("Clicked");
     }
 
     public void hide() {
