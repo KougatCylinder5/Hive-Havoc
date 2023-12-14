@@ -15,6 +15,7 @@ TagManager:
   - Stone Hitbox
   - Coal Hitbox
   - Copper Hitbox
+  - UI
   layers:
   - Default
   - TransparentFX

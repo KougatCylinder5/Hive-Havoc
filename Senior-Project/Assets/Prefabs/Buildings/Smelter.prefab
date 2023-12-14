@@ -5797,6 +5797,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   popup: {fileID: 24486235640646276}
+  goAway: 1
 --- !u!1 &3540043321726072969
 GameObject:
   m_ObjectHideFlags: 0
