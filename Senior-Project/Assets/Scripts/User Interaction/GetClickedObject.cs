@@ -4,6 +4,7 @@ public class GetClickedObject : MonoBehaviour
 {
     private GameObject troop;
     private GameObject building;
+    private GameObject popup;
     public LayerMask notTerrain;
 
     // Update is called once per frame
@@ -23,20 +24,28 @@ public class GetClickedObject : MonoBehaviour
                 {
                     building = hitInfo.transform.gameObject;
                 }
+                else if(hitInfo.transform.CompareTag("UI"))
+                {
+                    popup = hitInfo.transform.gameObject;
+                    Debug.Log("UI Hit");
+                }
             }
             else
             {
                 troop = null;
                 building = null;
+                popup = null;
             }
         }
         else if(Input.GetMouseButtonDown(1))
         {
             troop = null;
             building = null;
+            popup = null;
         }
     }
 
     public GameObject getTroop(){return troop;}
     public GameObject getBuilding(){return building;}
+    public GameObject getPopup(){return popup;}
 }

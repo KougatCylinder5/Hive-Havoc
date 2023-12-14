@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 262.33694, g: 325.04984, b: 430.2193, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4621,6 +4621,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DialogBox
       objectReference: {fileID: 0}
+    - target: {fileID: 7703996242665806115, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9207502459411114011, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
       propertyPath: dialogScript.Array.size
       value: 8
@@ -4749,7 +4753,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   message: Select a factory and place it neer water.
-  endAction: 1
+  endAction: 0
 --- !u!114 &1950265745
 MonoBehaviour:
   m_ObjectHideFlags: 0
