@@ -50,7 +50,7 @@ public class AIController : IHealth
             if (value <= 0)
             {
                 _health = 0;
-                IsDead = true;
+                _isDead = true;
             }
             else
             {
@@ -119,13 +119,15 @@ public class AIController : IHealth
     {
         //if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Death"))
         //{
-            //_animator.SetTrigger("Death");
-            Invoke(nameof(DestroySelf), 0.5f);
+        //_animator.SetTrigger("Death");
+        
+        Destroy(gameObject, 0.5f);
+        //Invoke(nameof(DestroySelf), 0.5f);
         //}
     }
     private void DestroySelf()
     {
-        Destroy(gameObject);
+        Destroy(gameObject,0.5f);
     }
     public override void DealDamage(int damage)
     {

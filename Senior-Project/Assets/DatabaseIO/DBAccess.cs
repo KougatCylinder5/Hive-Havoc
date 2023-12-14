@@ -37,7 +37,7 @@ public class DBAccess : MonoBehaviour
         return dbConnectionString;
     }
 
-    public static void startTransaction(bool spitLog = true) {
+    public static void startTransaction(bool spitLog = false) {
         if (!transactionActive) {
             sqliteDB.Open();
             var sqliteCommand = sqliteDB.CreateCommand();
@@ -55,7 +55,7 @@ public class DBAccess : MonoBehaviour
         }
     }
 
-    public static void commitTransaction(bool spitLog = true) {
+    public static void commitTransaction(bool spitLog = false) {
         if(transactionActive) {
             var sqliteCommand = sqliteDB.CreateCommand();
             int playTimeIsSeconds = 0;
@@ -109,7 +109,7 @@ public class DBAccess : MonoBehaviour
         }
     }
 
-    public static void rollbackTransaction(bool spitLog = true) {
+    public static void rollbackTransaction(bool spitLog = false) {
         if(transactionActive) {
             var sqliteCommand = sqliteDB.CreateCommand();
 
@@ -189,8 +189,6 @@ public class DBAccess : MonoBehaviour
     public IEnumerator LoadScene()
     {
         loadingScene = SceneManager.LoadSceneAsync(sceneToLoad);
-        //loadingScene.allowSceneActivation = false;
-
         while (!loadingScene.isDone)
         {
             LoadingBar.text = loadingScene.progress.ToString();
@@ -226,7 +224,7 @@ public class DBAccess : MonoBehaviour
         return reloadingSave;
     }
 
-    public static void doRealod() {
+    public static void doReload() {
         reloadingSave = true;
     }
     public static void clearReload() {
@@ -376,27 +374,14 @@ public class DBAccess : MonoBehaviour
         }
     }
 
-    public static void/*int*/ addUnit(int type, float xPos, float yPos, float xTarget, float yTarget, float health, int pathMode) {
+    public static void addUnit(int type, float xPos, float yPos, float xTarget, float yTarget, float health, int pathMode) {
         if(!transactionActive) {
             Debug.LogError(noTransactionError);
-            //return 0;
+            return;
         } else {
-            //int rowid = 0;
             var sqliteCommand = sqliteDB.CreateCommand();
             sqliteCommand.CommandText = "INSERT INTO unit ('x_pos', 'y_pos', 'target_x', 'target_y', 'health', 'type', 'path_mode', 'save_id') VALUES ('" + xPos + "', '" + yPos + "', '" + xTarget + "', '" + yTarget + "', '" + health + "', '" + type + "', '" + pathMode + "','" + saveID + "');";
             sqliteCommand.ExecuteNonQuery();
-
-            //sqliteCommand.CommandText = "SELECT last_insert_rowid() FROM unit;";
-            //IDataReader lastRow = sqliteCommand.ExecuteReader();
-
-            //try {
-            //    while(lastRow.Read()) {
-            //        rowid = lastRow.GetInt32(0);
-            //    }
-            //} catch {}
-
-            //lastRow.Close();
-            //return rowid;
         }
     }
 

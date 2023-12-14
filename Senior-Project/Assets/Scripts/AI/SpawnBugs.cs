@@ -23,7 +23,7 @@ public class SpawnBugs : MonoBehaviour
     {
         if (FlowFieldGenerator.FlowFieldFinished)
         {
-            Saver.playerUnits.Add(Instantiate(bug, transform.position + offset, Quaternion.identity));
+            Saver.allUnits.Add(Instantiate(bug, transform.position + offset, Quaternion.identity));
         }
         
     }
