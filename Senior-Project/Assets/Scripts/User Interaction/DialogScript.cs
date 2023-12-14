@@ -24,7 +24,7 @@ public class DialogScript : MonoBehaviour {
     }
 
     public enum Actions {
-        pass, factoryplace, wait, end
+        pass, factoryplace, spawnbug, end
     }
 
 }
