@@ -73,12 +73,6 @@ public class MakeUnitBuilding : BuildingClass
             x = (Random.value - 0.5f) * buildingSize;
         }
         Vector3 randVec = new(x, transform.position.y, z);
-        Saver.playerUnits.AddRange(MakeUnits.SpawnUnitsAtPosition(spawnCount, unitToSpawn[unit], transform.position + randVec, transform));
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawCube(transform.position, new(buildingSize*2, 2, buildingSize*2));
+        Saver.allUnits.AddRange(MakeUnits.SpawnUnitsAtPosition(spawnCount, unitToSpawn, transform.position + randVec, transform));
     }
 }

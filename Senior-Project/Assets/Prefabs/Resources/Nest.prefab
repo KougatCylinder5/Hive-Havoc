@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7167437260043311412}
   - component: {fileID: 6842881551727138744}
   - component: {fileID: 4036514596693127822}
+  - component: {fileID: -5823948313488065643}
   m_Layer: 0
   m_Name: Nest
   m_TagString: Untagged
@@ -122,3 +123,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bug: {fileID: 3706112903273544462, guid: b9b6e8bd65d5b334bbe75f513a8c0021, type: 3}
   offset: {x: 0, y: 0.25, z: 0}
+--- !u!114 &-5823948313488065643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5105626110259817009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c04933be6f0caec4098c2e65de88f3ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _health: 25
+  _maxHealth: 25
+  _regeneration: 1
+  _isDead: 0
