@@ -23,10 +23,10 @@ public class HunterBehavior : UnitAI
         base.Update();
 
 
-        if (Physics.OverlapSphereNonAlloc(_position, AttackRadius, enemies, LayerMask.GetMask("EnemyUnit")) > 0 && !IsIgnoringEnemies)
+        if (Physics.OverlapSphereNonAlloc(_position, AttackRadius, enemies, LayerMask.GetMask("EnemyUnit", "EnemyBuilding")) > 0 && !IsIgnoringEnemies)
         {
             oldLookDirection = transform.rotation;
-            enemies = enemies.OrderBy(c => { if(c && !c.GetComponent<EnemyAI>().IsDead) return (c.transform.position - _position).magnitude; return float.PositiveInfinity; }).ToArray();
+            enemies = enemies.OrderBy(c => { if(c && !c.GetComponent<IHealth>().IsDead) return (c.transform.position - _position).magnitude; return float.PositiveInfinity; }).ToArray();
             AttackTarget = enemies[0].gameObject;
             Vector3 enemyAtHeight = AttackTarget.transform.position;
             enemyAtHeight.y = _position.y;
@@ -52,14 +52,10 @@ public class HunterBehavior : UnitAI
             AttackCooldown -= Time.deltaTime*AttackSpeed;
         }
     }
-    private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        
-    }
 
     private new void Attack(GameObject target)
     {
-        target.GetComponent<EnemyAI>().DealDamage(DamageAmount);
+        target.GetComponent<IHealth>().DealDamage(DamageAmount);
     }
 
 

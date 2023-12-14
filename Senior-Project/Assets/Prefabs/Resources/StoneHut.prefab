@@ -610,7 +610,7 @@ GameObject:
   - component: {fileID: 9017930420774944602}
   - component: {fileID: 2227119621044184942}
   m_Layer: 3
-  m_Name: SampleStoneHut
+  m_Name: StoneHut
   m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

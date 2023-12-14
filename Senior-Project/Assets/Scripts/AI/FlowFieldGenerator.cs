@@ -22,7 +22,6 @@ public class FlowFieldGenerator : MonoBehaviour
     private NativeList<FlowFieldJob.PathNode> closedList;
     private NativeList<JobHandle> handles;
     private NativeArray<bool> obstructedTiles;
-    private Coroutine gridGenerator;
 
     [BurstCompile]
     public void Awake()
@@ -50,15 +49,14 @@ public class FlowFieldGenerator : MonoBehaviour
         {
             obstructedTiles[j] = NaturalObstructedTiles[j];
         }
-        gridGenerator =  StartCoroutine(nameof(NodeIterate));
+        StartCoroutine(nameof(NodeIterate));
         
     }
     private IEnumerator NodeIterate()
     {
         while (positionsToCheck.Length > 0)
         {
-            if (Saver.LoadDone)
-                yield return 0;
+            yield return new WaitUntil(delegate { return Saver.LoadDone; });
             NativeList<FlowFieldJob.PathNode> newPositionsToCheck = new(positionsToCheck.Length * 8, Allocator.Persistent);
             FlowFieldJob job = new()
             {
@@ -86,18 +84,23 @@ public class FlowFieldGenerator : MonoBehaviour
 
             }
             newPositionsToCheck.Dispose();
-            yield return new WaitForEndOfFrame();
+            yield return 0;
         }
+        int counter = 0;
         foreach (FlowFieldJob.PathNode node in closedList)
         {
             FlowTiles[node.position.x, node.position.y] = node;
+            if(counter > 30)
+            {
+                counter = 0;
+                yield return 0;
+            }
         }
         FlowFieldFinished = true;
         obstructedTiles.Dispose();
         closedList.Dispose();
         handles.Dispose();
         positionsToCheck.Dispose();
-        StopCoroutine(gridGenerator);
     }
     [BurstCompile]
     public struct FlowFieldJob : IJobParallelFor

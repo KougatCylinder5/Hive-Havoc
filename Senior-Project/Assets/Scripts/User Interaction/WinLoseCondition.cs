@@ -4,8 +4,8 @@ using UnityEngine.SceneManagement;
 
 public class WinLoseCondition : MonoBehaviour
 {
-    public List<GameObject> nests;
     public GameObject commandCenter;
+    public static List<GameObject> nests = new();
 
     // Start is called before the first frame update
     void Awake()
@@ -16,6 +16,8 @@ public class WinLoseCondition : MonoBehaviour
 
     void CheckWin()
     {
+        if (!Saver.LoadDone)
+            return;
         bool hasWon = false;
         foreach (GameObject go in nests)
         {
@@ -29,6 +31,7 @@ public class WinLoseCondition : MonoBehaviour
         if (hasWon)
         {
             Debug.Log("Win!");
+            SceneManager.LoadScene("Select Level");
         }
             
     }
