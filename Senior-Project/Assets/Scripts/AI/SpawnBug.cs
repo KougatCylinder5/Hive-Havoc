@@ -11,7 +11,7 @@ public class SpawnBug : MonoBehaviour
     {
         if (FlowFieldGenerator.FlowFieldFinished)
         {
-            Saver.playerUnits.Add(Instantiate(bug, pos, Quaternion.identity));
+            Saver.allUnits.Add(Instantiate(bug, pos, Quaternion.identity));
         }
         
     }

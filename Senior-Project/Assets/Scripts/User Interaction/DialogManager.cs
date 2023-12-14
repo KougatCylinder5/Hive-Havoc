@@ -20,9 +20,8 @@ public class DialogManager : MonoBehaviour
 
     private void Update() {
         if(awaitTask == 1) {
-            if(GameObject.Find("SoldierMaker(Clone)")) {
+            if(GameObject.Find("CartMaker(Clone)")) {
                 awaitTask = 0;
-                index++;
                 next();
             }
         }
@@ -63,7 +62,7 @@ public class DialogManager : MonoBehaviour
             awaitTask = 2;
         } else {
             Destroy(gameObject);
-            GameObject.Find("Nest").GetComponent<SpawnBugs>().enabled = true;
+            GameObject.Find("Nest(").GetComponent<SpawnBugs>().enabled = true;
         }
     }
 

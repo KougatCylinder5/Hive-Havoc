@@ -5,21 +5,24 @@ using UnityEngine;
 public class PopupDisplayer : MonoBehaviour
 {
     public UIPopUps popup;
-    public bool goAway = false;
+    private bool goAway = false;
+    private bool onGO = false;
 
-    private void OnMouseOver() {
-        if (Input.GetMouseButtonDown(0)) 
-        {
-            if (!goAway)
-            {
+    private void Update() {
+        if (Input.GetMouseButtonDown(0)) {
+            if(onGO) {
                 popup.show();
-                goAway = true;
-            }
-            else if (goAway)
-            {
+            } else if (!popup.isMouseOver()) {
                 popup.hide();
-                goAway = false;
             }
         }
+    }
+
+    private void OnMouseOver() {
+        onGO = true;
+    }
+
+    private void OnMouseExit() {
+        onGO = false;
     }
 }
