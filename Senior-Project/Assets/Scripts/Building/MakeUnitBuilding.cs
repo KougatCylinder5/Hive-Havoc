@@ -73,6 +73,6 @@ public class MakeUnitBuilding : BuildingClass
             x = (Random.value - 0.5f) * buildingSize;
         }
         Vector3 randVec = new(x, transform.position.y, z);
-        Saver.allUnits.AddRange(MakeUnits.SpawnUnitsAtPosition(spawnCount, unitToSpawn, transform.position + randVec, transform));
+        Saver.allUnits.AddRange(MakeUnits.SpawnUnitsAtPosition(spawnCount, unitToSpawn[unit], transform.position + randVec, transform));
     }
 }
