@@ -249,7 +249,7 @@ public class Saver : MonoBehaviour
                 addPlaceable((int)Enum.Parse<PlaceableTypes>(building.name[..building.name.IndexOf('(')]), building.transform.position.x, building.transform.position.z, buildingClass.Health, 0);
                 if (Enum.Parse<PlaceableTypes>(building.name[..building.name.IndexOf('(')]) == PlaceableTypes.Nest)
                 {
-                    WinCondition.nests.Add(building);
+                    WinLoseCondition.nests.Add(building);
                 }
             }
             catch { invalidThings.Add(building); }
