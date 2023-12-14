@@ -7,7 +7,8 @@ public class PopupDisplayer : MonoBehaviour
     public UIPopUps popup;
     public bool goAway = false;
 
-    private void OnMouseOver() {
+
+    private void Update() {
         if (Input.GetMouseButtonDown(0)) 
         {
             if (!goAway)
