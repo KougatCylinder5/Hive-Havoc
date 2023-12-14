@@ -361,13 +361,19 @@ GameObject:
   - component: {fileID: 8947916621590455403}
   - component: {fileID: 3775908250783570441}
   - component: {fileID: 9207502459411114011}
+  - component: {fileID: 328747234555157976}
+  - component: {fileID: 5532038111046941983}
+  - component: {fileID: 7429319103198518522}
+  - component: {fileID: 6121969049776708910}
+  - component: {fileID: 9168874264472432001}
+  - component: {fileID: 7838325632374503993}
   m_Layer: 5
   m_Name: DialogBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1885749881598008079
 RectTransform:
   m_ObjectHideFlags: 0
@@ -411,7 +417,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_TargetDisplay: 0
 --- !u!114 &8947916621590455403
 MonoBehaviour:
@@ -465,7 +471,98 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4551adf118f4184479eeb0c06e46e105, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogScript: []
+  dialogScript:
+  - {fileID: 328747234555157976}
+  - {fileID: 5532038111046941983}
+  - {fileID: 7429319103198518522}
+  - {fileID: 6121969049776708910}
+  - {fileID: 6121969049776708910}
+  - {fileID: 9168874264472432001}
+  - {fileID: 7838325632374503993}
+--- !u!114 &328747234555157976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7703996242665806115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 875c3fa4861a4194194e670cd39bf465, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: '{Introduction}'
+  endAction: 0
+--- !u!114 &5532038111046941983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7703996242665806115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 875c3fa4861a4194194e670cd39bf465, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: Use W, A, S, D, or hold the middle mouse button to move around.
+  endAction: 0
+--- !u!114 &7429319103198518522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7703996242665806115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 875c3fa4861a4194194e670cd39bf465, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: Next we are going to need to place down a structure.
+  endAction: 0
+--- !u!114 &6121969049776708910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7703996242665806115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 875c3fa4861a4194194e670cd39bf465, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: Select a factory and place it neer water.
+  endAction: 0
+--- !u!114 &9168874264472432001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7703996242665806115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 875c3fa4861a4194194e670cd39bf465, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: Great. Now build the army by clicking the factory and creating an army!
+  endAction: 0
+--- !u!114 &7838325632374503993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7703996242665806115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 875c3fa4861a4194194e670cd39bf465, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: Good Luck!
+  endAction: 3
 --- !u!1 &8051266952533427009
 GameObject:
   m_ObjectHideFlags: 0
