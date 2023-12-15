@@ -1413,11 +1413,10 @@ MonoBehaviour:
   _isDead: 0
   spawnCount: 1
   unitToSpawn:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 2685746383838149287, guid: 044d5cc4411d2ae49b3d48fd50f33d6f, type: 3}
   buildingSize: 3
   costOfUnit: 0000000000000000000000000100000000000000
+  canMakeUnits: 0
   water:
     serializedVersion: 2
     m_Bits: 16
@@ -2291,6 +2290,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5079054777353939013}
     m_Modifications:
+    - target: {fileID: 1876665948193797269, guid: 6f4f9d19cdbee76439968e9e9f8dee9a, type: 3}
+      propertyPath: m_Color.b
+      value: 0.11764706
+      objectReference: {fileID: 0}
+    - target: {fileID: 1876665948193797269, guid: 6f4f9d19cdbee76439968e9e9f8dee9a, type: 3}
+      propertyPath: m_Color.g
+      value: 0.67058825
+      objectReference: {fileID: 0}
+    - target: {fileID: 1876665948193797269, guid: 6f4f9d19cdbee76439968e9e9f8dee9a, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2849780753777051027, guid: 6f4f9d19cdbee76439968e9e9f8dee9a, type: 3}
+      propertyPath: coolDown
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2849780753777051027, guid: 6f4f9d19cdbee76439968e9e9f8dee9a, type: 3}
+      propertyPath: progressBar
+      value: 
+      objectReference: {fileID: 3859995510641428148}
     - target: {fileID: 6554763409476978407, guid: 6f4f9d19cdbee76439968e9e9f8dee9a, type: 3}
       propertyPath: m_Name
       value: CartMakerUI
@@ -2335,11 +2354,48 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7563235832157247633, guid: 6f4f9d19cdbee76439968e9e9f8dee9a, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563235832157247633, guid: 6f4f9d19cdbee76439968e9e9f8dee9a, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563235832157247633, guid: 6f4f9d19cdbee76439968e9e9f8dee9a, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7778188830349890617, guid: 6f4f9d19cdbee76439968e9e9f8dee9a, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7778188830349890617, guid: 6f4f9d19cdbee76439968e9e9f8dee9a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7778188830349890617, guid: 6f4f9d19cdbee76439968e9e9f8dee9a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7778188830349890617, guid: 6f4f9d19cdbee76439968e9e9f8dee9a, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7778188830349890617, guid: 6f4f9d19cdbee76439968e9e9f8dee9a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6f4f9d19cdbee76439968e9e9f8dee9a, type: 3}
+--- !u!224 &3859995510641428148 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7778188830349890617, guid: 6f4f9d19cdbee76439968e9e9f8dee9a, type: 3}
+  m_PrefabInstance: {fileID: 6800673966567985805}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4530586840234346664 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6971352642139347493, guid: 6f4f9d19cdbee76439968e9e9f8dee9a, type: 3}

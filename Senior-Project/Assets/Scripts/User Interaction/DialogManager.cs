@@ -20,9 +20,15 @@ public class DialogManager : MonoBehaviour
 
     private void Update() {
         if(awaitTask == 1) {
-            if(GameObject.Find("SoldierMaker(Clone)")) {
+            if(GameObject.Find("CartMaker(Clone)")) {
                 awaitTask = 0;
-                index++;
+                next();
+            }
+        }
+
+        if (awaitTask == 2) {
+            if (!GameObject.Find("Crawler(Clone)")) {
+                awaitTask = 0;
                 next();
             }
         }
@@ -52,8 +58,11 @@ public class DialogManager : MonoBehaviour
             awaitTask = 1;
         } else if (dialogScript[index].getAction() == 2) {
             GetComponent<Canvas>().enabled = false;
+            GetComponent<SpawnBug>().Spawn();
+            awaitTask = 2;
         } else {
             Destroy(gameObject);
+            GameObject.Find("Nest(").GetComponent<SpawnBugs>().enabled = true;
         }
     }
 

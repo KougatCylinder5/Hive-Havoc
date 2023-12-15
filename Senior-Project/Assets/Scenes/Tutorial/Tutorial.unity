@@ -1676,7 +1676,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5105626110259817009, guid: d7aa72d17be6fda4ea237bd521ee7d01, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 264857889}
+    - targetCorrespondingSourceObject: {fileID: 5105626110259817009, guid: d7aa72d17be6fda4ea237bd521ee7d01, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 318827506}
   m_SourcePrefab: {fileID: 100100000, guid: d7aa72d17be6fda4ea237bd521ee7d01, type: 3}
 --- !u!1 &839647639 stripped
 GameObject:
@@ -4157,14 +4163,14 @@ MonoBehaviour:
   - {fileID: 3356599496919314407, guid: 302f313808009ea4fa5c2c2ca5aaa8e6, type: 3}
   - {fileID: 3356599496919314407, guid: a17f1d38cf349254584c3bd56cefce26, type: 3}
   - {fileID: 3353867752437551522, guid: d024b6e2c549d1d409f8be490697f740, type: 3}
-  - {fileID: 0}
+  - {fileID: 3353867752437551522, guid: a263cbc50af7f97418f58833be697c4f, type: 3}
   - {fileID: 3353867752437551522, guid: 6f821373fb00eaf469ed8bed47622f91, type: 3}
-  - {fileID: 8509959233601206906, guid: ce1d5901b45533748bcbe2fd6cf07823, type: 3}
+  - {fileID: 3353867752437551522, guid: 3b880bbd19ed0f648869e06ea330916d, type: 3}
   - {fileID: 3353867752437551522, guid: 73b7cb6fe7c57f54ca7ad07c3e58627c, type: 3}
-  - {fileID: 8509959233601206906, guid: f9a6a619f0cabc34faf9d1766e77212f, type: 3}
+  - {fileID: 3353867752437551522, guid: 9a02567069d74ca439cf658ad130c488, type: 3}
   - {fileID: 3353867752437551522, guid: 2ea27990a0f465043964029bf38ce9ec, type: 3}
-  - {fileID: 8509959233601206906, guid: f77ca65b2d78e7c449744d18d56daa16, type: 3}
-  - {fileID: 3356599496919314407, guid: 93326ab7a0186e148851e0d6eb680d05, type: 3}
+  - {fileID: 3353867752437551522, guid: 852950c07aa58614482486292477730b, type: 3}
+  - {fileID: 3356599496919314407, guid: b62daa310af212e4ba169ec87d0b6558, type: 3}
   - {fileID: 3356599496919314407, guid: 9f372f708f94b1c4591d6966df16d078, type: 3}
   boundNearestOrigin: {fileID: 1063763469}
   playableAreaSizeX: 24
@@ -4429,7 +4435,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad2922e7d4d106d4a8954da3739ac081, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  commandCenter: {fileID: 0}
+  commandCenter: {fileID: 1453399075}
 --- !u!1001 &1950265734
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4438,6 +4444,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 687949853665052076, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      propertyPath: m_SortingOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1324614225507707562, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 83
+      objectReference: {fileID: 0}
+    - target: {fileID: 1324614225507707562, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -186.7
+      objectReference: {fileID: 0}
     - target: {fileID: 1885749881598008079, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -4518,15 +4536,234 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7341839054170715119, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -170
+      objectReference: {fileID: 0}
+    - target: {fileID: 7341839054170715119, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: -410
+      objectReference: {fileID: 0}
+    - target: {fileID: 7341839054170715119, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 85
+      objectReference: {fileID: 0}
+    - target: {fileID: 7341839054170715119, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -205
+      objectReference: {fileID: 0}
     - target: {fileID: 7703996242665806115, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
       propertyPath: m_Name
       value: DialogBox
       objectReference: {fileID: 0}
+    - target: {fileID: 7703996242665806115, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8532353628803707830, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      propertyPath: m_text
+      value: Demo Text
+      objectReference: {fileID: 0}
+    - target: {fileID: 9207502459411114011, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      propertyPath: dialogScript.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 9207502459411114011, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      propertyPath: dialogScript.Array.data[0]
+      value: 
+      objectReference: {fileID: 1950265738}
+    - target: {fileID: 9207502459411114011, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      propertyPath: dialogScript.Array.data[1]
+      value: 
+      objectReference: {fileID: 1950265737}
+    - target: {fileID: 9207502459411114011, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      propertyPath: dialogScript.Array.data[2]
+      value: 
+      objectReference: {fileID: 1950265736}
+    - target: {fileID: 9207502459411114011, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      propertyPath: dialogScript.Array.data[3]
+      value: 
+      objectReference: {fileID: 1950265739}
+    - target: {fileID: 9207502459411114011, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      propertyPath: dialogScript.Array.data[4]
+      value: 
+      objectReference: {fileID: 1950265746}
+    - target: {fileID: 9207502459411114011, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      propertyPath: dialogScript.Array.data[5]
+      value: 
+      objectReference: {fileID: 1950265747}
+    - target: {fileID: 9207502459411114011, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      propertyPath: dialogScript.Array.data[6]
+      value: 
+      objectReference: {fileID: 1950265754}
+    - target: {fileID: 9207502459411114011, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      propertyPath: dialogScript.Array.data[7]
+      value: 
+      objectReference: {fileID: 1950265745}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7703996242665806115, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      insertIndex: 4
+      addedObject: {fileID: 1950265749}
+    - targetCorrespondingSourceObject: {fileID: 7703996242665806115, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1950265738}
+    - targetCorrespondingSourceObject: {fileID: 7703996242665806115, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1950265737}
+    - targetCorrespondingSourceObject: {fileID: 7703996242665806115, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1950265736}
+    - targetCorrespondingSourceObject: {fileID: 7703996242665806115, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1950265739}
+    - targetCorrespondingSourceObject: {fileID: 7703996242665806115, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1950265746}
+    - targetCorrespondingSourceObject: {fileID: 7703996242665806115, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1950265747}
+    - targetCorrespondingSourceObject: {fileID: 7703996242665806115, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1950265754}
+    - targetCorrespondingSourceObject: {fileID: 7703996242665806115, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1950265745}
   m_SourcePrefab: {fileID: 100100000, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+--- !u!1 &1950265735 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7703996242665806115, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+  m_PrefabInstance: {fileID: 1950265734}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1950265736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1950265735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 875c3fa4861a4194194e670cd39bf465, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: Next we are going to need to place down a structure.
+  endAction: 0
+--- !u!114 &1950265737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1950265735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 875c3fa4861a4194194e670cd39bf465, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: Use W, A, S, D, or hold the middle mouse button to move around.
+  endAction: 0
+--- !u!114 &1950265738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1950265735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 875c3fa4861a4194194e670cd39bf465, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: '{Introduction}'
+  endAction: 0
+--- !u!114 &1950265739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1950265735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 875c3fa4861a4194194e670cd39bf465, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: Select a factory and place it neer water.
+  endAction: 1
+--- !u!114 &1950265745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1950265735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 875c3fa4861a4194194e670cd39bf465, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: Good Luck!
+  endAction: 3
+--- !u!114 &1950265746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1950265735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 875c3fa4861a4194194e670cd39bf465, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: Great. Now build the army by clicking the factory and creating an army!
+  endAction: 0
+--- !u!114 &1950265747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1950265735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 875c3fa4861a4194194e670cd39bf465, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: Bugs spawn from bug nest. The goal is to kill the bugs before they destroy
+    the base.  Try to kill the bug.
+  endAction: 2
+--- !u!114 &1950265749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1950265735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0fe535eb2a1a704eb71bea70e9c0604, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bug: {fileID: 3706112903273544462, guid: b9b6e8bd65d5b334bbe75f513a8c0021, type: 3}
+  pos: {x: 37.83, y: -0.000003514697, z: 55.35}
+--- !u!114 &1950265754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1950265735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 875c3fa4861a4194194e670cd39bf465, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: Great! More will spawn soon. Finish the level by defeating the nest!
+  endAction: 0
 --- !u!1 &2049511484
 GameObject:
   m_ObjectHideFlags: 0
@@ -4916,3 +5153,4 @@ SceneRoots:
   - {fileID: 983361994}
   - {fileID: 788697724}
   - {fileID: 1950265734}
+  - {fileID: 294839982}

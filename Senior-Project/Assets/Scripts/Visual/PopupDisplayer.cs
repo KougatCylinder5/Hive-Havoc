@@ -1,25 +1,36 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PopupDisplayer : MonoBehaviour
 {
     public UIPopUps popup;
-    public bool goAway = false;
+    private bool goAway = false;
+    private bool onGO = false;
+    private MakeUnitBuilding mubClass;
 
-    private void OnMouseOver() {
-        if (Input.GetMouseButtonDown(0)) 
-        {
-            if (!goAway)
-            {
+    private void Awake()
+    {
+        mubClass = GetComponent<MakeUnitBuilding>();
+    }
+
+    private void Update() {
+        if (Input.GetMouseButtonDown(0) && mubClass.canMakeUnits) {
+            if(onGO) {
                 popup.show();
-                goAway = true;
-            }
-            else if (goAway)
-            {
+            } else if (!popup.isMouseOver()) {
                 popup.hide();
-                goAway = false;
             }
         }
+        else
+        {
+            Debug.Log("Cant make units :(");
+        }
+    }
+
+    private void OnMouseOver() {
+        onGO = true;
+    }
+
+    private void OnMouseExit() {
+        onGO = false;
     }
 }

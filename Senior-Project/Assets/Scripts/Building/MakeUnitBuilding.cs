@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
+
 
 public class MakeUnitBuilding : BuildingClass
 {
@@ -7,16 +10,13 @@ public class MakeUnitBuilding : BuildingClass
     public int buildingSize;
     private GetClickedObject gco;
     public int[] costOfUnit;
-    private bool canMakeUnits = false;
+    public bool canMakeUnits;
     public LayerMask water;
 
     void Awake()
     {
         gco = GameObject.Find("ScriptManager").GetComponent<GetClickedObject>();
-        if(Physics.CheckBox(transform.position, new(buildingSize, 2, buildingSize), transform.rotation, water))
-        {
-            canMakeUnits = true;
-        }
+        canMakeUnits = Physics.BoxCast(transform.position, new(buildingSize * 2, 2, buildingSize * 2), Vector3.up, transform.rotation, 1, water);
     }
 
     void Update()
@@ -50,29 +50,32 @@ public class MakeUnitBuilding : BuildingClass
 
     public void SpawnUnits(int unit)
     {
-        bool onXSide = Random.value > 0.5f;
-        float isPositive = Random.value - 0.5f;
-        if(isPositive <= 0)
+        List<Vector2Int> spots = new List<Vector2Int>();
+        foreach(Vector2Int v in GenAllSurroundingSpawnPos())
         {
-            isPositive = -1;
+            if(PathingManager.ObstructedTiles[PathingManager.CalculateIndex(v.x, v.y)])
+            {
+                spots.Add(v);
+            }
         }
-        else
+        Vector2Int randVec = spots[UnityEngine.Random.Range(0, spots.Count)];
+        Vector3 finalVec = new(randVec.x, 0, randVec.y);
+        Saver.allUnits.AddRange(MakeUnits.SpawnUnitsAtPosition(spawnCount, unitToSpawn[unit], finalVec));
+    }
+
+    public List<Vector2Int> GenAllSurroundingSpawnPos()
+    {
+        List<Vector2Int> possiblePoints = new();
+        for (int i = (int)Mathf.Pow(buildingSize + 2, 2) -1; i >= 0; --i)
         {
-            isPositive = 1;
+            Vector2Int point = new((int)transform.position.x, (int)transform.position.z);
+            point += new Vector2Int(Mathf.FloorToInt(i % (buildingSize + 2)) - (int)Math.Round((float)(buildingSize / 2),MidpointRounding.AwayFromZero) -1 , Mathf.FloorToInt(i / (buildingSize + 2)) - (int)Math.Round((float)(buildingSize / 2), MidpointRounding.AwayFromZero) -1);
+            Debug.Log(point);
+            if (PathingManager.IsOpen(point))
+            {
+                possiblePoints.Add(point);
+            }
         }
-        float x;
-        float z;
-        if(onXSide)
-        {
-            x = buildingSize * isPositive;
-            z = (Random.value - 0.5f) * buildingSize;
-        }
-        else
-        {
-            z = buildingSize * isPositive;
-            x = (Random.value - 0.5f) * buildingSize;
-        }
-        Vector3 randVec = new(x, transform.position.y, z);
-        Saver.allUnits.AddRange(MakeUnits.SpawnUnitsAtPosition(spawnCount, unitToSpawn[unit], transform.position + randVec, transform));
+        return possiblePoints;
     }
 }
