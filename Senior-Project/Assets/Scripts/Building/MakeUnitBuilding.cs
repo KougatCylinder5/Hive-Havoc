@@ -10,16 +10,13 @@ public class MakeUnitBuilding : BuildingClass
     public int buildingSize;
     private GetClickedObject gco;
     public int[] costOfUnit;
-    public bool canMakeUnits = false;
+    public bool canMakeUnits;
     public LayerMask water;
 
     void Awake()
     {
         gco = GameObject.Find("ScriptManager").GetComponent<GetClickedObject>();
-        if(Physics.BoxCast(transform.position, new(buildingSize*2, 2, buildingSize*2), Vector3.zero, transform.rotation, 0, water))
-        {
-            canMakeUnits = true;
-        }
+        canMakeUnits = Physics.BoxCast(transform.position, new(buildingSize * 2, 2, buildingSize * 2), Vector3.up, transform.rotation, 1, water);
     }
 
     void Update()
@@ -63,7 +60,7 @@ public class MakeUnitBuilding : BuildingClass
         }
         Vector2Int randVec = spots[UnityEngine.Random.Range(0, spots.Count)];
         Vector3 finalVec = new(randVec.x, 0, randVec.y);
-        Saver.playerUnits.AddRange(MakeUnits.SpawnUnitsAtPosition(spawnCount, unitToSpawn[unit], transform.position + finalVec));
+        Saver.allUnits.AddRange(MakeUnits.SpawnUnitsAtPosition(spawnCount, unitToSpawn[unit], finalVec));
     }
 
     public List<Vector2Int> GenAllSurroundingSpawnPos()
@@ -71,8 +68,8 @@ public class MakeUnitBuilding : BuildingClass
         List<Vector2Int> possiblePoints = new();
         for (int i = (int)Mathf.Pow(buildingSize + 2, 2) -1; i >= 0; --i)
         {
-            Vector2Int point = new(2, 2);
-            point += new Vector2Int(Mathf.FloorToInt(i % (buildingSize + 2)) - (int)Math.Round((float)(buildingSize / 2),MidpointRounding.AwayFromZero), Mathf.FloorToInt(i / (buildingSize + 2)) - (int)Math.Round((float)(buildingSize / 2), MidpointRounding.AwayFromZero));
+            Vector2Int point = new((int)transform.position.x, (int)transform.position.z);
+            point += new Vector2Int(Mathf.FloorToInt(i % (buildingSize + 2)) - (int)Math.Round((float)(buildingSize / 2),MidpointRounding.AwayFromZero) -1 , Mathf.FloorToInt(i / (buildingSize + 2)) - (int)Math.Round((float)(buildingSize / 2), MidpointRounding.AwayFromZero) -1);
             Debug.Log(point);
             if (PathingManager.IsOpen(point))
             {
