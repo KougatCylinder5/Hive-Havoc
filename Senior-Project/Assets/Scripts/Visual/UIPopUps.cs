@@ -27,6 +27,9 @@ public class UIPopUps : MonoBehaviour
 
     private uint coolDownTime = 0;
 
+    public RectTransform progressBar;
+
+    private bool onGO;
 
     public enum EdgeType {
         Rising,
@@ -55,19 +58,43 @@ public class UIPopUps : MonoBehaviour
                     rate--;
                 }
                 coolDownTime--;
+                progressBar.transform.localScale = new Vector3(coolDownTime * 1.0f / coolDown, 1, 1);
+            } else {
+                progressBar.transform.localScale = new Vector3(1, 1, 1);
             }
             modifyText.text = prefix + "\n" + rate + "/" + max;
             if (rate > 0 && coolDownTime == 0) {
                 coolDownTime = coolDown;
-            }
-        }
-        
 
+            }
+            
+        }
+    }
+
+    public bool isMouseOver() {
+        return onGO;
     }
 
     public void buttonAction() {
         if(rate < max) {
             rate++;
         }
+    }
+
+    public void show() {
+        gameObject.transform.localPosition = new Vector3 (0, 3, 0);
+        Debug.Log("Clicked");
+    }
+
+    public void hide() {
+        gameObject.transform.localPosition = new Vector3(0, -1000, 0);
+    }
+
+    private void OnMouseOver() {
+        onGO = true;
+    }
+
+    private void OnMouseExit() {
+        onGO = false;
     }
 }

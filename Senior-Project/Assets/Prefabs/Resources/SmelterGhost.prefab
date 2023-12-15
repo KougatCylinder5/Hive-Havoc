@@ -6292,8 +6292,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingSize: 2
-  buildingCost: 0200000002000000020000000200000002000000
-  key: 110
+  buildingCost: 0100000000000000000000000000000000000000
+  key: 108
 --- !u!1 &3858855114861026078
 GameObject:
   m_ObjectHideFlags: 0

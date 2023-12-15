@@ -15,17 +15,18 @@ TagManager:
   - Stone Hitbox
   - Coal Hitbox
   - Copper Hitbox
+  - UI
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Building
+  - PlayerBuilding
   - Water
   - UI
   - Terrain
   - PlayerUnit
   - EnemyUnit
-  - NPC
+  - EnemyBuilding
   - Trees
   - 
   - 

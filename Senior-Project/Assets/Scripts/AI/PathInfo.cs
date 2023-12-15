@@ -17,7 +17,7 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
 
     public PathInfo()
     {
-        raycastLayers = LayerMask.GetMask(new string[] {"Water", "Building", "Terrain", "Trees" });
+        raycastLayers = LayerMask.GetMask(new string[] {"Water", "PlayerBuilding", "Terrain", "Trees", "EnemyBuilding" });
     }
 
     public void CleanPath()
@@ -26,8 +26,6 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
         copyPath.Enqueue(End);
 
         Vector2 curNode = Start;
-
-        
 
 
         cleanedPath.Clear();

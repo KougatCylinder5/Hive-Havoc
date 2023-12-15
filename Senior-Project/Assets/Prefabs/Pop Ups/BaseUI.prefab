@@ -844,9 +844,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6971352642139347493}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: BaseUI
-  m_TagString: Untagged
+  m_TagString: UI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

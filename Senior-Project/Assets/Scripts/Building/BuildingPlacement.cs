@@ -56,7 +56,7 @@ public class BuildingPlacement : MonoBehaviour
             {
                 if (CheckCost(_ghostBuilding.GetComponent<GhostBuildingClass>().GetCost(), ResourceStruct.Total, out int[] dep) && _ghostBuilding.GetComponent<GhostBuildingClass>().CheckPlacementArea(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.y))/* && CommandCenter.CheckArea(new (Mathf.RoundToInt(position.x), 0, Mathf.RoundToInt(position.y)))*/)
                 {
-                    Instantiate(_currentBuilding, _ghostBuilding.transform.position, Quaternion.identity);
+                    Saver.allBuildings.Add(Instantiate(_currentBuilding, _ghostBuilding.transform.position, Quaternion.identity));
                     DepleteResources(dep);
                 }
                 else
