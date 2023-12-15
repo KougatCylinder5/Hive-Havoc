@@ -120,7 +120,7 @@ public class AIController : IHealth
         //if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Death"))
         //{
         //_animator.SetTrigger("Death");
-        
+        UnitController.RemoveUnit(gameObject);
         Destroy(gameObject, 0.5f);
         //Invoke(nameof(DestroySelf), 0.5f);
         //}

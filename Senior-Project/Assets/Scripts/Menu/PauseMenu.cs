@@ -38,8 +38,6 @@ public class PauseMenu : MonoBehaviour {
                 Time.timeScale = 1;
             }
             if (GUILayout.Button("Save and Quit")) {
-                GameObject.Find("Saver").GetComponent<Saver>().saveScene();
-                Time.timeScale = 1;
                 Application.Quit();
             }
 

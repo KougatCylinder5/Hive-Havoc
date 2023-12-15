@@ -6,7 +6,7 @@ using UnityEngine.Rendering;
 public class UnitController : MonoBehaviour
 {
     [SerializeField]
-    private List<GameObject> units = new();
+    private static List<GameObject> units = new();
     public GetClickedObject gco;
     private float r = 0.05f;
     private float n = 0.5f;
@@ -55,11 +55,20 @@ public class UnitController : MonoBehaviour
             units.Clear();
         }
     }
-    public bool AddUnit(GameObject unit)
+    public static bool AddUnit(GameObject unit)
     {
         if (!units.Contains(unit))
         {
             units.Add(unit);
+            return true;
+        }
+        return false;
+    }
+    public static bool RemoveUnit(GameObject unit)
+    {
+        if (units.Contains(unit))
+        {
+            units.Remove(unit);
             return true;
         }
         return false;
