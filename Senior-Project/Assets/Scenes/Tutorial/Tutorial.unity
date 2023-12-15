@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 262.33694, g: 325.04984, b: 430.2193, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4217,14 +4217,14 @@ MonoBehaviour:
   - {fileID: 3356599496919314407, guid: 302f313808009ea4fa5c2c2ca5aaa8e6, type: 3}
   - {fileID: 3356599496919314407, guid: a17f1d38cf349254584c3bd56cefce26, type: 3}
   - {fileID: 3353867752437551522, guid: d024b6e2c549d1d409f8be490697f740, type: 3}
-  - {fileID: 8509959233601206906, guid: fa444c4066298064ca0619e794545778, type: 3}
+  - {fileID: 3353867752437551522, guid: a263cbc50af7f97418f58833be697c4f, type: 3}
   - {fileID: 3353867752437551522, guid: 6f821373fb00eaf469ed8bed47622f91, type: 3}
-  - {fileID: 8509959233601206906, guid: ce1d5901b45533748bcbe2fd6cf07823, type: 3}
+  - {fileID: 3353867752437551522, guid: 3b880bbd19ed0f648869e06ea330916d, type: 3}
   - {fileID: 3353867752437551522, guid: 73b7cb6fe7c57f54ca7ad07c3e58627c, type: 3}
-  - {fileID: 8509959233601206906, guid: f9a6a619f0cabc34faf9d1766e77212f, type: 3}
+  - {fileID: 3353867752437551522, guid: 9a02567069d74ca439cf658ad130c488, type: 3}
   - {fileID: 3353867752437551522, guid: 2ea27990a0f465043964029bf38ce9ec, type: 3}
-  - {fileID: 8509959233601206906, guid: f77ca65b2d78e7c449744d18d56daa16, type: 3}
-  - {fileID: 3356599496919314407, guid: 28e04c7e020f81049aaf0ba80fe96079, type: 3}
+  - {fileID: 3353867752437551522, guid: 852950c07aa58614482486292477730b, type: 3}
+  - {fileID: 3356599496919314407, guid: b62daa310af212e4ba169ec87d0b6558, type: 3}
   - {fileID: 3356599496919314407, guid: 9f372f708f94b1c4591d6966df16d078, type: 3}
   boundNearestOrigin: {fileID: 1063763469}
   playableAreaSizeX: 24
@@ -4489,7 +4489,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad2922e7d4d106d4a8954da3739ac081, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  commandCenter: {fileID: 0}
+  commandCenter: {fileID: 1453399075}
 --- !u!1001 &1950265734
 PrefabInstance:
   m_ObjectHideFlags: 0
