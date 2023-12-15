@@ -327,27 +327,45 @@ public class DBAccess : MonoBehaviour
             var sqliteCommand = sqliteDB.CreateCommand();
 
             try {
-                sqliteCommand.CommandText = "DELETE FROM placeables WHERE save_id LIKE '" + getSaveId(savename) + "';";
+                sqliteCommand.CommandText = "DELETE FROM placeables WHERE save_id=" + getSaveId(savename) + ";";
                 sqliteCommand.ExecuteNonQuery();
-                sqliteCommand.CommandText = "DELETE FROM unit WHERE save_id LIKE '" + getSaveId(savename) + "';";
+            } catch { }
+
+            try {
+                sqliteCommand.CommandText = "DELETE FROM unit WHERE save_id=" + getSaveId(savename) + ";";
                 sqliteCommand.ExecuteNonQuery();
-                sqliteCommand.CommandText = "DELETE FROM inventory WHERE save_id LIKE '" + getSaveId(savename) + "';";
+            } catch { }
+
+            try {
+                sqliteCommand.CommandText = "DELETE FROM inventory WHERE save_id=" + getSaveId(savename) + ";";
                 sqliteCommand.ExecuteNonQuery();
-                sqliteCommand.CommandText = "DELETE FROM tile_data WHERE save_id LIKE '" + getSaveId(savename) + "';";
+            } catch {}
+
+            try {
+                sqliteCommand.CommandText = "DELETE FROM tile_data WHERE save_id=" + getSaveId(savename) + ";";
                 sqliteCommand.ExecuteNonQuery();
-                sqliteCommand.CommandText = "DELETE FROM played_levels WHERE save_id LIKE '" + getSaveId(savename) + "';";
+            } catch { }
+
+            try {
+                sqliteCommand.CommandText = "DELETE FROM played_levels WHERE save_id=" + getSaveId(savename) + ";";
                 sqliteCommand.ExecuteNonQuery();
-                sqliteCommand.CommandText = "DELETE FROM unlocked_tech WHERE save_id LIKE '" + getSaveId(savename) + "';";
+            } catch {  }
+
+            try {
+                sqliteCommand.CommandText = "DELETE FROM unlocked_tech WHERE save_id=" + getSaveId(savename) + ";";
                 sqliteCommand.ExecuteNonQuery();
-                sqliteCommand.CommandText = "DELETE FROM level_data WHERE save_id LIKE '" + getSaveId(savename) + "';";
+            } catch {}
+
+            try {
+                sqliteCommand.CommandText = "DELETE FROM level_data WHERE save_id=" + getSaveId(savename) + ";";
                 sqliteCommand.ExecuteNonQuery();
+            } catch {}
+
+            try {
                 sqliteCommand.CommandText = "DELETE FROM saves WHERE name LIKE '" + savename + "';";
                 sqliteCommand.ExecuteNonQuery();
 
-            } catch {
-                Debug.LogWarning("Can't delete save: " + savename);
-                
-            }
+            } catch {}
         }
     }
 
