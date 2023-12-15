@@ -6,6 +6,10 @@ public class PauseMenu : MonoBehaviour {
 
     private GUIStyle bgStyle = new GUIStyle();
     private Texture2D bgImg;
+    private GUIStyle bgStyle2 = new GUIStyle();
+    private Texture2D bgImg2;
+    private string dots = "";
+    private int dotsCounter = 0;
     void Start() {
         bgImg = new Texture2D(1, 1, TextureFormat.RGBAFloat, false);
         bgImg.SetPixel(0, 0, new Color(0, 0, 0, 0.4f));
@@ -15,6 +19,15 @@ public class PauseMenu : MonoBehaviour {
         bgStyle.fontSize = 40;
         bgStyle.alignment = TextAnchor.UpperCenter;
         bgStyle.padding = new RectOffset(0,0,10,0);
+
+        bgImg2 = new Texture2D(1, 1, TextureFormat.RGBAFloat, false);
+        bgImg2.SetPixel(0, 0, new Color(0, 0, 0, 0.8f));
+        bgImg2.Apply();
+        bgStyle2.normal.background = bgImg2;
+        bgStyle2.normal.textColor = Color.white;
+        bgStyle2.fontSize = 40;
+        bgStyle2.alignment = TextAnchor.MiddleCenter;
+        bgStyle2.padding = new RectOffset(0, 0, 10, 0);
     }
 
     void Update() {
@@ -46,6 +59,25 @@ public class PauseMenu : MonoBehaviour {
             GUILayout.EndVertical();
             GUILayout.FlexibleSpace();
             GUILayout.EndArea();
+        }
+
+        if(!Saver.LoadDone) {
+            GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "Loading" + dots, bgStyle2);
+
+            if(!(dotsCounter > 0)) {
+                dotsCounter = 30;
+                dots += ".";
+                if(dots == "....") {
+                    dots = "";
+                }
+            }
+            dotsCounter--;
+        } else if(bgImg2.GetPixel(0,0).a > 0) {
+            bgImg2.SetPixel(0, 0, new Color(0, 0, 0, bgImg2.GetPixel(0, 0).a - 0.005f));
+            bgImg2.Apply();
+            bgStyle2.normal.background = bgImg2;
+            bgStyle2.normal.textColor = new Color(1, 1, 1, bgImg2.GetPixel(0, 0).a + 0.2f);
+            GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "Ready?", bgStyle2);
         }
     }
 }

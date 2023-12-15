@@ -702,7 +702,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 318827505}
-  - component: {fileID: 318827506}
   m_Layer: 5
   m_Name: Coal UI
   m_TagString: Untagged
@@ -1723,6 +1722,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5105626110259817009, guid: d7aa72d17be6fda4ea237bd521ee7d01, type: 3}
       insertIndex: -1
       addedObject: {fileID: 264857889}
+    - targetCorrespondingSourceObject: {fileID: 5105626110259817009, guid: d7aa72d17be6fda4ea237bd521ee7d01, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 318827506}
   m_SourcePrefab: {fileID: 100100000, guid: d7aa72d17be6fda4ea237bd521ee7d01, type: 3}
 --- !u!1001 &861526031
 PrefabInstance:
@@ -2035,6 +2037,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1078351671}
+  - {fileID: 318827505}
   m_Father: {fileID: 77842489}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -4499,6 +4502,14 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 1324614225507707562, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 83
+      objectReference: {fileID: 0}
+    - target: {fileID: 1324614225507707562, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -186.7
+      objectReference: {fileID: 0}
     - target: {fileID: 1885749881598008079, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -4579,6 +4590,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7341839054170715119, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -170
+      objectReference: {fileID: 0}
+    - target: {fileID: 7341839054170715119, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: -410
+      objectReference: {fileID: 0}
+    - target: {fileID: 7341839054170715119, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 85
+      objectReference: {fileID: 0}
+    - target: {fileID: 7341839054170715119, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -205
+      objectReference: {fileID: 0}
     - target: {fileID: 7703996242665806115, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
       propertyPath: m_Name
       value: DialogBox
@@ -4586,6 +4613,10 @@ PrefabInstance:
     - target: {fileID: 7703996242665806115, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8532353628803707830, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
+      propertyPath: m_text
+      value: Demo Text
       objectReference: {fileID: 0}
     - target: {fileID: 9207502459411114011, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
       propertyPath: dialogScript.Array.size
@@ -5175,7 +5206,6 @@ SceneRoots:
   - {fileID: 998828190}
   - {fileID: 1931554864}
   - {fileID: 1778328309}
-  - {fileID: 8647911135425827648}
   - {fileID: 1935933626}
   - {fileID: 2117055757}
   - {fileID: 401257671}
@@ -5184,3 +5214,4 @@ SceneRoots:
   - {fileID: 983361994}
   - {fileID: 788697724}
   - {fileID: 1950265734}
+  - {fileID: 294839982}
