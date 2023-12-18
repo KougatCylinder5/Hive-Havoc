@@ -5797,7 +5797,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   popup: {fileID: 24486235640646276}
-  goAway: 1
 --- !u!1 &3540043321726072969
 GameObject:
   m_ObjectHideFlags: 0
@@ -19036,6 +19035,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5079054777353939013}
     m_Modifications:
+    - target: {fileID: 6418351565376995057, guid: 4ee42477e59ead4499b480d63e4daf12, type: 3}
+      propertyPath: activateOn
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6418351565376995057, guid: 4ee42477e59ead4499b480d63e4daf12, type: 3}
+      propertyPath: progressBar
+      value: 
+      objectReference: {fileID: 2188735450734699435}
     - target: {fileID: 6554763409476978407, guid: 4ee42477e59ead4499b480d63e4daf12, type: 3}
       propertyPath: m_Name
       value: SmelterUI
@@ -19096,6 +19103,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 175a83a765229fd408f749cfb0ce4abc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &2188735450734699435 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5123862654657091550, guid: 4ee42477e59ead4499b480d63e4daf12, type: 3}
+  m_PrefabInstance: {fileID: 6432387819131466869}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4178028663382683216 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6971352642139347493, guid: 4ee42477e59ead4499b480d63e4daf12, type: 3}
