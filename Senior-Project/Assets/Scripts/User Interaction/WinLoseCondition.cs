@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class WinLoseCondition : MonoBehaviour
 {
-    public GameObject commandCenter;
+    public static GameObject commandCenter;
     public static List<GameObject> nests = new();
     public GameObject winScreen;
     public GameObject loseScreen;
@@ -21,9 +21,9 @@ public class WinLoseCondition : MonoBehaviour
         if (!Saver.LoadDone)
             return;
         bool hasWon = false;
-        foreach (GameObject go in nests)
+        foreach (GameObject nests in nests)
         {
-            if (go != null)
+            if (nests != null)
             {
                 hasWon = false;
                 break;
@@ -39,8 +39,10 @@ public class WinLoseCondition : MonoBehaviour
 
     void CheckLose()
     {
+        if (!Saver.LoadDone)
+            return;
         bool hasLost = false;
-        if (commandCenter != null)
+        if (commandCenter is null)
         {
             hasLost = true;
         }

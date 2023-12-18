@@ -179,6 +179,15 @@ public class Saver : MonoBehaviour
             GameObject tempHolder = Instantiate(Resources.Load(Enum.GetName(typeof(PlaceableTypes), (PlaceableTypes)building.getTileItemID())) as GameObject, new Vector3(building.getXPos(), 0.5f, building.getYPos()), Quaternion.identity);
             allBuildings.Add(tempHolder);
             tempHolder.GetComponent<IHealth>().SetHealth((int)building.getHealth());
+            
+            if((PlaceableTypes)building.getTileItemID() == PlaceableTypes.CommandCenter)
+            {
+                WinLoseCondition.commandCenter = tempHolder;
+            }
+            else if((PlaceableTypes)building.getTileItemID() == PlaceableTypes.Nest)
+            {
+                WinLoseCondition.nests.Add(tempHolder);
+            }
             if (counter > 15)
             {
                 counter = 0;
@@ -235,6 +244,10 @@ public class Saver : MonoBehaviour
                 if (Enum.Parse<PlaceableTypes>(building.name[..building.name.IndexOf('(')]) == PlaceableTypes.Nest)
                 {
                     WinLoseCondition.nests.Add(building);
+                }
+                else if(Enum.Parse<PlaceableTypes>(building.name[..building.name.IndexOf('(')]) == PlaceableTypes.CommandCenter)
+                {
+                    WinLoseCondition.commandCenter = building;
                 }
             }
             catch { invalidThings.Add(building); }
