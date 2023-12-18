@@ -10,18 +10,15 @@ public class MakeUnitBuilding : BuildingClass
     public int buildingSize;
     private GetClickedObject gco;
     public int[] costOfUnit;
-    public bool canMakeUnits;
-    public LayerMask water;
 
     void Awake()
     {
         gco = GameObject.Find("ScriptManager").GetComponent<GetClickedObject>();
-        canMakeUnits = Physics.BoxCast(transform.position, new(buildingSize * 2, 2, buildingSize * 2), Vector3.up, transform.rotation, 1, water);
     }
 
     void Update()
     {
-        if(Input.GetMouseButtonDown(0) && canMakeUnits)
+        if(Input.GetMouseButtonDown(0))
         {
             GameObject go = gco.getBuilding();
             if (go.Equals(gameObject) && go.GetComponent<MakeUnitBuilding>() != null)
