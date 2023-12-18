@@ -838,6 +838,41 @@ public class DBAccess : MonoBehaviour
         }
     }
 
+    public static int getDay() {
+        if (!transactionActive) {
+            Debug.LogError(noTransactionError);
+            return 0;
+        } else {
+            int day = 0;
+
+            var sqliteCommand = sqliteDB.CreateCommand();
+
+            sqliteCommand.CommandText = "SELECT value FROM level_data WHERE save_id = " + saveID + " AND key = 'day';";
+            IDataReader avalue = sqliteCommand.ExecuteReader();
+
+            try {
+                while (avalue.Read()) {
+                    day = avalue.GetInt32(0);
+                }
+            } catch { }
+
+            avalue.Close();
+            return day;
+        }
+    }
+
+    public void setDay(int day) {
+        if (!transactionActive) {
+            Debug.LogError(noTransactionError);
+        } else {
+            var sqliteCommand = sqliteDB.CreateCommand();
+            sqliteCommand.CommandText = "INSERT INTO level_data ('key', 'value', save_id) VALUES ('day', '" + day + "', '" + saveID + "') " +
+            "ON CONFLICT(key, save_id) DO UPDATE SET value = " + day + " WHERE key = 'day' AND save_id = " + saveID + ";";
+
+            sqliteCommand.ExecuteNonQuery();
+        }
+    }
+
 
 
 }
