@@ -1679,9 +1679,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5105626110259817009, guid: d7aa72d17be6fda4ea237bd521ee7d01, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 264857889}
-    - targetCorrespondingSourceObject: {fileID: 5105626110259817009, guid: d7aa72d17be6fda4ea237bd521ee7d01, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 318827506}
   m_SourcePrefab: {fileID: 100100000, guid: d7aa72d17be6fda4ea237bd521ee7d01, type: 3}
 --- !u!1 &839647639 stripped
@@ -5153,4 +5150,3 @@ SceneRoots:
   - {fileID: 983361994}
   - {fileID: 788697724}
   - {fileID: 1950265734}
-  - {fileID: 294839982}

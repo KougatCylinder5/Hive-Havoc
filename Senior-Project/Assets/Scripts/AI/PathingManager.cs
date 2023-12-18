@@ -43,7 +43,6 @@ public class PathingManager : MonoBehaviour
         Instance = this;
         _pathsToGenerate = new();
         Paths = new();
-        InvokeRepeating(nameof(DestroyAllPaths), 1, 5);
         
         for (int i = 0; i < GridSize.x * GridSize.y; i++)
         {
@@ -62,18 +61,7 @@ public class PathingManager : MonoBehaviour
     public void GeneratePaths()
     {
 
-        List<PathInfo> tempGeneratedPath = ReturnPaths(_pathsToGenerate);
-
-        foreach (PathInfo path in tempGeneratedPath)
-        {
-            if (Paths.IndexOf(path) == -1)
-            {
-                Paths.Add(path);
-            }
-        }
-
-
-        _pathsToGenerate.Clear();
+        Paths.AddRange(ReturnPaths(_pathsToGenerate));
 
     }
     public void QueuePath(PathInfo pathToQueue)
@@ -130,7 +118,6 @@ public class PathingManager : MonoBehaviour
             Queue<Vector2> path = new Queue<Vector2>();
             for (int j = iPath.Length - 1; j >= 0; j--)
             {
-
                 float2 node = iPath[j];
 
                 path.Enqueue(new Vector2(node.x, node.y));

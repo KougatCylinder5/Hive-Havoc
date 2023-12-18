@@ -52,13 +52,13 @@ public class UnitAI : AIController, IAIBasics, IAttack
             Target = _position2D;
             return;
         }
-
-        if (_pathInfo != null && _pathInfo.cleanedPath.Count != 0)
+        print(_pathInfo.cleanedPath.Count);
+        if (_pathInfo.cleanedPath.Count > 0)
         {
             Vector2 direction2D = (_pathInfo.cleanedPath.Peek() - _position2D).normalized;
             Vector3 direction = new(direction2D.x, -1f, direction2D.y);
 
-            _animator.SetFloat("Speed", Vector3.Scale(direction * Speed * Time.deltaTime, new(1, 0, 1)).magnitude);
+            //_animator.SetFloat("Speed", Vector3.Scale(direction * Speed * Time.deltaTime, new(1, 0, 1)).magnitude);
             _characterController.Move(Mathf.Clamp(Speed,0.25f,Vector3.Distance(_position2D, Target) / Time.deltaTime) * Time.deltaTime * direction);
             if ((_pathInfo.cleanedPath.Peek() - _position2D).sqrMagnitude < 0.02f)
             {
@@ -78,19 +78,6 @@ public class UnitAI : AIController, IAIBasics, IAttack
     {
         if (!Saver.LoadDone)
             return;
-        if (Target == Vector2.zero)
-            return;
-        float distanceToTarget = Vector2.Distance(_position2D, Target);
-        if (distanceToTarget < 0.1f)
-        {
-            _pathInfo.cleanedPath.Clear();
-            return;
-        }
-        if (distanceToTarget < 0.5f && _movedLastFrame.magnitude < 0.02f)
-        {
-            Target = _position2D;
-            return;
-        }
         if (_lastPathGenerated is null)
         {
             _lastPathGenerated = new PathInfo() { Start = _position2D, End = Target };
@@ -102,6 +89,18 @@ public class UnitAI : AIController, IAIBasics, IAttack
             _pathInfo = Instance.RetrievePath(_lastPathGenerated);
             _lastPathGenerated = null;
         }
+        float distanceToTarget = Vector2.Distance(_position2D, Target);
+        if (distanceToTarget < 0.1f)
+        {
+            _pathInfo.cleanedPath.Clear();
+            return;
+        }
+        if (distanceToTarget < 0.5f && _movedLastFrame.magnitude < 0.02f)
+        {
+            Target = _position2D;
+            return;
+        }
+        print("looping");
     }
 
 
@@ -123,6 +122,7 @@ public class UnitAI : AIController, IAIBasics, IAttack
             _movedLastFrame = _position2D - _lastPosition2D;
             _lastPosition2D = _position2D;
             yield return new WaitForSeconds(_updateFrequency * 2);
+            Debug.Log(gameObject);
         }
     }
 

@@ -47,7 +47,7 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
                 halfExtends = Vector3.one / 4f;
                 halfExtends.y = 0;
                 direction = ConvertToVector3(nextNode - curNode, 0).normalized;
-                if (Physics.SphereCast(origin: center, radius: 0.25f, direction: direction, maxDistance: (nextNode - curNode).magnitude, layerMask: raycastLayers, hitInfo: out RaycastHit _)) 
+                if (Physics.SphereCast(origin: center, radius: 0.25f, direction: direction, maxDistance: (nextNode - curNode).magnitude, layerMask: raycastLayers, hitInfo: out RaycastHit _))
                 {
                     cleanedPath.Enqueue(priorNode);
                 }
@@ -65,10 +65,10 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
             if (Physics.SphereCast(origin: center, radius: 0.25f, direction: direction, maxDistance: (nextNode - End).magnitude, layerMask: raycastLayers, hitInfo: out RaycastHit _))
             {
                 //Debug.Log(cleanedPath.Dequeue());
-                
+
             }
         }
-        
+
 
     }
 
