@@ -176,7 +176,6 @@ public class Saver : MonoBehaviour
         {
             if (building.getTileItemID() <= 3)
                 continue;
-            print((PlaceableTypes)building.getTileItemID());
             GameObject tempHolder = Instantiate(Resources.Load(Enum.GetName(typeof(PlaceableTypes), (PlaceableTypes)building.getTileItemID())) as GameObject, new Vector3(building.getXPos(), 0.5f, building.getYPos()), Quaternion.identity);
             allBuildings.Add(tempHolder);
             tempHolder.GetComponent<IHealth>().SetHealth((int)building.getHealth());

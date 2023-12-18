@@ -123,6 +123,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bug: {fileID: 3706112903273544462, guid: b9b6e8bd65d5b334bbe75f513a8c0021, type: 3}
   offset: {x: 0, y: 0.25, z: 0}
+  waveSize: 5
 --- !u!114 &-5823948313488065643
 MonoBehaviour:
   m_ObjectHideFlags: 0

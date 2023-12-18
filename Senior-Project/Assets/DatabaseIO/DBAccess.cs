@@ -33,6 +33,11 @@ public class DBAccess : MonoBehaviour
         dbConnectionString = "data source=" + Application.persistentDataPath + "\\storage.db;foreign keys=true";
         sqliteDB = new SqliteConnection(dbConnectionString);
     }
+
+    public static int getDiff()
+    {
+        return diff;
+    }
     protected static string getConnectionString() {
         return dbConnectionString;
     }

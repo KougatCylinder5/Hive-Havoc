@@ -6,12 +6,14 @@ public class WinLoseCondition : MonoBehaviour
 {
     public GameObject commandCenter;
     public static List<GameObject> nests = new();
+    public GameObject winScreen;
+    public GameObject loseScreen;
 
     // Start is called before the first frame update
     void Awake()
     {
-        InvokeRepeating(nameof(CheckWin), 0, 1);
-        InvokeRepeating(nameof(CheckLose), 0, 1);
+        InvokeRepeating(nameof(CheckWin), 10, 1);
+        InvokeRepeating(nameof(CheckLose), 10, 1);
     }
 
     void CheckWin()
@@ -30,8 +32,7 @@ public class WinLoseCondition : MonoBehaviour
         }
         if (hasWon)
         {
-            Debug.Log("Win!");
-            SceneManager.LoadScene("Select Level");
+            winScreen.SetActive(true);
         }
             
     }
@@ -45,7 +46,7 @@ public class WinLoseCondition : MonoBehaviour
         }
         if(hasLost)
         {
-            Debug.Log("Lose...");
+            loseScreen.SetActive(true);
         }
     }
 }
