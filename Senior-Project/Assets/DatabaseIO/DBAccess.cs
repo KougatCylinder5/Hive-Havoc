@@ -33,6 +33,11 @@ public class DBAccess : MonoBehaviour
         dbConnectionString = "data source=" + Application.persistentDataPath + "\\storage.db;foreign keys=true";
         sqliteDB = new SqliteConnection(dbConnectionString);
     }
+
+    public static int getDiff()
+    {
+        return diff;
+    }
     protected static string getConnectionString() {
         return dbConnectionString;
     }
@@ -868,6 +873,41 @@ public class DBAccess : MonoBehaviour
             var sqliteCommand = sqliteDB.CreateCommand();
             sqliteCommand.CommandText = "INSERT INTO level_data ('key', 'value', save_id) VALUES ('day', '" + day + "', '" + saveID + "') " +
             "ON CONFLICT(key, save_id) DO UPDATE SET value = " + day + " WHERE key = 'day' AND save_id = " + saveID + ";";
+
+            sqliteCommand.ExecuteNonQuery();
+        }
+    }
+
+    public static int getkey(string key) {
+        if (!transactionActive) {
+            Debug.LogError(noTransactionError);
+            return 0;
+        } else {
+            int day = 0;
+
+            var sqliteCommand = sqliteDB.CreateCommand();
+
+            sqliteCommand.CommandText = "SELECT value FROM level_data WHERE save_id = " + saveID + " AND key = '" + key + "';";
+            IDataReader avalue = sqliteCommand.ExecuteReader();
+
+            try {
+                while (avalue.Read()) {
+                    day = avalue.GetInt32(0);
+                }
+            } catch { }
+
+            avalue.Close();
+            return day;
+        }
+    }
+
+    public void setKey(string key, int value) {
+        if (!transactionActive) {
+            Debug.LogError(noTransactionError);
+        } else {
+            var sqliteCommand = sqliteDB.CreateCommand();
+            sqliteCommand.CommandText = "INSERT INTO level_data ('key', 'value', save_id) VALUES ('" + key + "', '" + value + "', '" + saveID + "') " +
+            "ON CONFLICT(key, save_id) DO UPDATE SET value = " + value + " WHERE key = '" + key +"' AND save_id = " + saveID + ";";
 
             sqliteCommand.ExecuteNonQuery();
         }

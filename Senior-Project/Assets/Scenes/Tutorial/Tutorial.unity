@@ -7595,7 +7595,7 @@ GameObject:
   - component: {fileID: 1935933641}
   - component: {fileID: 1935933642}
   - component: {fileID: 1935933643}
-  - component: {fileID: 1935933644}
+  - component: {fileID: 1935933646}
   m_Layer: 0
   m_Name: ScriptManager
   m_TagString: Untagged
@@ -7864,19 +7864,6 @@ MonoBehaviour:
   bound4: {fileID: 729583298}
   terrainSizeX: 81
   terrainSizeY: 81
---- !u!114 &1935933644
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1935933624}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fe723223d8292b49844fef60669f519, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  occluder: {fileID: 8650456570569476745, guid: dffa1ccf79fd21c4aad6b961c5dc133b, type: 3}
 --- !u!114 &1935933645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7889,6 +7876,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad2922e7d4d106d4a8954da3739ac081, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  commandCenter: {fileID: 1453399075}
+  winScreen: {fileID: 624054228}
+  loseScreen: {fileID: 1099545426}
+--- !u!114 &1935933646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1935933624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fe723223d8292b49844fef60669f519, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  occluder: {fileID: 8650456570569476745, guid: dffa1ccf79fd21c4aad6b961c5dc133b, type: 3}
 --- !u!1001 &1950265734
 PrefabInstance:
   m_ObjectHideFlags: 0

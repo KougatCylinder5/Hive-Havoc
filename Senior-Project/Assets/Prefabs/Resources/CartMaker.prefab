@@ -1634,13 +1634,9 @@ MonoBehaviour:
   _isDead: 0
   spawnCount: 1
   unitToSpawn:
-  - {fileID: 2685746383838149287, guid: 044d5cc4411d2ae49b3d48fd50f33d6f, type: 3}
+  - {fileID: 2685746383838149287, guid: 1da0e8b96405eb444a3ba512796794f6, type: 3}
   buildingSize: 3
   costOfUnit: 0000000000000000000000000100000000000000
-  canMakeUnits: 0
-  water:
-    serializedVersion: 2
-    m_Bits: 16
 --- !u!65 &881785306250355943
 BoxCollider:
   m_ObjectHideFlags: 0

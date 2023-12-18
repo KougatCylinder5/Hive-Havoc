@@ -27,7 +27,6 @@ public class GetClickedObject : MonoBehaviour
                 else if(hitInfo.transform.CompareTag("UI"))
                 {
                     popup = hitInfo.transform.gameObject;
-                    Debug.Log("UI Hit");
                 }
             }
             else
