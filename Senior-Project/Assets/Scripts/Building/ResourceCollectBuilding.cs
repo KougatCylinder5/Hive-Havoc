@@ -10,6 +10,7 @@ public class ResourceCollectBuilding : BuildingClass
     public GatheringType type;
     public Terrain terrain;
     private float distance;
+    private int rate;
 
     int multiplier;
 
@@ -21,24 +22,29 @@ public class ResourceCollectBuilding : BuildingClass
         InvokeRepeating(nameof(AddResources), 0, reset);
     }
 
+    public int getRate() {
+        return rate;
+    }
+
     public void AddResources()
     {
-        switch(type)
+        rate = resourcePerSec * multiplier;
+        switch (type)
         {
             case GatheringType.Wood:
-                ResourceStruct.Wood += resourcePerSec * multiplier;
+                ResourceStruct.Wood += rate;
                 break;
             case GatheringType.Stone:
-                ResourceStruct.Stone += resourcePerSec * multiplier;
+                ResourceStruct.Stone += rate;
                 break;
             case GatheringType.Coal:
-                ResourceStruct.Coal += resourcePerSec * multiplier;
+                ResourceStruct.Coal += rate;
                 break;
             case GatheringType.CopperOre:
-                ResourceStruct.CopperOre += resourcePerSec * multiplier;
+                ResourceStruct.CopperOre += rate;
                 break;
             case (GatheringType)4:
-                ResourceStruct.CopperIngot += resourcePerSec * multiplier;
+                ResourceStruct.CopperIngot += rate;
                 break;
         }
     }
