@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1979884979925260502}
   - component: {fileID: -3807680282025644615}
   - component: {fileID: 7222480808983168050}
+  - component: {fileID: 4006793809113664394}
   m_Layer: 3
   m_Name: StoneHut
   m_TagString: Building
@@ -46,7 +47,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cb41d46c4badb24f99e5749b05de7a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 5
+  _health: 0
+  _maxHealth: 0
+  _regeneration: 0
+  _isDead: 0
   resourcePerSec: 1
   efficientRange: 2
   normalRange: 4
@@ -73,6 +77,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4006793809113664394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3353867752437551522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70e1cb034f599c64ca2bf51a19552baa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5245426359995520833
 GameObject:
   m_ObjectHideFlags: 0
