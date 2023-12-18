@@ -76,6 +76,10 @@ public class UnitAI : AIController, IAIBasics, IAttack
 
     public void UpdatePath()
     {
+        if (!Saver.LoadDone)
+            return;
+        if (Target == Vector2.zero)
+            return;
         float distanceToTarget = Vector2.Distance(_position2D, Target);
         if (distanceToTarget < 0.1f)
         {
@@ -109,8 +113,6 @@ public class UnitAI : AIController, IAIBasics, IAttack
         {
             _pathRenderer.SetPosition(1, PathInfo.ConvertToVector3(nextPoint, _position.y));
         }
-        
-        
         _pathRenderer.Simplify(0.5f);
     }
 

@@ -199,11 +199,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _target: {x: 0, y: 0}
   _position: {x: 0, y: 0, z: 0}
-  speed: 1
+  speed: 3
   _updateFrequency: 0.1
   _characterController: {fileID: 0}
-  _health: 50
-  _maxHealth: 50
+  _health: 25
+  _maxHealth: 25
   _isDead: 0
   _attackTarget: {fileID: 0}
   _attackRadius: 10
