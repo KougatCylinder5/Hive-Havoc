@@ -5,18 +5,13 @@ using UnityEngine;
 
 public class SmelterScript : MonoBehaviour
 {
-    private void Awake()
-    {
-        
-    }
-
-    private void ButtonClick()
+    public void ButtonClick()
     {
         ResourceStruct.Coal -= 1;
         ResourceStruct.CopperOre -= 1;
     }
 
-    private void FinishProgress()
+    public void FinishProgress()
     {
         ResourceStruct.CopperIngot += 1;
     }
