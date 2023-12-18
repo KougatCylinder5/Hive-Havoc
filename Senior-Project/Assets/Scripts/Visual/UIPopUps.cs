@@ -78,12 +78,14 @@ public class UIPopUps : MonoBehaviour
     public void buttonAction() {
         if(rate < max) {
             rate++;
+            if(activateOn == EdgeType.Rising) {
+                Action.Invoke();
+            }
         }
     }
 
     public void show() {
         gameObject.transform.localPosition = new Vector3 (0, 3, 0);
-        Debug.Log("Clicked");
     }
 
     public void hide() {
