@@ -327,27 +327,45 @@ public class DBAccess : MonoBehaviour
             var sqliteCommand = sqliteDB.CreateCommand();
 
             try {
-                sqliteCommand.CommandText = "DELETE FROM placeables WHERE save_id LIKE '" + getSaveId(savename) + "';";
+                sqliteCommand.CommandText = "DELETE FROM placeables WHERE save_id=" + getSaveId(savename) + ";";
                 sqliteCommand.ExecuteNonQuery();
-                sqliteCommand.CommandText = "DELETE FROM unit WHERE save_id LIKE '" + getSaveId(savename) + "';";
+            } catch { }
+
+            try {
+                sqliteCommand.CommandText = "DELETE FROM unit WHERE save_id=" + getSaveId(savename) + ";";
                 sqliteCommand.ExecuteNonQuery();
-                sqliteCommand.CommandText = "DELETE FROM inventory WHERE save_id LIKE '" + getSaveId(savename) + "';";
+            } catch { }
+
+            try {
+                sqliteCommand.CommandText = "DELETE FROM inventory WHERE save_id=" + getSaveId(savename) + ";";
                 sqliteCommand.ExecuteNonQuery();
-                sqliteCommand.CommandText = "DELETE FROM tile_data WHERE save_id LIKE '" + getSaveId(savename) + "';";
+            } catch {}
+
+            try {
+                sqliteCommand.CommandText = "DELETE FROM tile_data WHERE save_id=" + getSaveId(savename) + ";";
                 sqliteCommand.ExecuteNonQuery();
-                sqliteCommand.CommandText = "DELETE FROM played_levels WHERE save_id LIKE '" + getSaveId(savename) + "';";
+            } catch { }
+
+            try {
+                sqliteCommand.CommandText = "DELETE FROM played_levels WHERE save_id=" + getSaveId(savename) + ";";
                 sqliteCommand.ExecuteNonQuery();
-                sqliteCommand.CommandText = "DELETE FROM unlocked_tech WHERE save_id LIKE '" + getSaveId(savename) + "';";
+            } catch {  }
+
+            try {
+                sqliteCommand.CommandText = "DELETE FROM unlocked_tech WHERE save_id=" + getSaveId(savename) + ";";
                 sqliteCommand.ExecuteNonQuery();
-                sqliteCommand.CommandText = "DELETE FROM level_data WHERE save_id LIKE '" + getSaveId(savename) + "';";
+            } catch {}
+
+            try {
+                sqliteCommand.CommandText = "DELETE FROM level_data WHERE save_id=" + getSaveId(savename) + ";";
                 sqliteCommand.ExecuteNonQuery();
+            } catch {}
+
+            try {
                 sqliteCommand.CommandText = "DELETE FROM saves WHERE name LIKE '" + savename + "';";
                 sqliteCommand.ExecuteNonQuery();
 
-            } catch {
-                Debug.LogWarning("Can't delete save: " + savename);
-                
-            }
+            } catch {}
         }
     }
 
@@ -816,6 +834,41 @@ public class DBAccess : MonoBehaviour
             try {
                 sqliteCommand.CommandText = "INSERT INTO unlocked_tech ('tech_id', save_id) VALUES ('" + techID + "', '" + saveID + "');";
             } catch { }
+            sqliteCommand.ExecuteNonQuery();
+        }
+    }
+
+    public static int getDay() {
+        if (!transactionActive) {
+            Debug.LogError(noTransactionError);
+            return 0;
+        } else {
+            int day = 0;
+
+            var sqliteCommand = sqliteDB.CreateCommand();
+
+            sqliteCommand.CommandText = "SELECT value FROM level_data WHERE save_id = " + saveID + " AND key = 'day';";
+            IDataReader avalue = sqliteCommand.ExecuteReader();
+
+            try {
+                while (avalue.Read()) {
+                    day = avalue.GetInt32(0);
+                }
+            } catch { }
+
+            avalue.Close();
+            return day;
+        }
+    }
+
+    public void setDay(int day) {
+        if (!transactionActive) {
+            Debug.LogError(noTransactionError);
+        } else {
+            var sqliteCommand = sqliteDB.CreateCommand();
+            sqliteCommand.CommandText = "INSERT INTO level_data ('key', 'value', save_id) VALUES ('day', '" + day + "', '" + saveID + "') " +
+            "ON CONFLICT(key, save_id) DO UPDATE SET value = " + day + " WHERE key = 'day' AND save_id = " + saveID + ";";
+
             sqliteCommand.ExecuteNonQuery();
         }
     }

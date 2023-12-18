@@ -22,7 +22,7 @@ public class DBInit : MonoBehaviour
         DBAccess.AddTableIfMissing("tile_data", "id INTEGER PRIMARY KEY AUTOINCREMENT, save_id INTEGER REFERENCES saves(id) ON DELETE CASCADE, x_pos INTEGER, y_pos INTEGER, type INTEGER");
         DBAccess.AddTableIfMissing("played_levels", "save_id INTEGER REFERENCES saves(id) ON DELETE CASCADE, level_id INTEGER, PRIMARY KEY (save_id, level_id)");
         //DBAccess.AddTableIfMissing("unlocked_tech", "save_id INTEGER REFERENCES saves(id) ON DELETE CASCADE, tech_id INTEGER, PRIMARY KEY (save_id, tech_id)");
-        DBAccess.AddTableIfMissing("level_data", "save_id INTEGER REFERENCES saves(id) ON DELETE CASCADE, key TEXT, value TEXT, PRIMARY KEY (save_id, key)");
+        DBAccess.AddTableIfMissing("level_data", "save_id INTEGER REFERENCES saves(id) ON DELETE CASCADE, key TEXT, value INTEGER, PRIMARY KEY (save_id, key)");
     }
 
 }

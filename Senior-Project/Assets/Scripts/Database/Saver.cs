@@ -15,7 +15,7 @@ public class Saver : MonoBehaviour
 
     public GameObject treeOcculuderPrefab;
 
-    public Vector3 worldSize;
+    public static Vector3 worldSize;
 
     public GameObject[] startingUnits;
     public GameObject[] startingBuildings;
@@ -192,12 +192,12 @@ public class Saver : MonoBehaviour
         LoadDone = true;
     }
 
-    public void saveScene()
+    public static void saveScene()
     {
         startTransaction();
         clear();
         List<GameObject> invalidThings = new();
-
+        List<Placeable> placeables = new();
         foreach(GameObject blocker in resourceObstructers)
         {
             try
@@ -219,7 +219,7 @@ public class Saver : MonoBehaviour
                         break;
 
                 }
-                addPlaceable(type, blocker.transform.position.x / worldSize.x, blocker.transform.position.z / worldSize.z, 1, 1);
+                placeables.Add(new Placeable(0,type, blocker.transform.position.x / worldSize.x, blocker.transform.position.z / worldSize.z, 1, 1));
             }
             catch(Exception e) { invalidThings.Add(blocker); Debug.Log(e); }
         }
@@ -227,7 +227,25 @@ public class Saver : MonoBehaviour
         {
             resourceObstructers.Remove(invalid);
         }
+        foreach (GameObject building in allBuildings)
+        {
+            try
+            {
+                BuildingClass buildingClass = building.GetComponent<BuildingClass>();
+                placeables.Add(new(0, (int)Enum.Parse<PlaceableTypes>(building.name[..building.name.IndexOf('(')]), building.transform.position.x, building.transform.position.z, buildingClass.Health, 0));
+                if (Enum.Parse<PlaceableTypes>(building.name[..building.name.IndexOf('(')]) == PlaceableTypes.Nest)
+                {
+                    WinLoseCondition.nests.Add(building);
+                }
+            }
+            catch { invalidThings.Add(building); }
+        }
+        foreach (GameObject invalid in invalidThings)
+        {
+            allBuildings.Remove(invalid);
+        }
         invalidThings.Clear();
+        addPlaceables(placeables);
         foreach(GameObject unit in allUnits)
         {
             try
@@ -241,23 +259,7 @@ public class Saver : MonoBehaviour
         {
             allUnits.Remove(invalid);
         }
-        foreach(GameObject building in allBuildings)
-        {
-            try
-            {
-                BuildingClass buildingClass = building.GetComponent<BuildingClass>();
-                addPlaceable((int)Enum.Parse<PlaceableTypes>(building.name[..building.name.IndexOf('(')]), building.transform.position.x, building.transform.position.z, buildingClass.Health, 0);
-                if (Enum.Parse<PlaceableTypes>(building.name[..building.name.IndexOf('(')]) == PlaceableTypes.Nest)
-                {
-                    WinLoseCondition.nests.Add(building);
-                }
-            }
-            catch { invalidThings.Add(building); }
-        }
-        foreach (GameObject invalid in invalidThings)
-        {
-            allBuildings.Remove(invalid);
-        }
+        
 
 
         updateInventory((int)ItemsID.Wood, ResourceStruct.Wood);

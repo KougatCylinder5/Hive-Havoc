@@ -13,7 +13,6 @@ public class RectangleSelection : MonoBehaviour
     private Vector3[] _pointList = new Vector3[4];
     private LayerMask _terrainWater;
     private LineRenderer _lineRenderer;
-    public UnitController _uc;
     private float height = 0.55f;
 
     // Start is called before the first frame update
@@ -21,7 +20,6 @@ public class RectangleSelection : MonoBehaviour
     {
         _lineRenderer = GetComponent<LineRenderer>();
         _terrainWater = LayerMask.GetMask("Terrain", "Water");
-        _uc = GetComponent<UnitController>();
         _lineRenderer.loop = true;
         _lineRenderer.widthMultiplier = 0.1f;
     }
@@ -88,7 +86,7 @@ public class RectangleSelection : MonoBehaviour
         RaycastHit[] hits = Physics.BoxCastAll(center: center, halfExtents: halfExtends, direction: Vector3.up, Quaternion.Euler(0,45,0), layerMask: LayerMask.GetMask("PlayerUnit"), maxDistance: float.PositiveInfinity);
         foreach(RaycastHit hit in hits)
         {
-            _uc.AddUnit(hit.transform.gameObject);
+            UnitController.AddUnit(hit.transform.gameObject);
         }
     }
 }
