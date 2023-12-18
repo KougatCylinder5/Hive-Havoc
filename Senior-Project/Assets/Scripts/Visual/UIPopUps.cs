@@ -24,6 +24,7 @@ public class UIPopUps : MonoBehaviour
 
     public UnityEvent Action;
 
+    public UnityEvent OnPress;
 
     private uint coolDownTime = 0;
 
@@ -78,12 +79,15 @@ public class UIPopUps : MonoBehaviour
     public void buttonAction() {
         if(rate < max) {
             rate++;
+            OnPress.Invoke();
+            if (activateOn == EdgeType.Rising) {
+                Action.Invoke();
+            }
         }
     }
 
     public void show() {
         gameObject.transform.localPosition = new Vector3 (0, 3, 0);
-        Debug.Log("Clicked");
     }
 
     public void hide() {

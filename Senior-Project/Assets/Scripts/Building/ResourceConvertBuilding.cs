@@ -1,4 +1,3 @@
-using UnityEditor.ShaderGraph.Internal;
 using static ResourceCollectBuilding;
 public class ResourceConvertBuilding : BuildingClass
 {
