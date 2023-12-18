@@ -42,7 +42,7 @@ public class EnemyAI : AIController, IAIBasics
         }
         else
         {
-            _type = PathingType.Flow;
+            Target = new(_startPoint.x, _startPoint.z);
         }
         if (FlowFieldFinished)
         {
