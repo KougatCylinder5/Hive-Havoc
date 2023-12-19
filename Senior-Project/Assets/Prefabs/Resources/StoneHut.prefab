@@ -1298,6 +1298,7 @@ GameObject:
   - component: {fileID: 1979884979925260502}
   - component: {fileID: -3807680282025644615}
   - component: {fileID: 7222480808983168050}
+  - component: {fileID: 8697690483191843316}
   m_Layer: 3
   m_Name: StoneHut
   m_TagString: Building
@@ -1364,6 +1365,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8697690483191843316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3353867752437551522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 036751d06f0a6d64c9d47143a5e3b2c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  popup: {fileID: 7742516331803945813}
 --- !u!1 &3381630706438067449
 GameObject:
   m_ObjectHideFlags: 0
@@ -3019,8 +3033,39 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6554763409476978407, guid: 5ab1c56d150f19045963672baf92d279, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 436177285697924541}
   m_SourcePrefab: {fileID: 100100000, guid: 5ab1c56d150f19045963672baf92d279, type: 3}
+--- !u!1 &5244371956054045291 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6554763409476978407, guid: 5ab1c56d150f19045963672baf92d279, type: 3}
+  m_PrefabInstance: {fileID: 1310813666626876556}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &436177285697924541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5244371956054045291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70e1cb034f599c64ca2bf51a19552baa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7742516331803945813 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8737550078544191449, guid: 5ab1c56d150f19045963672baf92d279, type: 3}
+  m_PrefabInstance: {fileID: 1310813666626876556}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5244371956054045291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 175a83a765229fd408f749cfb0ce4abc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &8255039153389432489 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6971352642139347493, guid: 5ab1c56d150f19045963672baf92d279, type: 3}

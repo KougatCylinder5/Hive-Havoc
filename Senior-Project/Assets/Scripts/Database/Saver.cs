@@ -312,7 +312,7 @@ public class Saver : MonoBehaviour
     //This must match the prefab name
     public enum UnitTypes
     {
-        Hunter,
+        DrillCart,
         Crawler
     }
 

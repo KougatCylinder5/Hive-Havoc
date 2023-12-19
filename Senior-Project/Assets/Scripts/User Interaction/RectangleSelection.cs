@@ -86,6 +86,7 @@ public class RectangleSelection : MonoBehaviour
         RaycastHit[] hits = Physics.BoxCastAll(center: center, halfExtents: halfExtends, direction: Vector3.up, Quaternion.Euler(0,45,0), layerMask: LayerMask.GetMask("PlayerUnit"), maxDistance: float.PositiveInfinity);
         foreach(RaycastHit hit in hits)
         {
+            
             UnitController.AddUnit(hit.transform.gameObject);
         }
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class HunterBehavior : UnitAI
+public class DrillBehavior : UnitAI
 {
     public Collider[] enemies = new Collider[100];
     Quaternion lookDirection = Quaternion.identity;
@@ -32,7 +32,6 @@ public class HunterBehavior : UnitAI
             enemyAtHeight.y = _position.y;
             Quaternion endRotation = Quaternion.LookRotation((enemyAtHeight - _position).normalized);
             gameObject.transform.rotation = Quaternion.RotateTowards(gameObject.transform.rotation, endRotation, 180 * Time.deltaTime);
-            
         }
         else
         {
