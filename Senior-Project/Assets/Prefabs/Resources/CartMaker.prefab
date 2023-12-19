@@ -1628,8 +1628,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d56b6532772f4241a208fb741fe352c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 0
-  _maxHealth: 0
+  _health: 10
+  _maxHealth: 10
   _regeneration: 0
   _isDead: 0
   spawnCount: 1
