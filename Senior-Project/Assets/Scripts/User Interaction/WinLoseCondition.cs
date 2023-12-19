@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class WinLoseCondition : MonoBehaviour
 {
@@ -18,8 +17,6 @@ public class WinLoseCondition : MonoBehaviour
 
     void CheckWin()
     {
-        if (!Saver.LoadDone)
-            return;
         bool hasWon = false;
         foreach (GameObject nests in nests)
         {
@@ -39,16 +36,10 @@ public class WinLoseCondition : MonoBehaviour
 
     void CheckLose()
     {
-        if (!Saver.LoadDone)
-            return;
-        bool hasLost = false;
-        if (commandCenter is null)
+        print(commandCenter);
+        if (commandCenter == null)
         {
-            hasLost = true;
-        }
-        if(hasLost)
-        {
-            loseScreen.SetActive(true);
+            loseScreen.SetActive(true);  
         }
     }
 }
