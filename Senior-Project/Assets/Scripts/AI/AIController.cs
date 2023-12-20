@@ -73,8 +73,6 @@ public class AIController : IHealth
         _position = transform.position;
         _position2D = new(_position.x, _position.z);
         _target = _position2D;
-        _animator = GetComponent<Animator>();
-        _animator.SetFloat("Randomness", Random.Range(0, 1f));
         
     }
     public bool SetDestination(Vector2 target)
@@ -123,6 +121,7 @@ public class AIController : IHealth
         UnitController.RemoveUnit(gameObject);
         if(deathParticles != null)
             deathParticles.Play();
+        GetComponent<CharacterController>().enabled = false;
         Destroy(gameObject, 0.5f);
         //Invoke(nameof(DestroySelf), 0.5f);
         //}

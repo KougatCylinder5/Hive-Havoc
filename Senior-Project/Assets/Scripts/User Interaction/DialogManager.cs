@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
 using TMPro;
+using static UnityEngine.UI.CanvasScaler;
 
 public class DialogManager : MonoBehaviour
 {
@@ -75,7 +76,7 @@ public class DialogManager : MonoBehaviour
         } else {
             Time.timeScale = 1;
             Destroy(gameObject);
-            GameObject.Find("Nest(Clone)").GetComponent<SpawnBugs>().enabled = true;
+            Saver.allBuildings.FindAll(x => { return x.name[..x.name.IndexOf('(')] == "Nest"; }).ForEach(nest => { nest.GetComponent<SpawnBugs>().enabled = true; });
             PauseMenu.setPause(true);
         }
     }

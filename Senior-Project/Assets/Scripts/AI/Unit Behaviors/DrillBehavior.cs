@@ -6,8 +6,6 @@ using UnityEngine;
 public class DrillBehavior : UnitAI
 {
     public Collider[] enemies = new Collider[100];
-    Quaternion lookDirection = Quaternion.identity;
-    Quaternion oldLookDirection = Quaternion.identity;
 
     private new void Awake()
     {
@@ -25,7 +23,6 @@ public class DrillBehavior : UnitAI
 
         if (Physics.OverlapSphereNonAlloc(_position, AttackRadius, enemies, LayerMask.GetMask("EnemyUnit", "EnemyBuilding")) > 0 && !IsIgnoringEnemies)
         {
-            oldLookDirection = transform.rotation;
             enemies = enemies.OrderBy(c => { if(c && !c.GetComponent<IHealth>().IsDead) return (c.transform.position - _position).magnitude; return float.PositiveInfinity; }).ToArray();
             AttackTarget = enemies[0].gameObject;
             Vector3 enemyAtHeight = AttackTarget.transform.position;
