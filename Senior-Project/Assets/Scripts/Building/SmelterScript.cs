@@ -5,14 +5,15 @@ using UnityEngine;
 
 public class SmelterScript : MonoBehaviour
 {
+    ResourceConvertBuilding rcb;
+
+
+    private void Awake()
+    {
+        rcb = GetComponentInParent<ResourceConvertBuilding>();
+    }
     public void ButtonClick()
     {
-        ResourceStruct.Coal -= 1;
-        ResourceStruct.CopperOre -= 1;
-    }
-
-    public void FinishProgress()
-    {
-        ResourceStruct.CopperIngot += 1;
+        rcb.ConvertResources();
     }
 }

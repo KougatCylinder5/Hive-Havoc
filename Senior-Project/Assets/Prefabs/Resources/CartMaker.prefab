@@ -2723,6 +2723,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5079054777353939013}
     m_Modifications:
+    - target: {fileID: 1475947240972721679, guid: 6f4f9d19cdbee76439968e9e9f8dee9a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1475947240972721679, guid: 6f4f9d19cdbee76439968e9e9f8dee9a, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 2.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 1475947240972721679, guid: 6f4f9d19cdbee76439968e9e9f8dee9a, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0
+      objectReference: {fileID: 0}
     - target: {fileID: 1876665948193797269, guid: 6f4f9d19cdbee76439968e9e9f8dee9a, type: 3}
       propertyPath: m_Color.b
       value: 0.11764706
@@ -2735,6 +2747,10 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2038468460092104805, guid: 6f4f9d19cdbee76439968e9e9f8dee9a, type: 3}
+      propertyPath: m_text
+      value: Make a cart for 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2849780753777051027, guid: 6f4f9d19cdbee76439968e9e9f8dee9a, type: 3}
       propertyPath: coolDown
       value: 100
@@ -2743,6 +2759,10 @@ PrefabInstance:
       propertyPath: progressBar
       value: 
       objectReference: {fileID: 3859995510641428148}
+    - target: {fileID: 4098593601546534835, guid: 6f4f9d19cdbee76439968e9e9f8dee9a, type: 3}
+      propertyPath: m_text
+      value: Factory
+      objectReference: {fileID: 0}
     - target: {fileID: 6554763409476978407, guid: 6f4f9d19cdbee76439968e9e9f8dee9a, type: 3}
       propertyPath: m_Name
       value: CartMakerUI
