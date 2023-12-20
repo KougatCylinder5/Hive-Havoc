@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 262.33694, g: 325.04984, b: 430.2193, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5158,6 +5158,11 @@ MonoBehaviour:
   startingBuildings:
   - {fileID: 1453399075}
   - {fileID: 264857888}
+  startingWood: 30
+  startingStone: 25
+  startingIngot: 5
+  startingCoal: 10
+  startingOre: 0
 --- !u!114 &1192118952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8959,7 +8964,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8532353628803707830, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
       propertyPath: m_text
-      value: Demo Text
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8637053352405509773, guid: c3fc148d1c44c2b4eabf5689705b8c5e, type: 3}
       propertyPath: m_AnchorMax.x

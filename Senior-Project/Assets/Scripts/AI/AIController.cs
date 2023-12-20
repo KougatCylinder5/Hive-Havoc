@@ -9,7 +9,7 @@ using static PathingManager;
 [RequireComponent(typeof(Animator))]
 public class AIController : IHealth
 {
-
+    public ParticleSystem deathParticles;
     public Vector2 Target { get => _target; protected set => _target = value; }
 
     [SerializeField]
@@ -121,6 +121,8 @@ public class AIController : IHealth
         //{
         //_animator.SetTrigger("Death");
         UnitController.RemoveUnit(gameObject);
+        if(deathParticles != null)
+            deathParticles.Play();
         Destroy(gameObject, 0.5f);
         //Invoke(nameof(DestroySelf), 0.5f);
         //}

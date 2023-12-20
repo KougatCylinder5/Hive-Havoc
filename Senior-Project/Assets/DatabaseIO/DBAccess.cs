@@ -97,7 +97,7 @@ public class DBAccess : MonoBehaviour
                 sqliteCommand.CommandText = "BEGIN TRANSACTION;";
                 sqliteCommand.ExecuteNonQuery();
 
-                sqliteCommand.CommandText = "UPDATE saves SET play_time=" + playTimeIsSeconds + ", last_play='" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' WHERE id IS " + saveID + ";";
+                sqliteCommand.CommandText = "UPDATE saves SET play_time= play_time + " + playTimeIsSeconds/60.0 + ", last_play='" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' WHERE id IS " + saveID + ";";
                 sqliteCommand.ExecuteNonQuery();
             }
 
@@ -250,7 +250,7 @@ public class DBAccess : MonoBehaviour
 
   
                 while (asave.Read()) {
-                    saves.Add(new Save(asave.GetString(0), asave.GetInt32(1), asave.GetInt32(2), asave.GetString(3), asave.GetInt32(4), asave.GetString(5), asave.GetString(6)));
+                    saves.Add(new Save(asave.GetString(0), asave.GetInt32(1), asave.GetInt32(2), asave.GetString(3), asave.GetFloat(4), asave.GetString(5), asave.GetString(6)));
                 }
 
             asave.Close();

@@ -31,7 +31,8 @@ public class SpawnBugs : MonoBehaviour
     {
         for (int i = 0; i < currentWave * (DBAccess.getDiff() + 1) * waveSize; i++)
         {
-            Saver.allUnits.Add(Instantiate(bug, transform.position + offset, Quaternion.identity));
+            Vector3 offset2 = new Vector3(0, 0, 0.5f);
+            Saver.allUnits.Add(Instantiate(bug, transform.position + offset + (i * offset2), Quaternion.identity));
         }
         currentWave++;
     }

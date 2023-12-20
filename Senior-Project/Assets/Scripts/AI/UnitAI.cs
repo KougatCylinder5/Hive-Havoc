@@ -5,6 +5,8 @@ using static PathingManager;
 [RequireComponent(typeof(LineRenderer))]
 public class UnitAI : AIController, IAIBasics, IAttack
 {
+
+    
     public new Vector2 Target { get => _target; set => _target = value; }
     
     private PathInfo _lastPathGenerated = null;
