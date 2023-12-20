@@ -24,11 +24,22 @@ public class Saver : MonoBehaviour
     public static List<GameObject> allUnits = new List<GameObject>();
     public static List<GameObject> allBuildings = new List<GameObject>();
 
+    public int startingWood = 0;
+    public int startingStone = 0;
+    public int startingIngot = 0;
+    public int startingCoal = 0;
+    public int startingOre = 0;
+
     public static bool LoadDone { get; private set; }
     // Start is called before the first frame update
     void Start()
     {
         LoadDone = false;
+        ResourceStruct.Wood = startingWood;
+        ResourceStruct.Stone = startingStone;
+        ResourceStruct.Coal = startingCoal;
+        ResourceStruct.CopperIngot = startingIngot;
+        ResourceStruct.CopperOre = startingOre;
         Invoke(nameof(Load), 0.5f);
     }
     void Load()
@@ -78,6 +89,11 @@ public class Saver : MonoBehaviour
                     yield return 0;
                 }
             }
+            updateInventory((int)ItemsID.Wood, ResourceStruct.Wood);
+            updateInventory((int)ItemsID.Coal, ResourceStruct.Coal);
+            updateInventory((int)ItemsID.CopperOre, ResourceStruct.CopperOre);
+            updateInventory((int)ItemsID.CopperIngot, ResourceStruct.CopperIngot);
+            updateInventory((int)ItemsID.Stone, ResourceStruct.Stone);
             commitTransaction();
         }
         foreach (GameObject unit in startingUnits) Destroy(unit);
@@ -172,6 +188,7 @@ public class Saver : MonoBehaviour
             }
         }
         List<Placeable> buildings = getPlaceables();
+        allBuildings.Clear();
         foreach (Placeable building in buildings)
         {
             if (building.getTileItemID() <= 3)
@@ -202,6 +219,7 @@ public class Saver : MonoBehaviour
 
     public static void saveScene()
     {
+        if(!LoadDone) return;
         startTransaction();
         clear();
         List<GameObject> invalidThings = new();
@@ -302,7 +320,7 @@ public class Saver : MonoBehaviour
         CopperHut,
         WoodWall,
         StoneWall,
-        SoldierMaker,
+        CartMaker,
         Ballista,
         Nest,
         CommandCenter

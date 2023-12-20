@@ -10,6 +10,8 @@ public class PauseMenu : MonoBehaviour {
     private Texture2D bgImg2;
     private string dots = "";
     private int dotsCounter = 0;
+
+    private static bool canPause = true;
     void Start() {
         bgImg = new Texture2D(1, 1, TextureFormat.RGBAFloat, false);
         bgImg.SetPixel(0, 0, new Color(0, 0, 0, 0.4f));
@@ -30,8 +32,12 @@ public class PauseMenu : MonoBehaviour {
         bgStyle2.padding = new RectOffset(0, 0, 10, 0);
     }
 
+    public static void setPause(bool status) {
+        canPause = status;
+    }
+
     void Update() {
-        if(Input.GetKeyDown(KeyCode.Escape)) {
+        if(Input.GetKeyDown(KeyCode.Escape) && canPause) {
             if(Time.timeScale == 0) {
                 Time.timeScale = 1;
             } else {
@@ -41,7 +47,7 @@ public class PauseMenu : MonoBehaviour {
     }
 
     public void OnGUI() {
-        if(Time.timeScale == 0) {
+        if(Time.timeScale == 0 && canPause) {
             GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "PAUSED", bgStyle);
 
             GUILayout.BeginArea(new Rect(Screen.width/3, 0, Screen.width/3, Screen.height));

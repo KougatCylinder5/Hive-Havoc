@@ -22,7 +22,7 @@ public class MakeUnitBuilding : BuildingClass
         }
         Vector2Int randVec = spots[UnityEngine.Random.Range(0, spots.Count)];
         Vector3 finalVec = new(randVec.x, 0, randVec.y);
-        Saver.allUnits.AddRange(MakeUnits.SpawnUnitsAtPosition(spawnCount, unitToSpawn[unit], finalVec));
+        MakeUnits.SpawnUnitsAtPosition(spawnCount, unitToSpawn[unit], finalVec).ForEach(unit => { unit.GetComponent<UnitAI>().SetDestination(unit.transform); Saver.allUnits.Add(unit); });
     }
 
     public List<Vector2Int> GenAllSurroundingSpawnPos()
