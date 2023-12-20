@@ -10,7 +10,7 @@ public class SpawnBugs : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        InvokeRepeating(nameof(SpawnBug), 30, 5);
+        InvokeRepeating(nameof(SpawnBug), 60, 5);
         InvokeRepeating(nameof(SpawnWave), 100, 100);
     }
 
