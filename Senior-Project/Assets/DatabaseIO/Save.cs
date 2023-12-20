@@ -8,11 +8,11 @@ public class Save
     private int dif;
     private int rank;
     private string lastPlay;
-    private int playTime;
+    private float playTime;
     private string thumbnail;
     private string levelName;
 
-    public Save(string saveName, int dif, int rank, string lastPlay, int playTime , string thumbnail, string levelName) {
+    public Save(string saveName, int dif, int rank, string lastPlay, float playTime , string thumbnail, string levelName) {
         this.saveName = saveName;
         this.dif = dif;
         this.rank = rank;
@@ -38,7 +38,7 @@ public class Save
         return lastPlay;
     }
 
-    public int getPlayTime() {
+    public float getPlayTime() {
         return playTime;
     }
 

@@ -4893,6 +4893,11 @@ MonoBehaviour:
   startingBuildings:
   - {fileID: 1453399075}
   - {fileID: 264857888}
+  startingWood: 30
+  startingStone: 25
+  startingIngot: 5
+  startingCoal: 10
+  startingOre: 0
 --- !u!114 &1192118952
 MonoBehaviour:
   m_ObjectHideFlags: 0
