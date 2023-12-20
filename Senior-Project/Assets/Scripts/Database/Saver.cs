@@ -172,6 +172,7 @@ public class Saver : MonoBehaviour
             }
         }
         List<Placeable> buildings = getPlaceables();
+        allBuildings.Clear();
         foreach (Placeable building in buildings)
         {
             if (building.getTileItemID() <= 3)
@@ -202,6 +203,7 @@ public class Saver : MonoBehaviour
 
     public static void saveScene()
     {
+        if(!LoadDone) return;
         startTransaction();
         clear();
         List<GameObject> invalidThings = new();
@@ -302,7 +304,7 @@ public class Saver : MonoBehaviour
         CopperHut,
         WoodWall,
         StoneWall,
-        SoldierMaker,
+        CartMaker,
         Ballista,
         Nest,
         CommandCenter
