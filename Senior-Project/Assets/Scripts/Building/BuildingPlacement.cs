@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class BuildingPlacement : MonoBehaviour
 {
@@ -28,7 +29,6 @@ public class BuildingPlacement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector2 position = Mouse.MouseToWorldPoint(LayerMask.GetMask("Terrain", "Water"));
         foreach(KeyCode key in _keycodes)
         {
             if(Input.GetKeyDown(key))
@@ -44,38 +44,7 @@ public class BuildingPlacement : MonoBehaviour
         }
         if(_inPlaceMode)
         {
-            ShowGrid(boundNearestOrigin.position, playableAreaSizeX, playableAreaSizeZ);
-            if(!_made)
-            {
-                _ghostBuilding = Instantiate(_buildingPrefabs[_pressed * 2 + 1], new Vector3(position.x, 0f, position.y), Quaternion.identity);
-                _currentBuilding = _buildingPrefabs[_pressed * 2];
-                _made = true;
-            }
-            ShowBuilding(_ghostBuilding, position);
-            if(Input.GetMouseButtonDown(0))
-            {
-                if (CheckCost(_ghostBuilding.GetComponent<GhostBuildingClass>().GetCost(), ResourceStruct.Total, out int[] dep) && _ghostBuilding.GetComponent<GhostBuildingClass>().CheckPlacementArea(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.y))/* && CommandCenter.CheckArea(new (Mathf.RoundToInt(position.x), 0, Mathf.RoundToInt(position.y)))*/)
-                {
-                    Saver.allBuildings.Add(Instantiate(_currentBuilding, _ghostBuilding.transform.position, Quaternion.identity));
-                    DepleteResources(dep);
-                }
-                else
-                {
-                    Debug.Log("Not enough resources...");
-                    _currentBuilding = null;
-                }
-                _inPlaceMode = false;
-                _made = false;
-                Destroy(_ghostBuilding);
-            }
-            if(Input.GetKeyDown(KeyCode.Backspace))
-            {
-                Debug.Log("Placement cancelled...");
-                _currentBuilding = null;
-                _inPlaceMode = false;
-                _made = false;
-                Destroy(_ghostBuilding);
-            }
+            PlaceBuilding();
         }
     }
 
@@ -134,5 +103,48 @@ public class BuildingPlacement : MonoBehaviour
         lineRenderer.SetPosition(1, new(nearestOrigin.x, 0.1f, nearestOrigin.z + width));
         lineRenderer.SetPosition(2, new(nearestOrigin.x + length, 0.1f, nearestOrigin.z + width));
         lineRenderer.SetPosition(3, new(nearestOrigin.x + length, 0.1f, nearestOrigin.z));
+    }
+
+    public void PlaceBuilding()
+    {
+        Vector2 position = Mouse.MouseToWorldPoint(LayerMask.GetMask("Terrain", "Water"));
+        ShowGrid(boundNearestOrigin.position, playableAreaSizeX, playableAreaSizeZ);
+        if (!_made)
+        {
+            _ghostBuilding = Instantiate(_buildingPrefabs[_pressed * 2 + 1], new Vector3(position.x, 0f, position.y), Quaternion.identity);
+            _currentBuilding = _buildingPrefabs[_pressed * 2];
+            _made = true;
+        }
+        ShowBuilding(_ghostBuilding, position);
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (CheckCost(_ghostBuilding.GetComponent<GhostBuildingClass>().GetCost(), ResourceStruct.Total, out int[] dep) && _ghostBuilding.GetComponent<GhostBuildingClass>().CheckPlacementArea(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.y))/* && CommandCenter.CheckArea(new (Mathf.RoundToInt(position.x), 0, Mathf.RoundToInt(position.y)))*/)
+            {
+                Saver.allBuildings.Add(Instantiate(_currentBuilding, _ghostBuilding.transform.position, Quaternion.identity));
+                DepleteResources(dep);
+            }
+            else
+            {
+                Debug.Log("Not enough resources...");
+                _currentBuilding = null;
+            }
+            _inPlaceMode = false;
+            _made = false;
+            Destroy(_ghostBuilding);
+        }
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            Debug.Log("Placement cancelled...");
+            _currentBuilding = null;
+            _inPlaceMode = false;
+            _made = false;
+            Destroy(_ghostBuilding);
+        }
+    }
+
+    public void SetGhostBuilding(int ghostBuildingIndex)
+    {
+        _pressed = ghostBuildingIndex;
+        _inPlaceMode = true;
     }
 }
