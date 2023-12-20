@@ -11,14 +11,13 @@ public class DialogManager : MonoBehaviour
     private int newDialogIndex = 0;
     private int awaitTask = 0;
 
-    void Start()
-    {
-        if (dialogScript.Count > 0) {
-            next();
-        }
-    }
+    private bool triggered = false;
 
     private void Update() {
+        if(Saver.LoadDone && !triggered) {
+            triggerStart();
+        }
+
         if(awaitTask == 1) {
             if(GameObject.Find("CartMaker(Clone)")) {
                 awaitTask = 0;
@@ -32,18 +31,26 @@ public class DialogManager : MonoBehaviour
                 next();
             }
         }
-    }
 
-    private void FixedUpdate() {
-        if(dialogScript[index].getDialog().Length > newDialogIndex) {
+        if (index > -1 && dialogScript[index].getDialog().Length > newDialogIndex) {
             GetComponentInChildren<TextMeshProUGUI>().text += dialogScript[index].getDialog()[newDialogIndex];
-            if(dialogScript[index].getDialog().Length == newDialogIndex) {
+            if (dialogScript[index].getDialog().Length == newDialogIndex) {
             }
             newDialogIndex++;
         }
     }
 
+    public void triggerStart() {
+        
+        if (dialogScript.Count > 0 && !triggered) {
+            next();
+            triggered = true;
+        }
+    }
+
     public void next() {
+        PauseMenu.setPause(false);
+        Time.timeScale = 0;
         newDialogIndex = 0;
         index++;
         GetComponentInChildren<TextMeshProUGUI>().text = "";
@@ -52,17 +59,24 @@ public class DialogManager : MonoBehaviour
 
     public void nextStep() {
         if(dialogScript[index].getAction() == 0) {
+            GameObject.Find("Nest(Clone)").GetComponent<SpawnBugs>().enabled = false;
             next();
         } else if (dialogScript[index].getAction() == 1) {
+            Time.timeScale = 1;
             GetComponent<Canvas>().enabled = false;
             awaitTask = 1;
+            PauseMenu.setPause(true);
         } else if (dialogScript[index].getAction() == 2) {
+            Time.timeScale = 1;
             GetComponent<Canvas>().enabled = false;
             GetComponent<SpawnBug>().Spawn();
             awaitTask = 2;
+            PauseMenu.setPause(true);
         } else {
+            Time.timeScale = 1;
             Destroy(gameObject);
-            GameObject.Find("Nest(").GetComponent<SpawnBugs>().enabled = true;
+            GameObject.Find("Nest(Clone)").GetComponent<SpawnBugs>().enabled = true;
+            PauseMenu.setPause(true);
         }
     }
 

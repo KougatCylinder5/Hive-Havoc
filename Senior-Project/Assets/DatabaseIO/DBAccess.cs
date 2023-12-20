@@ -97,7 +97,7 @@ public class DBAccess : MonoBehaviour
                 sqliteCommand.CommandText = "BEGIN TRANSACTION;";
                 sqliteCommand.ExecuteNonQuery();
 
-                sqliteCommand.CommandText = "UPDATE saves SET play_time=" + playTimeIsSeconds + ", last_play='" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' WHERE id IS " + saveID + ";";
+                sqliteCommand.CommandText = "UPDATE saves SET play_time= play_time + " + playTimeIsSeconds/60.0 + ", last_play='" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' WHERE id IS " + saveID + ";";
                 sqliteCommand.ExecuteNonQuery();
             }
 
