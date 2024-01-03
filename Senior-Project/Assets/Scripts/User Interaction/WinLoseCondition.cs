@@ -8,7 +8,7 @@ public class WinLoseCondition : MonoBehaviour
     public GameObject winScreen;
     public GameObject loseScreen;
 
-    // Start is called before the first frame update
+    //Check for winning or losing every second
     void Awake()
     {
         InvokeRepeating(nameof(CheckWin), 10, 1);
@@ -17,6 +17,7 @@ public class WinLoseCondition : MonoBehaviour
 
     void CheckWin()
     {
+        //If there are no more nests to destroy, the player wins.
         bool hasWon = false;
         foreach (GameObject nests in nests)
         {
@@ -33,13 +34,9 @@ public class WinLoseCondition : MonoBehaviour
         }
             
     }
-
+    //If the command center has been destroyed, the player loses.
     void CheckLose()
     {
-        print(commandCenter);
-        if (commandCenter == null)
-        {
-            loseScreen.SetActive(true);  
-        }
+        loseScreen.SetActive(commandCenter == null);  
     }
 }

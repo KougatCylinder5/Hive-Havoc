@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -11,7 +9,7 @@ public class ResourcesUI : MonoBehaviour
     public TMP_Text copperIngotText;
     public TMP_Text stoneText;
 
-    // Update is called once per frame
+    // Set the UI to match the ResourceStruct's values
     void Update()
     {
         woodText.text = "" + ResourceStruct.Wood;

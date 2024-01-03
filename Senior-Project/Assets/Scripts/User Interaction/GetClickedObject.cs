@@ -10,6 +10,7 @@ public class GetClickedObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //When the mouse is clicked, shoot a ray and set the respective game objects to what was clicked.
         if(Input.GetMouseButtonDown(0))
         {
             RaycastHit hitInfo = new RaycastHit();

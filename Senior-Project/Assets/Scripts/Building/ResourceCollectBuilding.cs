@@ -11,12 +11,11 @@ public class ResourceCollectBuilding : BuildingClass
     public Terrain terrain;
     private float distance;
     private int rate;
-
     int multiplier;
 
-    // Start is called before the first frame update
     void Awake()
     {
+        //When this object is placed, detect how close it is to its resource, then collect resources every cycle until destroyed.
         terrain = GameObject.Find("Ground").GetComponent<Terrain>();
         multiplier = CalculateRange();
         InvokeRepeating(nameof(AddResources), 0, reset);
@@ -25,7 +24,7 @@ public class ResourceCollectBuilding : BuildingClass
     public int getRate() {
         return rate;
     }
-
+    //Give the player resources
     public void AddResources()
     {
         rate = resourcePerSec * multiplier;
@@ -43,7 +42,7 @@ public class ResourceCollectBuilding : BuildingClass
             case GatheringType.CopperOre:
                 ResourceStruct.CopperOre += rate;
                 break;
-            case (GatheringType)4:
+            case GatheringType.CopperIngot:
                 ResourceStruct.CopperIngot += rate;
                 break;
         }
@@ -51,6 +50,7 @@ public class ResourceCollectBuilding : BuildingClass
 
     public int CalculateRange()
     {
+        //Return a mulitplier based on how close the building is to the resource it is collecting.
         TreeInstance nearestTree = terrain.terrainData.treeInstances.OrderBy(tree => 
         { 
             return tree.prototypeIndex == (int)type 
@@ -89,5 +89,4 @@ public class ResourceCollectBuilding : BuildingClass
         CopperOre = 2,
         CopperIngot = 4
     }
-
 }

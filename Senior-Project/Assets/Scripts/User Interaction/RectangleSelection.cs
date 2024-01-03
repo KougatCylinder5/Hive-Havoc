@@ -1,9 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
-
 
 [RequireComponent(typeof(LineRenderer))]
 public class RectangleSelection : MonoBehaviour
@@ -29,6 +24,7 @@ public class RectangleSelection : MonoBehaviour
     {
         if(detectDrag())
         {
+            //Draw the rectangle using _lineRenderer
             float hypo = Vector3.Distance(_initPos, _curPos);
             if (hypo > 0.4f)
             {
@@ -55,7 +51,7 @@ public class RectangleSelection : MonoBehaviour
             }
         }
     }
-
+    //Detect if the player is dragging the left mouse button
     public bool detectDrag()
     {
         if(Input.GetMouseButtonDown(0))
@@ -75,7 +71,7 @@ public class RectangleSelection : MonoBehaviour
         }
         return false;
     }
-
+    //Select the troops within the rectangle
     private void selectTroops()
     {
         Vector3 center = (_pointList[0] + _pointList[2]) / 2;
@@ -86,7 +82,6 @@ public class RectangleSelection : MonoBehaviour
         RaycastHit[] hits = Physics.BoxCastAll(center: center, halfExtents: halfExtends, direction: Vector3.up, Quaternion.Euler(0,45,0), layerMask: LayerMask.GetMask("PlayerUnit"), maxDistance: float.PositiveInfinity);
         foreach(RaycastHit hit in hits)
         {
-            
             UnitController.AddUnit(hit.transform.gameObject);
         }
     }

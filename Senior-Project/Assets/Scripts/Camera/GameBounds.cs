@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using UnityEngine;
 
 public class GameBounds : MonoBehaviour
@@ -26,7 +25,7 @@ public class GameBounds : MonoBehaviour
             height = furthestFromOrigin.transform.position.z + 1 - nearestToOrigin.transform.position.z
         };
     }
-
+    //The camera must stay within the bounds.
     public Vector3 StayInBounds(Vector3 position)
     {
         return new Vector3(Mathf.Clamp(position.x, bound4.transform.position.x, bound2.transform.position.x), position.y, Mathf.Clamp(position.z, bound3.transform.position.z, bound1.transform.position.z));

@@ -7,16 +7,12 @@ public class SpawnBugs : MonoBehaviour
     private int currentWave = 1;
     public int waveSize;
 
-    // Start is called before the first frame update
     void Awake()
     {
+        //After 60 seconds, spawn a bug every 5 seconds.
         InvokeRepeating(nameof(SpawnBug), 60, 5);
+        //Every 100 seconds, spawn a wave.
         InvokeRepeating(nameof(SpawnWave), 100, 100);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
     }
 
     public void SpawnBug()
@@ -29,6 +25,7 @@ public class SpawnBugs : MonoBehaviour
 
     public void SpawnWave()
     {
+        //Make a wave of bugs from the nest all at once, based on the difficulty of the save and the current wave number.
         for (int i = 0; i < currentWave * (DBAccess.getDiff() + 1) * waveSize; i++)
         {
             Vector3 offset2 = new Vector3(0, 0, 0.5f);

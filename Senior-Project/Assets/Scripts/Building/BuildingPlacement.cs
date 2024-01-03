@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class BuildingPlacement : MonoBehaviour
 {
@@ -17,18 +16,18 @@ public class BuildingPlacement : MonoBehaviour
     public int playableAreaSizeX;
     public int playableAreaSizeZ;
 
-    // Start is called before the first frame update
     void Start()
     {
+        //Initialize the list of shortcut keys for buildings
         for(int i = 1; i < _buildingPrefabs.Count; i+=2)
         {
             _keycodes.Add(_buildingPrefabs[i].GetComponent<GhostBuildingClass>().GetKey());
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
+        //Check if any of the building shortcut keys are being pressed, and if so, create the building that that key is assigned to.
         foreach(KeyCode key in _keycodes)
         {
             if(Input.GetKeyDown(key))
@@ -84,7 +83,7 @@ public class BuildingPlacement : MonoBehaviour
 
     public float SizeCheck(GameObject building)
     {
-        if(building.GetComponent<GhostBuildingClass>().GetSize() % 2 == 0)
+        if (building.GetComponent<GhostBuildingClass>().GetSize() % 2 == 0)
         {
             return 0.5f;
         }
@@ -107,6 +106,7 @@ public class BuildingPlacement : MonoBehaviour
 
     public void PlaceBuilding()
     {
+        //Show the ghost building and the grid to the player...
         Vector2 position = Mouse.MouseToWorldPoint(LayerMask.GetMask("Terrain", "Water"));
         ShowGrid(boundNearestOrigin.position, playableAreaSizeX, playableAreaSizeZ);
         if (!_made)
@@ -116,8 +116,10 @@ public class BuildingPlacement : MonoBehaviour
             _made = true;
         }
         ShowBuilding(_ghostBuilding, position);
+        //...if the mouse is clicked, try to place the building...
         if (Input.GetMouseButtonDown(0))
         {
+            //...if the player doesn't have enough resources, don't let them place it...
             if (CheckCost(_ghostBuilding.GetComponent<GhostBuildingClass>().GetCost(), ResourceStruct.Total, out int[] dep) && _ghostBuilding.GetComponent<GhostBuildingClass>().CheckPlacementArea(Mathf.RoundToInt(position.x), Mathf.RoundToInt(position.y))/* && CommandCenter.CheckArea(new (Mathf.RoundToInt(position.x), 0, Mathf.RoundToInt(position.y)))*/)
             {
                 Saver.allBuildings.Add(Instantiate(_currentBuilding, _ghostBuilding.transform.position, Quaternion.identity));
@@ -125,16 +127,15 @@ public class BuildingPlacement : MonoBehaviour
             }
             else
             {
-                Debug.Log("Not enough resources...");
                 _currentBuilding = null;
             }
             _inPlaceMode = false;
             _made = false;
             Destroy(_ghostBuilding);
         }
+        //...and if the player presses backspace while a ghost building is active, cancel the placement.
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
-            Debug.Log("Placement cancelled...");
             _currentBuilding = null;
             _inPlaceMode = false;
             _made = false;

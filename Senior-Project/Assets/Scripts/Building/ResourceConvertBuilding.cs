@@ -12,7 +12,7 @@ public class ResourceConvertBuilding : BuildingClass
     {
         InvokeRepeating(nameof(ConvertResources), 0, reset);
     }
-
+    //If able, convert 'costPerConversion' resources into 'makePerConversion' resources of 'convertType'
     public void ConvertResources()
     {
         bool flag = true;
@@ -68,6 +68,5 @@ public class ResourceConvertBuilding : BuildingClass
                     break;
             }
         }
-        
     }
 }

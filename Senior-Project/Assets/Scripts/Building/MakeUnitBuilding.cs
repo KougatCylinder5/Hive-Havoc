@@ -10,6 +10,7 @@ public class MakeUnitBuilding : BuildingClass
     public int buildingSize;
     public int[] costOfUnit;
 
+    //Spawns 'spawnCount' units from the 'unitToSpawn' array based on the index (int unit)
     public void SpawnUnits(int unit)
     {
         List<Vector2Int> spots = new List<Vector2Int>();
@@ -24,7 +25,7 @@ public class MakeUnitBuilding : BuildingClass
         Vector3 finalVec = new(randVec.x, 0, randVec.y);
         MakeUnits.SpawnUnitsAtPosition(spawnCount, unitToSpawn[unit], finalVec).ForEach(unit => { unit.GetComponent<UnitAI>().SetDestination(unit.transform); Saver.allUnits.Add(unit); });
     }
-
+    //Detects which points around the perimeter of the building are not obstructed and can have a unit spawned on them.
     public List<Vector2Int> GenAllSurroundingSpawnPos()
     {
         List<Vector2Int> possiblePoints = new();
@@ -39,7 +40,7 @@ public class MakeUnitBuilding : BuildingClass
         }
         return possiblePoints;
     }
-
+    //If the player has enough resources, spawn the unit.
     public void CheckForSpawn()
     {
         bool flag = true;

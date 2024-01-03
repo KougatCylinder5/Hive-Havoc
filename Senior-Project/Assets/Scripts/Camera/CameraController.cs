@@ -5,22 +5,20 @@ public class CameraController : MonoBehaviour
     public float movementSpeed;
     public float movementTime;
     private Vector3 _newPosition;
-
     public Vector3 zoomAmount;
     private Vector3 _newZoom;
     public Transform cameraTransform;
     public int minZoomBound;
     public int maxZoomBound;
-
     private Vector3 _dragStartPosition;
     private Vector3 _dragCurrentPosition;
-
     public float speedConstant;
     public GameBounds boundChecker;
 
     // Start is called before the first frame update
     void Start()
     {
+        //Initialize the camera's position and zoom
         _newPosition = transform.position;
         _newZoom = cameraTransform.localPosition;
     }
@@ -36,6 +34,7 @@ public class CameraController : MonoBehaviour
 
     void HandleMovementInput()
     {
+        //WASD moves camera
         if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
         {
             _newPosition += transform.forward * movementSpeed;
@@ -57,10 +56,12 @@ public class CameraController : MonoBehaviour
 
     void HandleMouseInput()
     {
+        //Scrolling zooms camera
         if((Input.mouseScrollDelta.y > 0 && _newZoom.y + zoomAmount.y > minZoomBound) || (Input.mouseScrollDelta.y < 0 && _newZoom.y - zoomAmount.y < maxZoomBound))
         {
             _newZoom += Input.mouseScrollDelta.y * zoomAmount;
         }
+        //Dragging middle mouse button moves camera
         if(Input.GetMouseButtonDown(2))
         {
             _dragStartPosition = CameraRaycast();
@@ -73,12 +74,13 @@ public class CameraController : MonoBehaviour
         }
         cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, _newZoom, Time.deltaTime * movementTime);
     }
-
+    //When the camera is zoomed in, it moves slower, and vice versa.
     void SpeedChange(float speedConstant)
     {
         movementSpeed = _newZoom.y * speedConstant;
     }
 
+    //Used for detecting how far the mouse is dragged for moving the camera
     Vector3 CameraRaycast()
     {
         Plane plane = new Plane(Vector3.up, Vector3.zero);

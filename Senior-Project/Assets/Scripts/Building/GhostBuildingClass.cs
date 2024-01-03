@@ -16,6 +16,7 @@ public class GhostBuildingClass : MonoBehaviour
         bounds = GameObject.Find("ScriptManager").GetComponent<GameBounds>();
     }
 
+    //Return true if the position is within the buildable area and the tile is not obstructed.
     public bool CheckPlacementArea(int x, int y)
     {
         x += Mathf.FloorToInt(buildingSize / 2f);
@@ -32,18 +33,7 @@ public class GhostBuildingClass : MonoBehaviour
         return true;
     }
 
-    public int[] GetCost()
-    {
-        return buildingCost;
-    }
-
-    public KeyCode GetKey()
-    {
-        return key;
-    }
-
-    public int GetSize()
-    {
-        return buildingSize;
-    }
+    public int[] GetCost(){return buildingCost;}
+    public KeyCode GetKey(){return key;}
+    public int GetSize(){return buildingSize;}
 }
