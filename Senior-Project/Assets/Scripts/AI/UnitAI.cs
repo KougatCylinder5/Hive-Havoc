@@ -46,7 +46,7 @@ public class UnitAI : AIController, IAIBasics, IAttack
         _lastPosition2D = _position2D;
         StartCoroutine(nameof(DistanceMoved));
     }
-    
+    // move along the path and discard nodes as they are reached
     public void ExecutePath()
     {
         if (Vector2.Distance(_position2D, Target) < 0.1f)
@@ -54,13 +54,11 @@ public class UnitAI : AIController, IAIBasics, IAttack
             Target = _position2D;
             return;
         }
-        print(_pathInfo.cleanedPath.Count);
         if (_pathInfo.cleanedPath.Count > 0)
         {
             Vector2 direction2D = (_pathInfo.cleanedPath.Peek() - _position2D).normalized;
             Vector3 direction = new(direction2D.x, -1f, direction2D.y);
 
-            //_animator.SetFloat("Speed", Vector3.Scale(direction * Speed * Time.deltaTime, new(1, 0, 1)).magnitude);
             _characterController.Move(Mathf.Clamp(Speed,0.25f,Vector3.Distance(_position2D, Target) / Time.deltaTime) * Time.deltaTime * direction);
             if ((_pathInfo.cleanedPath.Peek() - _position2D).sqrMagnitude < 0.02f)
             {
@@ -78,34 +76,38 @@ public class UnitAI : AIController, IAIBasics, IAttack
 
     public void UpdatePath()
     {
+        // if the scene as not been finished loading do not get the path yet
         if (!Saver.LoadDone)
             return;
+        // if your current path is null generate a new one
         if (_lastPathGenerated is null)
         {
             _lastPathGenerated = new PathInfo() { Start = _position2D, End = Target };
 
             Instance.QueuePath(_lastPathGenerated);
         }
+        // get the path you generated
         if (Instance.RetrievePath(_lastPathGenerated) != null)
         {
             _pathInfo = Instance.RetrievePath(_lastPathGenerated);
             _lastPathGenerated = null;
         }
+        // if you reached your target clear all remaining nodes
         float distanceToTarget = Vector2.Distance(_position2D, Target);
         if (distanceToTarget < 0.1f)
         {
             _pathInfo.cleanedPath.Clear();
             return;
         }
+        // if stuck on an object or enemy stop moving so that you can attack them or stop displaying the movement line
         if (distanceToTarget < 0.5f && _movedLastFrame.magnitude < 0.02f)
         {
             Target = _position2D;
             return;
         }
-        print("looping");
     }
 
-
+    // display the movement direction of the player controlled units
     private void DisplayLine()
     {
         _pathRenderer.positionCount = 2;
@@ -116,7 +118,7 @@ public class UnitAI : AIController, IAIBasics, IAttack
         }
         _pathRenderer.Simplify(0.5f);
     }
-
+    // get the distance moved between frames
     private IEnumerator DistanceMoved()
     {
         while (true)
@@ -127,7 +129,7 @@ public class UnitAI : AIController, IAIBasics, IAttack
             Debug.Log(gameObject);
         }
     }
-
+    // needs to be implemented by an child class as each unit attacks differently
     public void Attack(GameObject target)
     {
         throw new System.NotImplementedException();

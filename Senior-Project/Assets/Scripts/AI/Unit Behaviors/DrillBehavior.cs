@@ -20,7 +20,7 @@ public class DrillBehavior : UnitAI
     {
         base.Update();
 
-
+        // check for enemies in range to attack
         if (Physics.OverlapSphereNonAlloc(_position, AttackRadius, enemies, LayerMask.GetMask("EnemyUnit", "EnemyBuilding")) > 0 && !IsIgnoringEnemies)
         {
             enemies = enemies.OrderBy(c => { if(c && !c.GetComponent<IHealth>().IsDead) return (c.transform.position - _position).magnitude; return float.PositiveInfinity; }).ToArray();
@@ -38,7 +38,7 @@ public class DrillBehavior : UnitAI
         {
             Attack(AttackTarget);
             AttackCooldown = AttackBaseCooldown;
-        }
+        }// if moving can't attack enemies
         else if(IsIgnoringEnemies)
         {
             ExecutePath();

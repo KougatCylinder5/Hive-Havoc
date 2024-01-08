@@ -10,6 +10,7 @@ public class SpawnWaterOccluders : MonoBehaviour
 
     public GameObject occluder;
     // Start is called before the first frame update
+    // look at the terrain and its map to spawn gameobjects that block pathing so units don't walk on water
     void Start()
     {
         terrain = GameObject.Find("Ground");

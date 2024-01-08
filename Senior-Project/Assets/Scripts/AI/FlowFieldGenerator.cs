@@ -43,11 +43,11 @@ public class FlowFieldGenerator : MonoBehaviour
         positionsToCheck = new(Allocator.Persistent) { new() { position = new((int)_startPoint.x, (int)_startPoint.z), direction = Vector2.zero, gCost = 0, fCost = 0, hCost = 0, isWalkable = true } };
         closedList = new(Allocator.Persistent);
         handles = new NativeList<JobHandle>(Allocator.Persistent);
-
+        // start at our command point and create a chain of nodes that from anywhere on the map will make a path that can reach their goal
         obstructedTiles = new(GridSize.x * GridSize.y, Allocator.Persistent);
         for (int j = 0; j < NaturalObstructedTiles.Count; j++)
         {
-            obstructedTiles[j] = NaturalObstructedTiles[j];
+            obstructedTiles[j] = NaturalObstructedTiles[j]; // copy the array so that its only things that are naturally blocking paths (not buildings)
         }
         StartCoroutine(nameof(NodeIterate));
         
@@ -56,8 +56,10 @@ public class FlowFieldGenerator : MonoBehaviour
     {
         while (positionsToCheck.Length > 0)
         {
+            // only generate once the scene is done loading
             yield return new WaitUntil(delegate { return Saver.LoadDone; });
             NativeList<FlowFieldJob.PathNode> newPositionsToCheck = new(positionsToCheck.Length * 8, Allocator.Persistent);
+            // creates the job required type is a IParallelForJob
             FlowFieldJob job = new()
             {
                 startPosition = new((int)_startPoint.x, (int)_startPoint.z),
@@ -67,16 +69,19 @@ public class FlowFieldGenerator : MonoBehaviour
                 closedList = closedList.AsParallelReader(),
                 gridSize = GridSize
             };
-
+            
             handles.Add(job.Schedule(positionsToCheck.Length, 1));
             JobHandle.CompleteAll(handles);
+            // copy the checked nodes into an array to be passed back in again
             foreach (FlowFieldJob.PathNode oldNode in positionsToCheck)
             {
                 closedList.Add(oldNode);
             }
+            // copy the new nodes that need checked into an array to be checked
             positionsToCheck.Clear();
             foreach (FlowFieldJob.PathNode position in newPositionsToCheck)
             {
+                // check that the node wasn't checked already and hasn't been added twice
                 if (!positionsToCheck.Contains(position) && !closedList.Contains(position))
                 {
                     positionsToCheck.Add(position);
@@ -84,9 +89,11 @@ public class FlowFieldGenerator : MonoBehaviour
 
             }
             newPositionsToCheck.Dispose();
+            // yield to prevent frame freeze
             yield return 0;
         }
         int counter = 0;
+        // assign each index to a node that contains directions to the target
         foreach (FlowFieldJob.PathNode node in closedList)
         {
             FlowTiles[node.position.x, node.position.y] = node;
@@ -96,6 +103,7 @@ public class FlowFieldGenerator : MonoBehaviour
                 yield return 0;
             }
         }
+        // dispose of NativeArrays so memory leak doesn't happen
         FlowFieldFinished = true;
         obstructedTiles.Dispose();
         closedList.Dispose();
@@ -113,17 +121,19 @@ public class FlowFieldGenerator : MonoBehaviour
         public Vector2Int gridSize;
         public NativeList<PathNode>.ParallelWriter newPositionsToCheck;
 
+
+        // called as many times as there are positionsToCheck in parallel
         public void Execute(int index)
         {
 
-
+            // movement directions
             NativeArray<Vector2Int> neighbourOffsetArray = new(8, Allocator.Temp);
             neighbourOffsetArray[0] = new Vector2Int(-1, 0); // Left
             neighbourOffsetArray[1] = new Vector2Int(+1, 0); // Right
             neighbourOffsetArray[2] = new Vector2Int(0, +1); // Up
             neighbourOffsetArray[3] = new Vector2Int(0, -1); // Down
 
-
+            // get all neighbours and their cost to get there
             foreach (Vector2Int neighbour in neighbourOffsetArray)
             {
                 PathNode node = new()
@@ -193,6 +203,8 @@ public class FlowFieldGenerator : MonoBehaviour
             return pos.x + pos.y * gridWidth;
         }
     }
+
+    // dispose on exit just in case
     private void OnApplicationQuit()
     {
         obstructedTiles.Dispose();

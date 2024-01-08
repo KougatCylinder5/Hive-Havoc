@@ -34,6 +34,8 @@ public class Saver : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Give enough resources to start production of more
+        // will be overriden if loading from a prior save
         LoadDone = false;
         ResourceStruct.Wood = startingWood;
         ResourceStruct.Stone = startingStone;
@@ -44,30 +46,39 @@ public class Saver : MonoBehaviour
     }
     void Load()
     {
+        // start the coroutine to prevent the game from freezing while loading
         StartCoroutine(nameof(LoadSave));
     }
     public IEnumerator LoadSave()
     {
+        // get starting units 
         allUnits = startingUnits.ToList();
         allBuildings = startingBuildings.ToList();
         ground = GameObject.Find("Ground").GetComponent<Terrain>();
-
+        // create a copy of the ground so as not to overwrite the existing data
         ground.terrainData = Instantiate(groundData);
         int counter = 0;
+        // saves all the existing things to the DB for later
         if (!isAReload())
         {
             startTransaction();
             List<Placeable> allResources = new();
+            // iterate over every treeInstance (includes rocks and ore that can be harvested) to save its location in the db 
             foreach (TreeInstance resource in groundData.treeInstances.ToList())
-            {
+            {   
+                
                 allResources.Add(new(0, resource.prototypeIndex, resource.position.x, resource.position.z, 1, 1));
+                // yield to allow the next frame
                 if (counter++ > 20)
                 {
                     counter = 0;
                     yield return 0;
                 }
             }
+            // add all at once as it is quicker than at once
             addPlaceables(allResources);
+            
+            // all starting structures (enemy and player alike)
             List<Placeable> allBuildingsPlaceable = new();
             foreach (GameObject b in allBuildings)
             {
@@ -79,6 +90,8 @@ public class Saver : MonoBehaviour
                 }
             }
             addPlaceables(allBuildingsPlaceable);
+
+            // all starting units (enemy and player)
             foreach (GameObject unit in allUnits)
             {
                 AIController unitController = unit.GetComponent<AIController>();
@@ -89,6 +102,7 @@ public class Saver : MonoBehaviour
                     yield return 0;
                 }
             }
+            // set with default values
             updateInventory((int)ItemsID.Wood, ResourceStruct.Wood);
             updateInventory((int)ItemsID.Coal, ResourceStruct.Coal);
             updateInventory((int)ItemsID.CopperOre, ResourceStruct.CopperOre);
@@ -98,8 +112,10 @@ public class Saver : MonoBehaviour
         }
         foreach (GameObject unit in startingUnits) Destroy(unit);
         foreach (GameObject building in startingBuildings) Destroy(building);
+        // removes all things and reinstantiates them so to have a fresh slate
         startTransaction();
 
+        // set them from the DB
         ResourceStruct.Wood = amountInInventory((int)ItemsID.Wood);
         ResourceStruct.Coal = amountInInventory((int)ItemsID.Coal);
         ResourceStruct.CopperOre = amountInInventory((int)ItemsID.CopperOre);
@@ -109,6 +125,7 @@ public class Saver : MonoBehaviour
         commitTransaction();
         startTransaction();
 
+        // gets all the trees and rocks for placement
         List<Placeable> naturalObjects = getNaturalPlaceables();
 
         worldSize = groundData.size;
@@ -122,6 +139,7 @@ public class Saver : MonoBehaviour
             GameObject occuluder = Instantiate(treeOcculuderPrefab, new Vector3Int(Mathf.RoundToInt(Mathf.Clamp(placeable.getXPos() * worldSize.x, 0, worldSize.x)), 0, Mathf.RoundToInt(Mathf.Clamp(placeable.getYPos() * worldSize.z, 0, worldSize.z))), Quaternion.identity, ground.gameObject.transform);
             int amount = 0;
             resourceObstructers.Add(occuluder);
+            // spawn a different object depending upon what type it is from the DB
             switch (placeable.getTileItemID())
             {
                 case (int)PlaceableTypes.Tree:
@@ -146,6 +164,7 @@ public class Saver : MonoBehaviour
                     break;
 
             }
+            // amount to spawn in an area so that the tiles look full and aren't just one tree/rock
             for (int i = 0; i < amount; i++)
             {
                 Vector3 position = new Vector3(placeable.getXPos(), 0, placeable.getYPos());
@@ -163,30 +182,36 @@ public class Saver : MonoBehaviour
                     heightScale = 1
                 });
             }
+            // can't forget to yield for frame
             if (counter > 15)
             {
                 counter = 0;
                 yield return 0;
             }
         }
+        // update the ground so the rocks/ trees are properly displayed
         ground.Flush();
         commitTransaction();
         startTransaction();
+        // spawning all units from DB
         List<Unit> units = getUnits();
         foreach (Unit unit in units)
         {
             GameObject tempHolder = Instantiate(Resources.Load(Enum.GetName(typeof(UnitTypes), (UnitTypes)unit.getType())) as GameObject, new Vector3(unit.getXPos(), 0.5f, unit.getYPos()), Quaternion.identity);
             AIController controller = tempHolder.GetComponent<AIController>();
+            // assign health and target from memory for a smooth experience
             controller.SetDestination(new Vector2(unit.getXTarget(), unit.getYTarget()));
             controller.SetHealth((int)unit.getHealth());
 
             allUnits.Add(tempHolder);
+            //can't forget to yield for frame
             if (counter > 15)
             {
                 counter = 0;
                 yield return 0;
             }
         }
+        // get all buildings
         List<Placeable> buildings = getPlaceables();
         allBuildings.Clear();
         foreach (Placeable building in buildings)
@@ -197,14 +222,18 @@ public class Saver : MonoBehaviour
             allBuildings.Add(tempHolder);
             tempHolder.GetComponent<IHealth>().SetHealth((int)building.getHealth());
             
+            // some buildings are required for win/loss conditions and as such must be assigned elsewhere to be checked against
+
             if((PlaceableTypes)building.getTileItemID() == PlaceableTypes.CommandCenter)
             {
+                
                 WinLoseCondition.commandCenter = tempHolder;
             }
             else if((PlaceableTypes)building.getTileItemID() == PlaceableTypes.Nest)
             {
                 WinLoseCondition.nests.Add(tempHolder);
             }
+            // can't forget to yield
             if (counter > 15)
             {
                 counter = 0;
@@ -216,12 +245,17 @@ public class Saver : MonoBehaviour
         clearReload();
         LoadDone = true;
     }
-
+    /**
+     * Called by ApplicationQuit() to save upon exit or crash
+     */
     public static void saveScene()
     {
+        // if the load was never complete do not save to prevent a partial scene save
         if(!LoadDone) return;
         startTransaction();
         clear();
+        // objects may be removed or somehow become invalid 
+        // don't want them to be saved in this state so removing them
         List<GameObject> invalidThings = new();
         List<Placeable> placeables = new();
         foreach(GameObject blocker in resourceObstructers)
@@ -291,7 +325,7 @@ public class Saver : MonoBehaviour
         }
         
 
-
+        // update resources in inventory
         updateInventory((int)ItemsID.Wood, ResourceStruct.Wood);
         updateInventory((int)ItemsID.Coal, ResourceStruct.Coal);
         updateInventory((int)ItemsID.CopperOre, ResourceStruct.CopperOre);
@@ -305,7 +339,7 @@ public class Saver : MonoBehaviour
     {
         saveScene();
     }
-
+    // enum so that all types of objects are in sync across all scripts
     public enum PlaceableTypes
     { 
         Tree,
@@ -334,6 +368,7 @@ public class Saver : MonoBehaviour
         Crawler
     }
 
+    // resource IDs synced across scripts
     private enum ItemsID {
         Wood,
         Coal,

@@ -33,9 +33,9 @@ public class UnitController : MonoBehaviour
                 int j = 1;
 
                 Vector2 mousePos = Mouse.MouseToWorldPoint(LayerMask.GetMask("Terrain", "Water"));
+                // generates a spiral around the most click position so that the units are equally spread out and not overlapping
                 for (int i = 0; i < units.Count; i++)
                 {
-                    Debug.Log(units[i].name);
                     UnitAI unit = units[i].GetComponent<UnitAI>();
                     float genX;
                     float genY;

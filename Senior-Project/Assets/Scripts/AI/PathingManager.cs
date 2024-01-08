@@ -6,6 +6,7 @@ using Unity.Jobs;
 using Unity.Burst;
 using System.Linq;
 using System;
+using UnityEngine.UIElements;
 
 public class PathingManager : MonoBehaviour
 {
@@ -144,7 +145,7 @@ public class PathingManager : MonoBehaviour
         {
 
             NativeArray<PathNode> pathNodeArray = new NativeArray<PathNode>(GridSize.x * GridSize.y, Allocator.Temp);
-
+            // generate our array of possible walking points
             for (int x = 0; x < GridSize.x; x++)
             {
                 for (int y = 0; y < GridSize.y; y++)
@@ -167,7 +168,7 @@ public class PathingManager : MonoBehaviour
                 }
             }
 
-
+            // possible movement directions ie not able to move diagonially
             NativeArray<int2> neighbourOffsetArray = new(4, Allocator.Temp);
             neighbourOffsetArray[0] = new int2(-1, 0); // Left
             neighbourOffsetArray[1] = new int2(+1, 0); // Right
@@ -175,19 +176,22 @@ public class PathingManager : MonoBehaviour
             neighbourOffsetArray[3] = new int2(0, -1); // Down
 
             int endNodeIndex = CalculateIndex(endPosition.x, endPosition.y, GridSize.x);
-
+            // get our start mode and set it as our starting node in the array
             PathNode startNode = pathNodeArray[CalculateIndex(startPosition.x, startPosition.y, GridSize.x)];
             startNode.gCost = 0;
             startNode.CalculateFCost();
             pathNodeArray[startNode.index] = startNode;
-
+            // positions to check
             NativeList<int> openList = new NativeList<int>(Allocator.Temp);
+            // positions that have been checked
             NativeList<int> closedList = new NativeList<int>(Allocator.Temp);
 
+            // add our starting point to the points to check against
             openList.Add(startNode.index);
-
+            // if there are nodes to check and we haven't gotten to the end yet continue checking
             while (openList.Length > 0)
             {
+                // get the node with the lowest FCost (traveled distance + new distance to move)
                 int currentNodeIndex = GetLowestCostFNodeIndex(openList, pathNodeArray);
                 PathNode currentNode = pathNodeArray[currentNodeIndex];
 
@@ -237,6 +241,7 @@ public class PathingManager : MonoBehaviour
 
                     int2 currentNodePosition = new int2(currentNode.x, currentNode.y);
 
+                    // if somehow we find a path to a node with a lower travel distance update the way to reach that node and cost
                     int tentativeGCost = currentNode.gCost + CalculateDistanceCost(currentNodePosition, neighbourPosition);
                     if (tentativeGCost < neighbourNode.gCost)
                     {
@@ -253,7 +258,7 @@ public class PathingManager : MonoBehaviour
 
                 }
             }
-
+            // detect if we reached our end target
             PathNode endNode = pathNodeArray[endNodeIndex];
             if (endNode.cameFromNodeIndex == -1)
             {
@@ -265,6 +270,8 @@ public class PathingManager : MonoBehaviour
 
 
                 PathNode currentNode = endNode;
+                // go from the end to the start looking at the cameFromNodeIndex to determine which node
+                // is the parent
                 while (currentNode.cameFromNodeIndex != -1)
                 {
                     PathNode cameFromNode = pathNodeArray[currentNode.cameFromNodeIndex];
@@ -275,6 +282,7 @@ public class PathingManager : MonoBehaviour
                 path.Add(exactEndPosition);
 
             }
+            // ensure we dispose of our arrays so we don't leak memory
             pathNodeArray.Dispose();
             neighbourOffsetArray.Dispose();
             openList.Dispose();
@@ -362,10 +370,14 @@ public class PathingManager : MonoBehaviour
         try
         {
             ObstructedTiles[CalculateIndex(x, y)] = status;
-        }catch{ }
+        }catch{
+            Debug.Log("Attempted to set a node that isn't in range to walkable");
+            Debug.Log("Position was: " + x + ", " + y);
+        }
         
 
     }
+#if UNITY_EDITOR
     public void OnDrawGizmos()
     {
         for(int i = 0; i < ObstructedTiles.Count; i++)
@@ -376,4 +388,5 @@ public class PathingManager : MonoBehaviour
             } 
         }
     }
+#endif
 }

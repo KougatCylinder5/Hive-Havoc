@@ -35,11 +35,11 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
         Vector3 halfExtends;
         halfExtends.y = 0;
         Vector3 direction;
-
+        // check to ensure that the path isn't a single point
         if (copyPath.Count > 0)
         {
             Vector2 nextNode = Vector3.zero;
-
+            // as long as the path has nodes to move along continue
             while (copyPath.Count > 0)
             {
                 nextNode = copyPath.Dequeue();
@@ -47,31 +47,24 @@ public class PathInfo : IEquatable<PathInfo>, IEqualityComparer<PathInfo>
                 halfExtends = Vector3.one / 4f;
                 halfExtends.y = 0;
                 direction = ConvertToVector3(nextNode - curNode, 0).normalized;
+                // shoot a ray to the next point(s) until something is hit
                 if (Physics.SphereCast(origin: center, radius: 0.25f, direction: direction, maxDistance: (nextNode - curNode).magnitude, layerMask: raycastLayers, hitInfo: out RaycastHit _))
                 {
                     cleanedPath.Enqueue(priorNode);
                 }
+                // the previous node we used becomes our current node and we start again from there
                 priorNode = nextNode;
 
             }
+            // if the path has no length, set our pos to the position to be
             if (!priorNode.Equals(new Vector2(-1, -1)))
                 cleanedPath.Enqueue(priorNode);
 
-            center = ConvertToVector3(curNode, 0.35f);
-            halfExtends = Vector3.one / 4f;
-            halfExtends.y = 0;
-            direction = ConvertToVector3(nextNode - End, 0).normalized;
-
-            if (Physics.SphereCast(origin: center, radius: 0.25f, direction: direction, maxDistance: (nextNode - End).magnitude, layerMask: raycastLayers, hitInfo: out RaycastHit _))
-            {
-                //Debug.Log(cleanedPath.Dequeue());
-
-            }
         }
 
 
     }
-
+    // helper compariator functions to determine equality
     public static Vector3 ConvertToVector3(Vector2 obj, float height)
     {
         return new Vector3(obj.x, height, obj.y);
