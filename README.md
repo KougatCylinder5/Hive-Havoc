@@ -7,3 +7,7 @@
 ## Report a crash
 1. Get the crash report from `C:/Users/[USERNAME]/AppData/Local/Temp/FCCC/Hive Havoc/Crashes`
 2. Email the file `Player.log` to [hive-havoc-crash@googlegroups.com](mailto:hive-havoc-crash@googlegroups.com) and any information to help us recreate the issue.
+
+## How To Compile/Build
+1. Open the project in Unity (Version 2022.3.8f1)
+2. Ctrl + Shift + B to open build settings
