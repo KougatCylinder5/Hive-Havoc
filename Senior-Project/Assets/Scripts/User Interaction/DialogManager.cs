@@ -51,7 +51,7 @@ public class DialogManager : MonoBehaviour
 
     public void next() { //Advances to next script.
         PauseMenu.setPause(false);
-        Time.timeScale = 0;
+        //Time.timeScale = 0;
         newDialogIndex = 0;
         index++;
         GetComponentInChildren<TextMeshProUGUI>().text = "";
