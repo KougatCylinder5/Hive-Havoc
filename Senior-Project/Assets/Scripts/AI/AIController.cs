@@ -102,7 +102,7 @@ public class AIController : IHealth
     {
         _position = transform.position;
         _position2D = new(_position.x, _position.z);
-        
+        // execute whatever path we are set to, otherwise if no path set ignoring enemies to false as we are not moving
         if (_pathInfo.cleanedPath.TryPeek(out Vector2 nextNode))
         {
             transform.LookAt(PathInfo.ConvertToVector3(nextNode, _position.y));
@@ -115,20 +115,11 @@ public class AIController : IHealth
 
     protected void Die()
     {
-        //if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Death"))
-        //{
-        //_animator.SetTrigger("Death");
         UnitController.RemoveUnit(gameObject);
         if(deathParticles != null)
             deathParticles.Play();
         GetComponent<CharacterController>().enabled = false;
         Destroy(gameObject, 0.5f);
-        //Invoke(nameof(DestroySelf), 0.5f);
-        //}
-    }
-    private void DestroySelf()
-    {
-        Destroy(gameObject,0.5f);
     }
     public override void DealDamage(int damage)
     {

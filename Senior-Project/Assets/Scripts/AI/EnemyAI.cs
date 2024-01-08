@@ -44,8 +44,11 @@ public class EnemyAI : AIController, IAIBasics
         {
             Target = new(_startPoint.x, _startPoint.z);
         }
+
+        // don't move until paths have finished generating
         if (FlowFieldFinished)
         {
+            // depending on if a target is nearby go the CC or enemy
             switch (_type)
             {
                 case PathingType.Flow:
@@ -73,7 +76,6 @@ public class EnemyAI : AIController, IAIBasics
             Vector2 direction2D = (_pathInfo.cleanedPath.Peek() - _position2D).normalized;
             Vector3 direction = new(direction2D.x, -1f, direction2D.y);
 
-            //_animator.SetFloat("Speed", Vector3.Scale(direction * Speed * Time.deltaTime, new(1, 0, 1)).magnitude);
             _characterController.Move(Mathf.Clamp(Speed, 0.25f, Vector3.Distance(_position2D, Target) / Time.deltaTime) * Time.deltaTime * direction);
             if ((_pathInfo.cleanedPath.Peek() - _position2D).sqrMagnitude < 0.02f)
             {
@@ -113,12 +115,7 @@ public class EnemyAI : AIController, IAIBasics
     public void Flow()
     {
         Vector3 movementDirection = new Vector3(_velocity.x, -100f, _velocity.y) * Speed * Time.deltaTime;
-        Ray movementRay = new Ray(_position, _velocity);
-        //if (!Physics.Raycast(movementRay, movementDirection.magnitude/4, LayerMask.GetMask("EnemyUnit")))
-        //{
-              _characterController.Move(movementDirection);
-        //}
-        //_animator.SetFloat("Speed", Vector3.Scale(movementDirection, new(1, 0, 1)).magnitude);
+        _characterController.Move(movementDirection);
     }
     private IEnumerator UpdateDirection()
     {
@@ -126,6 +123,7 @@ public class EnemyAI : AIController, IAIBasics
         {
             Vector2Int roundedPosition = new(Mathf.RoundToInt(_position.x), Mathf.RoundToInt(_position.z));
 
+            // nearby tile offsets to observe
             Vector2Int[] posToObserve = new Vector2Int[8] { new Vector2Int(0, -1), new Vector2Int(0, 1), new Vector2Int(1, 0), new Vector2Int(-1, 0), new Vector2Int(1, 1), new Vector2Int(-1, 1), new Vector2Int(-1, -1), new Vector2Int(1, -1) };
 
             try
@@ -134,6 +132,7 @@ public class EnemyAI : AIController, IAIBasics
                 totalDirection += Random.insideUnitCircle.normalized;
                 for (int i = 0; i < posToObserve.Length; i++)
                 {
+                    // get the movement directions of all tiles its sitting upon to average the movement direction
                     try
                     {
                         Vector2 direction = FlowTiles[roundedPosition.x + posToObserve[i].x, roundedPosition.y + posToObserve[i].y].direction;
@@ -188,9 +187,6 @@ public class EnemyAI : AIController, IAIBasics
             Vector3 direction = _position - possibleTargets[0].transform.position;
             direction.z = 0.5f;
             target = possibleTargets[0].transform.gameObject;
-
-            //bool canSee = Physics.Raycast(_position, direction, radius);
-            //target = canSee ? target : null;
 
             return true;
         }
