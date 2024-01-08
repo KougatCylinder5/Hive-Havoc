@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Placeable
-{
+{ //Holds information about a placeable for later.
     private int id;
     private int tileItemID;
     private float xPos;

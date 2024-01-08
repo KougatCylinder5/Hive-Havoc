@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Save
-{
+{ // Holds information about a save for later.
     private string saveName;
     private int dif;
     private int rank;

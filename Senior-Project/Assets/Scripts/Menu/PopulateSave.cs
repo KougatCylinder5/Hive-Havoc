@@ -6,7 +6,6 @@ using UnityEditor;
 
 public class PopulateSave : MonoBehaviour
 {
-    // Start is called before the first frame update
     public int slotID;
     private TextMeshProUGUI[] textFields;
     private string saveName = "";
@@ -17,13 +16,7 @@ public class PopulateSave : MonoBehaviour
  
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void dropSave() {
+    public void dropSave() { //Deletes a save.
         DBAccess.startTransaction();
         DBAccess.deleteSave(saveName);
         DBAccess.commitTransaction();
@@ -31,7 +24,7 @@ public class PopulateSave : MonoBehaviour
         GetComponentInParent<SaveManager>().dropped();
     }
 
-    public void loadSave() {
+    public void loadSave() { //Loads in a save as a reloaded save.
         DBAccess.startTransaction();
         DBAccess.doReload();
         DBAccess.selectSave(saveName);
@@ -50,7 +43,7 @@ public class PopulateSave : MonoBehaviour
         gameObject.transform.localScale = new Vector3(0, 0, 0);
     }
 
-    public void show() {
+    public void show() { //Creates a save frame with the save information.
         
         GameObject newFrame = UnityEngine.Object.Instantiate(savePrefab);
         newFrame.transform.SetParent(GameObject.Find("Profile Menu").transform);
@@ -63,7 +56,7 @@ public class PopulateSave : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void refreshWithSave(Save saveData) {
+    public void refreshWithSave(Save saveData) { //Reloads the saves
         textFields = GetComponentsInChildren<TextMeshProUGUI>();
 
         saveName = saveData.getSaveName();

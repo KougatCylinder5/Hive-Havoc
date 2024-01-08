@@ -9,13 +9,9 @@ public class MakeSave : MonoBehaviour
 {
     public TMP_InputField saveName;
     public TMP_Dropdown saveDifficulty;
-    // Start is called before the first frame update
 
 
-    // Update is called once per frame
-
-
-    public void makeASave()
+    public void makeASave() // Create a save.
     {
         DBAccess.startTransaction();
         DBAccess.addSave(saveName.text, saveDifficulty.value);

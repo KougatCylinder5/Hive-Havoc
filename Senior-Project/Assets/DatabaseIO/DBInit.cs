@@ -6,13 +6,13 @@ using Mono.Data.Sqlite;
 public class DBInit : MonoBehaviour
 {
     void Start()
-    {
+    { //Builds the database file
         DBAccess.startTransaction();
         FixMissing();
         DBAccess.commitTransaction();
     }
 
-    private void FixMissing() {
+    private void FixMissing() { //Creates the tables for the database if not found.
         DBAccess.AddTableIfMissing("saves", "id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL UNIQUE, dif INTEGER, rank INTEGER, last_play TEXT, play_time INTEGER, thumbnail TEXT, level_name TEXT"); //Table name followed by colume names and datatypes seperated by comma (,)
         DBAccess.AddTableIfMissing("placeables", "id INTEGER PRIMARY KEY AUTOINCREMENT, tile_item_id INTEGER, save_id INTEGER REFERENCES saves(id) ON DELETE CASCADE, x_pos REAL, y_pos REAL, health REAL, natural INTEGER");
         //DBAccess.AddTableIfMissing("tile_items", "id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(50) UNIQUE");

@@ -6,15 +6,14 @@ public class MusicLooper : MonoBehaviour {
     private AudioHighPassFilter musicHighPassFilter;
     public float musicLoopPoint;
     public float musicResetPoint;
-    // Start is called before the first frame update
+
     void Start() {
         musicSource = GetComponent<AudioSource>();
         musicHighPassFilter = GetComponent<AudioHighPassFilter>();
         musicSource.Play();
     }
 
-    // Update is called once per frame
-    void Update() {
+    void Update() { //Loops the music from a end point and a reset point. Also addes an audio effect when the game is paused.
         if (musicSource.time >= musicResetPoint || musicSource.time == musicSource.clip.length) {
             musicSource.time -= musicResetPoint - musicLoopPoint;
             musicSource.Play();

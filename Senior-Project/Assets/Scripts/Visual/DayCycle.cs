@@ -12,7 +12,7 @@ public class DayCycle : MonoBehaviour {
     public float currentTime = 0;
 
     Light _sun;
-    // Start is called before the first frame update
+ 
     void Start() {
         _sun = GetComponent<Light>();
         float cycleDurr = cycleTime / 4;
@@ -21,8 +21,7 @@ public class DayCycle : MonoBehaviour {
         night = cycleDurr * 3;
     }
 
-    // Update is called once per frame
-    void Update() {
+    void Update() { //Jumps between different phases of the day.
         currentTime += Time.deltaTime;
         if(currentTime >= cycleTime) {
             currentTime -= cycleTime;

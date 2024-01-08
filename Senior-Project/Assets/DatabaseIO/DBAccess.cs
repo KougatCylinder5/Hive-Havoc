@@ -11,6 +11,11 @@ using UnityEngine.UIElements;
 using UnityEngine.PlayerLoop;
 using UnityEngine.ProBuilder.Shapes;
 
+/*
+ * The DBAccess class contains getters and setters for reading and writing data to the database.
+ * Access will be prevented if a transaction is not started to prevent data corruption.
+ */
+
 public class DBAccess : MonoBehaviour
 {
     private static int saveID = 0;
@@ -60,7 +65,7 @@ public class DBAccess : MonoBehaviour
         }
     }
 
-    public static void commitTransaction(bool spitLog = false) {
+    public static void commitTransaction(bool spitLog = false) { //Updates the playtime and commits the transaction
         if(transactionActive) {
             var sqliteCommand = sqliteDB.CreateCommand();
             int playTimeIsSeconds = 0;

@@ -12,7 +12,7 @@ public class PauseMenu : MonoBehaviour {
     private int dotsCounter = 0;
 
     private static bool canPause = true;
-    void Start() {
+    void Start() { //Creates the pause menu style.
         bgImg = new Texture2D(1, 1, TextureFormat.RGBAFloat, false);
         bgImg.SetPixel(0, 0, new Color(0, 0, 0, 0.4f));
         bgImg.Apply();
@@ -32,11 +32,11 @@ public class PauseMenu : MonoBehaviour {
         bgStyle2.padding = new RectOffset(0, 0, 10, 0);
     }
 
-    public static void setPause(bool status) {
+    public static void setPause(bool status) { //Sets if the game is allowed to pause.
         canPause = status;
     }
 
-    void Update() {
+    void Update() { //Updates the pause state if allowed and escape is pressed.
         if(Input.GetKeyDown(KeyCode.Escape) && canPause) {
             if(Time.timeScale == 0) {
                 Time.timeScale = 1;
@@ -46,7 +46,7 @@ public class PauseMenu : MonoBehaviour {
         }
     }
 
-    public void OnGUI() {
+    public void OnGUI() { //Puts the elements onto the screen.
         if(Time.timeScale == 0 && canPause) {
             GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "PAUSED", bgStyle);
 

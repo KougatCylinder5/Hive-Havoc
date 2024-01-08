@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 
-public class DialogScript : MonoBehaviour {
+public class DialogScript : MonoBehaviour { //Stores a line of dialog for the dialog box
     public string message;
     public Actions endAction;
 

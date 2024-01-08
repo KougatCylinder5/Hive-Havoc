@@ -14,7 +14,7 @@ public class DialogManager : MonoBehaviour
 
     private bool triggered = false;
 
-    private void Update() {
+    private void Update() {  //Checks of operation is complete to advance and prints the text.
         if(Saver.LoadDone && !triggered) {
             triggerStart();
         }
@@ -41,7 +41,7 @@ public class DialogManager : MonoBehaviour
         }
     }
 
-    public void triggerStart() {
+    public void triggerStart() { //If the box can be enabled.
         
         if (dialogScript.Count > 0 && !triggered) {
             next();
@@ -49,7 +49,7 @@ public class DialogManager : MonoBehaviour
         }
     }
 
-    public void next() {
+    public void next() { //Advances to next script.
         PauseMenu.setPause(false);
         Time.timeScale = 0;
         newDialogIndex = 0;
@@ -58,7 +58,7 @@ public class DialogManager : MonoBehaviour
         GetComponent<Canvas>().enabled = true;
     }
 
-    public void nextStep() {
+    public void nextStep() { //Gets the next step and advances.
         if(dialogScript[index].getAction() == 0) {
             GameObject.Find("Nest(Clone)").GetComponent<SpawnBugs>().enabled = false;
             next();

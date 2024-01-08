@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Unit {
+public class Unit { //Stores data about a unit for loading later.
     private int id;
     private int type;
     private float xPos;
