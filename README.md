@@ -21,4 +21,4 @@
 3. Ctrl + Shift + B to open build settings.
 4. Check that the scenes `Scenes/Menu` and `Scenes/Tutorial/Tutorial` are in *Scenes In Build* and selected. If not add the scenes by draging them from the explorer or opening the scene, then pressing the *Add Open Scene* button.
 5. Click the `Build` or `Build And Run` button to build the project.
-6. The project will be built to the selected folder (use and empty folder).
+6. The project will be built to the selected folder (use an empty folder).
