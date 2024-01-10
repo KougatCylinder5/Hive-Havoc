@@ -74,4 +74,12 @@ public class UnitController : MonoBehaviour
         }
         return false;
     }
+    private void OnApplicationQuit()
+    {
+        ExitLevel();
+    }
+    public void ExitLevel()
+    {
+        units.Clear();
+    }
 }

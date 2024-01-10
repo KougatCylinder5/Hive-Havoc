@@ -4,6 +4,7 @@ using Unity.Collections;
 using UnityEngine;
 using TMPro;
 using static UnityEngine.UI.CanvasScaler;
+using System;
 
 public class DialogManager : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class DialogManager : MonoBehaviour
     private bool triggered = false;
 
     private void Update() {  //Checks of operation is complete to advance and prints the text.
-        if(Saver.LoadDone && !triggered) {
+        if(Saver.LoadDone && !triggered && FlowFieldGenerator.FlowFieldFinished) {
             triggerStart();
         }
 
@@ -42,8 +43,22 @@ public class DialogManager : MonoBehaviour
     }
 
     public void triggerStart() { //If the box can be enabled.
-        
-        if (dialogScript.Count > 0 && !triggered) {
+        int indexStep = 0;
+        DBAccess.startTransaction();
+        try
+        {
+            indexStep = DBAccess.getkey("tutorialIndex");
+        } catch
+        {
+            Debug.Log("New Game.");
+        }
+        DBAccess.commitTransaction();
+        if (indexStep == dialogScript.Count-1)
+        {
+            Destroy(gameObject);
+        }
+        else if (dialogScript.Count > 0 && !triggered) {
+            index = indexStep - 1;
             next();
             triggered = true;
         }
@@ -59,7 +74,7 @@ public class DialogManager : MonoBehaviour
     }
 
     public void nextStep() { //Gets the next step and advances.
-        if(dialogScript[index].getAction() == 0) {
+        if (dialogScript[index].getAction() == 0) {
             GameObject.Find("Nest(Clone)").GetComponent<SpawnBugs>().enabled = false;
             next();
         } else if (dialogScript[index].getAction() == 1) {
@@ -79,6 +94,9 @@ public class DialogManager : MonoBehaviour
             Saver.allBuildings.FindAll(x => { return x.name[..x.name.IndexOf('(')] == "Nest"; }).ForEach(nest => { nest.GetComponent<SpawnBugs>().enabled = true; });
             PauseMenu.setPause(true);
         }
+        DBAccess.startTransaction();
+        DBAccess.setKey("tutorialIndex", index);
+        DBAccess.commitTransaction();
     }
 
 }

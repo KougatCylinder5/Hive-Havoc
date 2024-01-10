@@ -906,7 +906,7 @@ public class DBAccess : MonoBehaviour
         }
     }
 
-    public void setKey(string key, int value) {
+    public static void setKey(string key, int value) {
         if (!transactionActive) {
             Debug.LogError(noTransactionError);
         } else {

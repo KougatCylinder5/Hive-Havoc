@@ -65,7 +65,7 @@ public class PauseMenu : MonoBehaviour {
             GUILayout.EndArea();
         }
 
-        if(!Saver.LoadDone) {
+        if (!Saver.LoadDone || !FlowFieldGenerator.FlowFieldFinished) {
             GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "Loading" + dots, bgStyle2);
 
             if(!(dotsCounter > 0)) {

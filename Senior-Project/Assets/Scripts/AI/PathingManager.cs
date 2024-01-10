@@ -32,7 +32,7 @@ public class PathingManager : MonoBehaviour
         Instance = this;
         _pathsToGenerate = new();
         Paths = new();
-        
+        ObstructedTiles.Clear();
         for (int i = 0; i < GridSize.x * GridSize.y; i++)
         {
             ObstructedTiles.Add(true);
