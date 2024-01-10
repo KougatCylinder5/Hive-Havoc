@@ -12,7 +12,7 @@ public class MenuChanger : MonoBehaviour
 
     public void MainMenu()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene("Menu");
     }
 
     public void QuitGame()

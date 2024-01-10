@@ -207,9 +207,13 @@ public class FlowFieldGenerator : MonoBehaviour
     // dispose on exit just in case
     private void OnApplicationQuit()
     {
-        obstructedTiles.Dispose();
-        closedList.Dispose();
-        handles.Dispose();
-        positionsToCheck.Dispose();
+        ExitLevel();
+    }
+    public void ExitLevel()
+    {
+        try { obstructedTiles.Dispose(); } catch { }
+        try { closedList.Dispose(); } catch { }
+        try { handles.Dispose(); } catch { }
+        try { positionsToCheck.Dispose(); } catch { }
     }
 }
