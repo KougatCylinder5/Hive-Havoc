@@ -1,7 +1,7 @@
 # Hive Havoc
 
 ## How to install
-1. Download the latest [release](https://github.com/KougatCylinder5/Senior-Project/releases/latest).
+1. Download the latest [release](https://github.com/KougatCylinder5/Hive-Havoc/releases/latest).
 2. Run the installer and follow the instructions to install.
 
 ## Report a crash
