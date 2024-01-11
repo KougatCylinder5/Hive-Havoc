@@ -16,7 +16,7 @@
 5. Completely local database
 
 ## How To Compile/Build
-1. Install [Unity](https://unity.com/unity-hub) (This project has been built and tested in version 2022.3.8f1).
+1. Install [Unity](https://unity.com/download) (This project has been built and tested in version 2022.3.8f1).
 2. Open the project in Unity.
 3. Ctrl + Shift + B to open build settings.
 4. Check that the scenes `Scenes/Menu` and `Scenes/Tutorial/Tutorial` are in *Scenes In Build* and selected. If not add the scenes by draging them from the explorer or opening the scene, then pressing the *Add Open Scene* button.
